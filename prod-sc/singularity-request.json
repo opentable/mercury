@@ -1,5 +1,5 @@
 {
-    "id": "pp-hermes-sync",
+    "id": "mercury",
     "owners": ["multi-language@opentable.com"],
     "requestType": "SCHEDULED",
     "scheduleType": "QUARTZ",
