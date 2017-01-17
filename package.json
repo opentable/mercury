@@ -1,0 +1,30 @@
+{
+  "name": "mercury",
+  "version": "1.0.0",
+  "description": "static content translation platform",
+  "main": "src/app.js",
+  "scripts": {
+    "lint": "eslint ./",
+    "start": "node src/app.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opentable/mercury.git"
+  },
+  "keywords": [
+    "translation",
+    "mercury",
+    "bot"
+  ],
+  "author": "mlp-engineers@opentable.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/opentable/mercury/issues"
+  },
+  "homepage": "https://github.com/opentable/mercury#readme",
+  "devDependencies": {
+    "eslint": "^3.13.1",
+    "eslint-config-defaults": "^9.0.0"
+  }
+}
