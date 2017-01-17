@@ -1,5 +1,5 @@
 {
-    "requestId": "pp-hermes-sync",
+    "requestId": "mercury",
     "resources": {
         "cpus": 0.05,
         "memoryMb": 156,
@@ -9,7 +9,6 @@
     "skipHealthchecksOnDeploy": true,
     "considerHealthyAfterRunningForSeconds": 10,
     "env": {
-    	"NODE_ENV": "pp-uswest2",
-    	"IOTSYS_DATA": "3350094105"
+    	"NODE_ENV": "prod-sc",
     }
 }
