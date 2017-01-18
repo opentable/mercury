@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint ./",
     "start": "node src/app.js",
-    "test": "mocha"
+    "test": "npm run lint && mocha"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,11 @@
   "devDependencies": {
     "eslint": "^3.13.1",
     "eslint-config-defaults": "^9.0.0"
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "config": "^1.24.0",
+    "github": "^8.1.0",
+    "lodash": "^4.17.4"
   }
 }
