@@ -1,8 +1,0 @@
-{
-    "id": "mercury",
-    "owners": ["multi-language@opentable.com"],
-    "requestType": "SCHEDULED",
-    "scheduleType": "QUARTZ",
-    "quartzSchedule": "0 0/5 * 1/1 * ? *",
-    "instances": 1
-}
