@@ -3,27 +3,32 @@
 const _ 		= require('lodash');
 const async  	= require('async');
 const config 	= require('config');
-const github 	= require('./services/github');
+const manifest 	= require('./manifest');
+
+const processRepo = (repository, next) => {
+	async.waterfall([
+
+		cb => manifest.fetch(repository, cb),
+		
+		(repository, cb) => manifest.validate(repository, cb)
+	
+	], (err, repository) => {
+
+		console.log(`\ngot following result for ${repository.owner}/${repository.repo}:`);
+		console.log(err || JSON.stringify(repository));
+		next();
+	});
+};
 
 _.each(config.repositories, (repositories, owner) => {
-	async.each(repositories, (repo, next) => {
+	async.eachSeries(repositories, (repo, next) => {
 
-		const options = {
-			apiToken: config.github.apiToken,
-			path: 'mercury.json',
-			repo,
-			owner
-		};
-
-		github.getFileContent(options, (err, result) => {
-			console.log(`got following result for ${owner}/${repo}:`);
-			console.log(err || result);
-			next(err);
-		});
+		processRepo({ owner, repo }, next);
 		
-	}, (err) => {
+	}, () => {
+
 		const date = new Date();
-		console.log(`Mercury just ran - ${date}`);
-		process.exit(err ? 1 : 0);
+		console.log(`\n\nMercury just ran - ${date}`);
+		process.exit(0);
 	});
 });

@@ -5,8 +5,9 @@
   "main": "src/app.js",
   "scripts": {
     "lint": "eslint ./",
+    "mocha": "mocha test/unit",
     "start": "node src/app.js",
-    "test": "npm run lint && mocha"
+    "test": "npm run lint && npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -24,13 +25,18 @@
   },
   "homepage": "https://github.com/opentable/mercury#readme",
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^3.13.1",
-    "eslint-config-defaults": "^9.0.0"
+    "eslint-config-defaults": "^9.0.0",
+    "injectr": "^0.5.1",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.7"
   },
   "dependencies": {
     "async": "^2.1.4",
     "config": "^1.24.0",
     "github": "^8.1.0",
+    "joi": "^10.2.0",
     "lodash": "^4.17.4"
   }
 }
