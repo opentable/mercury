@@ -22,5 +22,15 @@ module.exports = {
             const content = !err && file ? getContent(file) : undefined;
             return next(err, content);
         });
+    },
+    getFilesList: (options, next) => {
+        github.authenticate({
+            type: 'oauth',
+            token: options.apiToken
+        });
+
+        github.repos.getContent(options, (err, list) => {
+            return next(err, list);
+        });
     }
 };
