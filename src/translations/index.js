@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-	getList: require('./get-List'),
+	getList: require('./get-list'),
     process: require('./process')
 };
