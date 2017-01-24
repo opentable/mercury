@@ -14,6 +14,25 @@ const getMatchingFiles = (list, srcGlobs) => {
 	return result;
 };
 
+// const mapFileObject = (file) => {
+//     return {
+//         github: file.path,
+//         smartling: `files/${file.name}`
+//     }
+// }
+// 
+// const createFilesList = (content, fullPath) => {
+//     let list = [];
+// 
+//     content.forEach(file => {
+//         if(micromatch.isMatch(file.path, fullPath)) {
+//             list.push(mapFileObject(file));
+//         }
+//     });
+// 
+//     return list;
+// }
+
 module.exports = (repository, callback) => {
     
     // TODO: reiterate on each translation item
