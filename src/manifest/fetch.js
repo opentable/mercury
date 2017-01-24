@@ -1,6 +1,7 @@
 'use strict';
 
 const config 					= require('config');
+const _								= require('lodash');
 const github 					= require('../services/github');
 const LoggerService 	= require('../services/logger-service');
 
@@ -22,15 +23,11 @@ module.exports = (repository, callback) => {
 			} catch(e){
 				err = new Error('An error happened when parsing manifest.json');
 
-				const optionsForError = {
-					path : options.path,
-					repo : options.repo,
-					owner: options.owner
-				}
-
-				loggerService.failedToParseManifest(err, optionsForError);
+				loggerService.failedToParseManifest(err, _.pick(options, ['path', 'repo', 'owner']));
 			}
 		} else {
+			loggerService.failedToLocateManifest(err, _.pick(options, ['path', 'repo', 'owner']));
+
 			err = new Error('manifest.json not found. Skipping.');
 		}
 

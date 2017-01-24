@@ -1,4 +1,3 @@
-const _      = require('lodash');
 const config = require('config');
 const logger = require('ot-logger');
 
@@ -12,25 +11,39 @@ logger.init(opts);
 
 module.exports = () => {
 
+  const buildMetaData = (error, errortype, options) => {
+    return {
+        errordetails: error || '',
+        errortype,
+        logname: 'error',
+        path : options.path,
+        failingrepository : options.repo,
+        failingrepositoryowner: options.owner
+      };
+  };
+
 	const failedToParseManifest = (error, options) => {
 
 		const msg = `Error while parsing ${options.path} from ${options.repo}`;
+    const errorType = 'failed-to-parse-manifest';
 
-		const metadata = {
-			errordetails: error || '',
-			errortype: 'failed-to-parse-manifest',
-			logname: 'error',
-			path : options.path,
-			failingrepository : options.repo,
-      failingrepositoryowner: options.owner
-		};
+		const metadata = buildMetaData(error, errorType, options);
 
-    console.log(`debug out the metadata: ${metadata}`);
+		logger.log('error', msg, metadata);
+	};
+
+  const failedToLocateManifest = (error, options) => {
+
+		const msg = `Error while locating manifest ${options.path} from ${options.repo}`;
+    const errorType = 'failed-to-locate-manifest';
+
+    const metadata = buildMetaData(error, errorType, options);
 
 		logger.log('error', msg, metadata);
 	};
 
 	return {
-		failedToParseManifest
+		failedToParseManifest,
+		failedToLocateManifest
 	};
 };
