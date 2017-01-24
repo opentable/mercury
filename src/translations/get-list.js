@@ -1,7 +1,9 @@
 'use strict';
 
+const _ = require('lodash');
 const config = require('config');
 const github = require('../services/github');
+const parseGlob = require('parse-glob');
 
 const createFilesList = (content) => {
     let list = [];
@@ -13,11 +15,13 @@ const createFilesList = (content) => {
 
 module.exports = (repository, callback) => {
         
-    const path = 'src/locales/en-us';
+    const fullPath = _.first(repository.manifestContent.translations).input.src;
     
+    const parsedPath = parseGlob(fullPath);
+        
     const options = {
 		apiToken: config.github.apiToken,
-		path,
+		path: parsedPath.base,
 		repo: repository.repo,
 		owner: repository.owner
 	};
