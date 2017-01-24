@@ -6,7 +6,7 @@ const LoggerService 	= require('../services/logger-service');
 
 module.exports = (repository, callback) => {
 
-	const loggerService = new LoggerService();
+	const loggerService = LoggerService();
 
 	const options = {
 		apiToken: config.github.apiToken,
@@ -21,11 +21,14 @@ module.exports = (repository, callback) => {
 				repository.manifestContent = JSON.parse(content);
 			} catch(e){
 				err = new Error('An error happened when parsing manifest.json');
-				loggerService.failedToParseManifest(err, {
-					options.path,
-					options.repo,
-					options.owner
-				});
+
+				const optionsForError = {
+					path : options.path,
+					repo : options.repo,
+					owner: options.owner
+				}
+
+				loggerService.failedToParseManifest(err, optionsForError);
 			}
 		} else {
 			err = new Error('manifest.json not found. Skipping.');
