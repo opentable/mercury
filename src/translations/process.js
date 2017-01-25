@@ -17,7 +17,7 @@ module.exports = (repository, callback) => {
     const smartlingOptions = {
         userIdentifier: config.smartling.userIdentifier,
         userSecret: config.smartling.userSecret,
-        projectId: repository.manifestContent.smartlingProjectId 
+        projectId: '7aebed099' 
     };
     
     async.eachOfSeries(repository.translationFiles, (translation, index, callback) => {
@@ -26,19 +26,19 @@ module.exports = (repository, callback) => {
         smartlingOptions.path = translation.smartling;
         
         github.getFileContent(githubOptions, (err, githubFileContent) => {
-            smartling.getFileContent(smartlingOptions, (err, smartlingFileContent) => {
+            smartling.uploadFileContent(githubFileContent, smartlingOptions, (err, smartlingUploadResult) => {
                 
                 if(err) {
-                    repository.translationFiles[index].report = 'Error';
+                    repository.translationFiles[index].report = err.message;
                     return callback();
                 }
                 
-                const difference = diff(githubFileContent, smartlingFileContent);
-                                
-                if(difference) {
-                    repository.translationFiles[index].report = 'Unsynced';
+                console.log(smartlingUploadResult);
+                                                
+                if(smartlingUploadResult.response.data && smartlingUploadResult.response.data.overWritten) {
+                    repository.translationFiles[index].report = 'Existing Smartling file overwritten';
                 } else {
-                    repository.translationFiles[index].report = 'Synced';
+                    repository.translationFiles[index].report = 'New Smartling file uploaded';
                 }
 
                 callback();

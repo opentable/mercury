@@ -41,6 +41,9 @@
     "js-yaml": "^3.7.0",
     "lodash": "^4.17.4",
     "micromatch": "^2.3.11",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "ot-logger": "^0.6.2",
+    "parse-glob": "^3.0.4",
+    "string-to-stream": "^1.1.0"
   }
 }
