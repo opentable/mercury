@@ -52,9 +52,21 @@ module.exports = () => {
 		logger.log('error', msg, metadata);
 	};
 
+  const failedToLocateTranslationFilesInGithub = (error, options) => {
+
+		const msg = `Error Failed to locate translate files in github - ${options.path} from ${options.repo}`;
+    const errorType = 'failed-to-location-translation-files-in-github';
+
+    const metadata = buildMetaData(error, errorType, options);
+
+		logger.log('error', msg, metadata);
+	};
+
+
 	return {
 		failedToParseManifest,
 		failedToLocateManifest,
-		manifestFailedValidation
+		manifestFailedValidation,
+    failedToLocateTranslationFilesInGithub
 	};
 };
