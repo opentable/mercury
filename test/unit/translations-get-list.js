@@ -11,7 +11,7 @@ describe('translations.getList()', () => {
         '../services/github': {
             getFilesList: githubStub
         }
-    }, { console });
+    });
     
     const repository = {
         owner: 'opentable',

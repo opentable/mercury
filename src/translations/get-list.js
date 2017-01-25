@@ -7,9 +7,7 @@ const mm 		= require('micromatch');
 
 const getMatchingFiles = (list, srcGlobs) => {
 	let result = list;
-
 	_.each(srcGlobs, glob => result = mm.match(result, glob));
-
 	return result;
 };
 
