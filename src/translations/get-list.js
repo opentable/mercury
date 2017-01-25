@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const config = require('config');
 const github = require('../services/github');
-const mm = require('micromatch');
+const micromatch = require('micromatch');
 const parseGlob = require('parse-glob');
 const LoggerService 	= require('../services/logger-service');
 
@@ -14,7 +14,7 @@ const createFilesList = (content, fullPath) => {
         list.push(file.path);
     });
 
-    return mm.match(list, fullPath);
+    return micromatch.match(list, fullPath);
 }
 
 module.exports = (repository, callback) => {
