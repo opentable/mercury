@@ -1,6 +1,8 @@
 'use strict';
 
+const fs = require('fs');
 const request = require('request');
+const str = require('string-to-stream');
 
 const authenticate = (options, next) => {
     const authenticateOptions = {
@@ -19,28 +21,41 @@ const authenticate = (options, next) => {
 };
 
 module.exports = {
-    getFileContent: (options, next) => {
+    uploadFileContent: (content, options, next) => {
         authenticate(options, (err, accessToken) => {
             
             if(err) {
                 return next(err);
             }
-            
-            const getFileOptions = {
-                url: `https://api.smartling.com/files-api/v2/projects/${options.projectId}/file?fileUri=/${options.path}`,
-                method: 'GET',
+                                    
+            const smartlingFormData = {
+                file: {
+                    value: content,
+                    options: {
+                        filename: 'test.json',
+                        contentType: 'application/json'
+                    }
+                },
+                fileUri: options.path,
+                fileType: 'json'
+            };
+
+            const smartlingUploadOptions = {
+                url: `https://api.smartling.com/files-api/v2/projects/${options.projectId}/file`,
+                method: 'POST',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
-                }
-            };
+                },
+                formData: smartlingFormData
+            }
             
-            request(getFileOptions, (err, response, body) => {
-                
+            request(smartlingUploadOptions, (err, response, body) => {
+                                
                 if(err || response.statusCode !== 200) {
-                    return next('Impossible to retrieve Smartling file');
+                    return next(new Error('Error when uploading Smartling file'));
                 }
                                 
-                next(null, body);
+                next(null, JSON.parse(body));
             });
         });
     }
