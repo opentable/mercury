@@ -1,6 +1,9 @@
 'use strict';
 
 const joi = require('joi');
+const LoggerService 	= require('../services/logger-service');
+
+const loggerService = LoggerService();
 
 const schema = joi.object().keys({
 	smartlingProjectId: joi.string().required(),
@@ -16,11 +19,23 @@ const schema = joi.object().keys({
 });
 
 module.exports = (repository, callback) => {
+
 	joi.validate(repository.manifestContent, schema, (err, normalisedManifest) => {
+		if(err){
+
+				const options = {
+					path: 'mercury.json',
+					repo: repository.repo,
+					owner: repository.owner
+				};
+
+				loggerService.manifestFailedValidation(err, options);
+		}
+
 		if(!err && normalisedManifest){
 			repository.manifestContent = normalisedManifest;
 		}
-		
+
 		callback(err, repository);
 	});
 };

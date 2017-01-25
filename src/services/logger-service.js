@@ -42,8 +42,19 @@ module.exports = () => {
 		logger.log('error', msg, metadata);
 	};
 
+  const manifestFailedValidation = (error, options) => {
+
+		const msg = `Error manifest failed validation - ${options.path} from ${options.repo}`;
+    const errorType = 'manifest-failed-validation';
+
+    const metadata = buildMetaData(error, errorType, options);
+
+		logger.log('error', msg, metadata);
+	};
+
 	return {
 		failedToParseManifest,
-		failedToLocateManifest
+		failedToLocateManifest,
+		manifestFailedValidation
 	};
 };

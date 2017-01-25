@@ -26,9 +26,9 @@ module.exports = (repository, callback) => {
 				loggerService.failedToParseManifest(err, _.pick(options, ['path', 'repo', 'owner']));
 			}
 		} else {
-			loggerService.failedToLocateManifest(err, _.pick(options, ['path', 'repo', 'owner']));
-
 			err = new Error('manifest.json not found. Skipping.');
+
+			loggerService.failedToLocateManifest(err, _.pick(options, ['path', 'repo', 'owner']));
 		}
 
 		if(err){
