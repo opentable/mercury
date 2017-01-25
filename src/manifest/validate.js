@@ -1,9 +1,11 @@
 'use strict';
 
-const joi 	= require('joi');
-const _ 	= require('lodash');
+const _ 				= require('lodash');
+const joi 				= require('joi');
+const LoggerService 	= require('../services/logger-service');
 
 const notEmptyArray = joi.array().min(1);
+const loggerService = LoggerService();
 
 const schema = joi.object().keys({
 	smartlingProjectId: joi.string().required(),
@@ -19,7 +21,12 @@ const schema = joi.object().keys({
 });
 
 module.exports = (repository, callback) => {
+
 	joi.validate(repository.manifestContent, schema, (err, normalisedManifest) => {
+
+		if(err){
+			loggerService.manifestFailedValidation(err, repository);
+		}
 
 		if(!err && normalisedManifest){
 
@@ -29,7 +36,7 @@ module.exports = (repository, callback) => {
 
 			repository.manifestContent = normalisedManifest;
 		}
-		
+
 		callback(err, repository);
 	});
 };
