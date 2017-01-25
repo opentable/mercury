@@ -40,7 +40,6 @@
     "js-yaml": "^3.7.0",
     "lodash": "^4.17.4",
     "micromatch": "^2.3.11",
-    "ot-logger": "^0.6.2",
-    "parse-glob": "^3.0.4"
+    "ot-logger": "^0.6.2"
   }
 }
