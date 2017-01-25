@@ -104,6 +104,19 @@ describe('manifest.validate()', () => {
 			});
 		});
 
+		describe(`when translation source contains src path as array`, () => {
+
+			const cloned = _.cloneDeep(repository);
+			cloned.manifestContent.translations[0].input.src = [cloned.manifestContent.translations[0].input.src];
+
+			beforeEach(done => validate(cloned, next(done)));
+
+			it('should be valid', () => {
+				expect(error).to.be.null;
+				expect(result).to.be.eql(cloned);
+			});
+		});
+
 		describe(`when translation output doesn't contain src path`, () => {
 
 			const invalid = _.cloneDeep(repository);

@@ -1,40 +1,39 @@
 'use strict';
 
-const _ = require('lodash');
-const config = require('config');
-const github = require('../services/github');
-const mm = require('micromatch');
-const parseGlob = require('parse-glob');
+const _ 		= require('lodash');
+const config 	= require('config');
+const github 	= require('../services/github');
+const mm 		= require('micromatch');
 
-const createFilesList = (content, fullPath) => {
-    let list = [];
-    
-    content.forEach(file => {
-        list.push(file.path);
-    });
-    
-    return mm.match(list, fullPath);
-}
+const getMatchingFiles = (list, srcGlobs) => {
+	let result = list;
+
+	_.each(srcGlobs, glob => result = mm.match(result, glob));
+
+	return result;
+};
 
 module.exports = (repository, callback) => {
-        
-    const fullPath = _.first(repository.manifestContent.translations).input.src;
-    const parsedPath = parseGlob(fullPath);
+    
+    // TODO: reiterate on each translation item
+    const srcGlobs = _.first(repository.manifestContent.translations).input.src;
+
     const options = {
 		apiToken: config.github.apiToken,
-		path: parsedPath.base,
 		repo: repository.repo,
 		owner: repository.owner
 	};
     
-    github.getFilesList(options, (err, content) => {
-		if(!err && content){
-			repository.translationFiles = createFilesList(content, fullPath);
-		} else {
-			err = new Error('No translation files found. Skipping.');
+    github.getFilesList(options, (err, list) => {
+		if(!err && list){
+			repository.translationFiles = getMatchingFiles(list, srcGlobs);
+			if(_.isEmpty(repository.translationFiles)){
+				err = true;
+			}
 		}
 
 		if(err){
+			err = new Error('No translation files found. Skipping.');
 			repository.skip = true;
 		}
 

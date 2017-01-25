@@ -1,6 +1,6 @@
 'use strict';
 
-const config = require('config');
+const config 	= require('config');
 const github 	= require('../services/github');
 
 module.exports = (repository, callback) => {
