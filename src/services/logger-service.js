@@ -62,7 +62,6 @@ module.exports = () => {
 		logger.log('error', msg, metadata);
 	};
 
-
 	return {
 		failedToParseManifest,
 		failedToLocateManifest,

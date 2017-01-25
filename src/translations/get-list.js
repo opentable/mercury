@@ -1,11 +1,11 @@
 'use strict';
 
-const _               = require('lodash');
-const config          = require('config');
-const github          = require('../services/github');
-const micromatch      = require('micromatch');
-const parseGlob       = require('parse-glob');
-const LoggerService 	= require('../services/logger-service');
+const _             = require('lodash');
+const config        = require('config');
+const github        = require('../services/github');
+const micromatch    = require('micromatch');
+const parseGlob     = require('parse-glob');
+const LoggerService = require('../services/logger-service');
 
 const createFilesList = (content, fullPath) => {
     let list = [];

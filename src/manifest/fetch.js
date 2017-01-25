@@ -1,9 +1,9 @@
 'use strict';
 
-const config 					= require('config');
-const _								= require('lodash');
-const github 					= require('../services/github');
-const LoggerService 	= require('../services/logger-service');
+const config 		= require('config');
+const _				= require('lodash');
+const github 		= require('../services/github');
+const LoggerService = require('../services/logger-service');
 
 module.exports = (repository, callback) => {
 
