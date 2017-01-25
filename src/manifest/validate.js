@@ -1,6 +1,6 @@
 'use strict';
 
-const joi = require('joi');
+const joi 						= require('joi');
 const LoggerService 	= require('../services/logger-service');
 
 const loggerService = LoggerService();
