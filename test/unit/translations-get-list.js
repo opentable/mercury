@@ -1,5 +1,6 @@
 'use strict';
 
+const _         = require('lodash');
 const expect 	= require('chai').expect;
 const injectr	= require('injectr');
 const sinon		= require('sinon');
@@ -16,7 +17,7 @@ describe('translations.getList()', () => {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: 'test/github/path' } } ]
+            translations: [ { input: { src: ['test/github/path/*.json'] } } ]
         }
     };
     
@@ -25,9 +26,10 @@ describe('translations.getList()', () => {
         let err, res;
         
         beforeEach((done) => {
-            const githubStub = sinon.stub().yields(null, [ { path: 'test/github/path/file.json' }, { path: 'test/github/path/other-file.json' }]);
+            const githubStub = sinon.stub().yields(null, ['test/github/path/file.json', 'test/github/path/other-file.json']);
+            const repo = _.cloneDeep(repository);
             
-            mockedGetList(githubStub)(repository, (error, result) => {
+            mockedGetList(githubStub)(_.clone(repo), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -36,41 +38,66 @@ describe('translations.getList()', () => {
         
         it('should append list of translations to repo key', () => {
             expect(err).to.be.null;
-            expect(res.translationFiles).to.be.eql([ 'test/github/path/file.json', 'test/github/path/other-file.json' ]);
+            expect(res.translationFiles).to.be.eql(['test/github/path/file.json', 'test/github/path/other-file.json']);
         });
-        
     });
-    
-    describe('happy path (using glob in filename)', () => {
-    
-        let err, res;
-        repository.manifestContent.translations[0].input.src = 'test/github/path/*.json';
+
+    describe('when using glob in filename', () => {
         
-        beforeEach((done) => {
-            const githubStub = sinon.stub().yields(null, [ { path: 'test/github/path/file.json' }, { path: 'test/github/path/other-file.yml' }]);
+        describe('happy path', () => {
+        
+            let err, res;
             
-            mockedGetList(githubStub)(repository, (error, result) => {
-                err = error;
-                res = result;
-                done();
+            beforeEach((done) => {
+                const githubStub = sinon.stub().yields(null, ['test/github/path/file.json', 'test/github/path/other-file.yml']);
+                const repo = _.cloneDeep(repository);
+                repo.manifestContent.translations[0].input.src = ['test/github/path/*.json'];
+
+                mockedGetList(githubStub)(repo, (error, result) => {
+                    err = error;
+                    res = result;
+                    done();
+                });
             });
+            
+            it('should append only the translations with the right termination to the repo key', () => {
+                expect(err).to.be.null;
+                expect(res.translationFiles).to.be.eql([ 'test/github/path/file.json' ]);
+            });        
         });
+
+        describe('when using multiple values as src', () => {
         
-        it('should append only the translations with the right termination to the repo key', () => {
-            expect(err).to.be.null;
-            expect(res.translationFiles).to.be.eql([ 'test/github/path/file.json' ]);
+            let err, res;          
+            
+            beforeEach((done) => {
+                const githubStub = sinon.stub().yields(null, ['test/github/path/file.json', 'test/github/path/config.json']);
+                const repo = _.cloneDeep(repository); 
+                repo.manifestContent.translations[0].input.src = ['test/github/path/*.json', '!test/github/path/config.json'];
+                
+                mockedGetList(githubStub)(repo, (error, result) => {
+                    err = error;
+                    res = result;
+                    done();
+                });
+            });
+            
+            it('should append only the translations with the right termination to the repo key', () => {
+                expect(err).to.be.null;
+                expect(res.translationFiles).to.be.eql(['test/github/path/file.json']);
+            });        
         });
-        
     });
-    
+
     describe('when getList returns no results', () => {
         
         let err, res;
 
 		beforeEach(done => {
             const githubStub = sinon.stub().yields(new Error('404 file not found'), []);
-            
-            mockedGetList(githubStub)(repository, (error, result) => {
+            const repo = _.cloneDeep(repository);
+
+            mockedGetList(githubStub)(repo, (error, result) => {
                 err = error;
                 res = result;
                 done();

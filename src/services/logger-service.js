@@ -9,6 +9,12 @@ const opts   = {
 
 logger.init(opts);
 
+const log = (type, msg, metadata) => {
+    if(config.Logging.shouldLog){
+        logger.log(type, msg, metadata);
+    }
+}
+
 module.exports = () => {
 
     const buildMetaData = (error, errortype, options) => {
@@ -28,7 +34,7 @@ module.exports = () => {
 
         const metadata = buildMetaData(error, errorType, options);
 
-        logger.log('error', msg, metadata);
+        log('error', msg, metadata);
     };
 
     const failedToLocateManifest = (error, options) => {
@@ -37,7 +43,7 @@ module.exports = () => {
 
         const metadata = buildMetaData(error, errorType, options);
 
-        logger.log('error', msg, metadata);
+        log('error', msg, metadata);
     };
 
     const manifestFailedValidation = (error, options) => {
@@ -47,7 +53,7 @@ module.exports = () => {
 
         const metadata = buildMetaData(error, errorType, options);
 
-        logger.log('error', msg, metadata);
+        log('error', msg, metadata);
     };
 
     const failedToLocateTranslationFilesInGithub = (error, options) => {
@@ -57,7 +63,7 @@ module.exports = () => {
 
         const metadata = buildMetaData(error, errorType, options);
 
-        logger.log('error', msg, metadata);
+        log('error', msg, metadata);
     };
 
     return {

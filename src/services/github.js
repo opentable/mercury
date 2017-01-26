@@ -1,6 +1,8 @@
 'use strict';
 
-let github = new require('github')({
+const _ = require('lodash');
+
+const github = new require('github')({
     protocol: 'https',
     host: 'api.github.com',
     headers: {
@@ -10,27 +12,53 @@ let github = new require('github')({
     timeout: 5000
 });
 
+const getFileContent = (options, next) => {
+    github.authenticate({
+        type: 'oauth',
+        token: options.apiToken
+    });
+
+    github.repos.getContent(options, (err, file) => {
+        const getContent = f => new Buffer(f.content, f.encoding).toString();
+        const content = !err && file ? getContent(file) : undefined;
+        return next(err, content);
+    });
+};
+
+const getReferenceSha = (options, next) => {
+    github.authenticate({
+        type: 'oauth',
+        token: options.apiToken
+    });
+
+    options.ref = 'heads/master';
+
+    github.gitdata.getReference(options, (err, reference) => {
+        next(err, reference ? reference.object.sha : undefined);
+    });
+};
+
+const getFilesList = (options, next) => {
+
+    getReferenceSha(options, (err, sha) => {
+
+        if(err){ return next(err); }
+
+        github.authenticate({
+            type: 'oauth',
+            token: options.apiToken
+        });
+
+        options.recursive = true;
+        options.sha = sha;
+
+        github.gitdata.getTree(options, (err, list) => {
+            next(err, list ? _.map(list.tree, x => x.path) : undefined);
+        });
+    });
+};
+
 module.exports = {
-    getFileContent: (options, next) => {
-        github.authenticate({
-            type: 'oauth',
-            token: options.apiToken
-        });
-
-        github.repos.getContent(options, (err, file) => {
-            const getContent = f => new Buffer(f.content, f.encoding).toString();
-            const content = !err && file ? getContent(file) : undefined;
-            return next(err, content);
-        });
-    },
-    getFilesList: (options, next) => {
-        github.authenticate({
-            type: 'oauth',
-            token: options.apiToken
-        });
-
-        github.repos.getContent(options, (err, list) => {
-            return next(err, list);
-        });
-    }
+    getFileContent,
+    getFilesList
 };
