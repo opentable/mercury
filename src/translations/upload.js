@@ -31,9 +31,7 @@ module.exports = (repository, callback) => {
                     repository.translationFiles[index].report = err.message;
                     return callback();
                 }
-                
-                console.log(smartlingUploadResult);
-                                                
+                                                                
                 if(smartlingUploadResult.response.data && smartlingUploadResult.response.data.overWritten) {
                     repository.translationFiles[index].report = 'Existing Smartling file overwritten';
                 } else {
