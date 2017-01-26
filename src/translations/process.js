@@ -12,11 +12,11 @@ module.exports = (repository, callback) => {
 		repo: repository.repo,
 		owner: repository.owner
 	};
-    
+
     const smartlingOptions = {
         userIdentifier: config.smartling.userIdentifier,
         userSecret: config.smartling.userSecret,
-        projectId: '7aebed099' 
+        projectId: repository.manifestContent.smartlingProjectId 
     };
     
     async.eachOfSeries(repository.translationFiles, (translation, index, callback) => {
