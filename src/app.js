@@ -15,7 +15,7 @@ const processRepo = (repository, next) => {
         
         (repository, cb) => translations.getList(repository, cb),
         
-        (repository, cb) => translations.process(repository, cb)
+        (repository, cb) => translations.upload(repository, cb)
 	
 	], (err, repository) => {
 
