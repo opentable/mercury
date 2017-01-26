@@ -67,7 +67,7 @@ describe('translations.getList()', () => {
             beforeEach((done) => {
                 const githubStub = sinon.stub().yields(null, testData.githubMock);
                 const repo = _.cloneDeep(repository); 
-                repo.manifestContent.translations[0].input.src = ['test/github/path/*.json', '!test/github/path/other-file.json.json'];
+                repo.manifestContent.translations[0].input.src = ['test/github/path/*.json', '!test/github/path/other-file.json'];
                 
                 mockedGetList(githubStub)(repo, (error, result) => {
                     err = error;
@@ -78,7 +78,7 @@ describe('translations.getList()', () => {
             
             it('should append only the translations with the right termination to the repo key', () => {
                 expect(err).to.be.null;
-                expect(res.translationFiles).to.be.eql(['test/github/path/file.json']);
+                expect(res.translationFiles).to.be.eql(testData.translationFilesGlob);
             });
         });
     });

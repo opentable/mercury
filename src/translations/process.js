@@ -2,7 +2,6 @@
 
 const async = require('async');
 const config = require('config');
-const diff = require('deep-diff').diff;
 const github = require('../services/github');
 const smartling = require('../services/smartling');
 
@@ -43,8 +42,8 @@ module.exports = (repository, callback) => {
 
                 callback();
             });
-    	});
+        });
     }, (err) => {
-        callback(null, repository);
+        callback(err, repository);
     });
 }

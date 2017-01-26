@@ -5,33 +5,28 @@ const config 	= require('config');
 const github 	= require('../services/github');
 const LoggerService = require('../services/logger-service');
 const mm 		= require('micromatch');
+const path      = require('path');
 
 const loggerService = LoggerService();
 
 const getMatchingFiles = (list, srcGlobs) => {
 	let result = list;
-	_.each(srcGlobs, glob => result = mm.match(result, glob));
-	return result;
+    
+	_.each(srcGlobs, glob => {
+        result = mm.match(result, glob);
+    });
+
+	return mapFileObjects(result);
 };
 
-// const mapFileObject = (file) => {
-//     return {
-//         github: file.path,
-//         smartling: `files/${file.name}`
-//     }
-// }
-// 
-// const createFilesList = (content, fullPath) => {
-//     let list = [];
-// 
-//     content.forEach(file => {
-//         if(micromatch.isMatch(file.path, fullPath)) {
-//             list.push(mapFileObject(file));
-//         }
-//     });
-// 
-//     return list;
-// }
+const mapFileObjects = (files) => {
+    return _.map(files, file => {
+        return {
+            github: file,
+            smartling: `files/${path.basename(file)}`
+        }
+    });
+};
 
 module.exports = (repository, callback) => {
     
@@ -45,8 +40,10 @@ module.exports = (repository, callback) => {
 	};
 
     github.getFilesList(options, (err, list) => {
+                 
 		if(!err && list){
 			repository.translationFiles = getMatchingFiles(list, srcGlobs);
+            
 			if(_.isEmpty(repository.translationFiles)){
 				err = true;
 			}
@@ -57,7 +54,7 @@ module.exports = (repository, callback) => {
 			loggerService.failedToLocateTranslationFilesInGithub(err, _.pick(options, ['path', 'repo', 'owner']));
 			repository.skip = true;
 		}
-
+        
 		callback(err, repository);
 	});
 };

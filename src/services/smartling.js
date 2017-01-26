@@ -1,8 +1,6 @@
 'use strict';
 
-const fs = require('fs');
 const request = require('request');
-const str = require('string-to-stream');
 
 const authenticate = (options, next) => {
     const authenticateOptions = {
