@@ -11,7 +11,6 @@ const schema = joi.object().keys({
 	smartlingProjectId: joi.string().required(),
 	translations: notEmptyArray.items(joi.object().keys({
 		input: joi.object().keys({
-			locale: joi.string().required(),
 			src: joi.any().allow(joi.string(), notEmptyArray.items(joi.string())).required()
 		}).required(),
 		output: joi.object().keys({

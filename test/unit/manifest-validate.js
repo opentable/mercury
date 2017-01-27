@@ -20,7 +20,6 @@ describe('manifest.validate()', () => {
 			smartlingProjectId: 'test-id',
 			translations: [{
 				input: {
-					locale: 'en-us',
 					src: './src/locales/en-us/*.json'
 				},
 				output: {
@@ -77,18 +76,6 @@ describe('manifest.validate()', () => {
 
 			it('should not be valid', () => {
 				expect(error.toString()).to.contain('"translations" does not contain 1 required value(s)');
-			});
-		});
-
-		describe(`when translation source doesn't contain locale`, () => {
-
-			const invalid = _.cloneDeep(repository);
-			delete invalid.manifestContent.translations[0].input.locale;
-
-			beforeEach(done => validate(invalid, next(done)));
-
-			it('should not be valid', () => {
-				expect(error.toString()).to.contain('"locale" is required');
 			});
 		});
 
