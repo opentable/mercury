@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const request = require('request');
 
 const authenticate = (options, next) => {
@@ -30,7 +31,7 @@ module.exports = {
                 file: {
                     value: content,
                     options: {
-                        filename: 'test.json',
+                        filename: path.basename(options.path),
                         contentType: 'application/json'
                     }
                 },
