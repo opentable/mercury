@@ -23,7 +23,7 @@ describe('manifest.validate()', () => {
 					src: './src/locales/en-us/*.json'
 				},
 				output: {
-					src: './src/locales/${locale}/${filename}.json'
+					dest: './src/locales/${locale}/${filename}.json'
 				}
 			}]
 		}
@@ -104,15 +104,15 @@ describe('manifest.validate()', () => {
 			});
 		});
 
-		describe(`when translation output doesn't contain src path`, () => {
+		describe(`when translation output doesn't contain dest path`, () => {
 
 			const invalid = _.cloneDeep(repository);
-			delete invalid.manifestContent.translations[0].output.src;
+			delete invalid.manifestContent.translations[0].output.dest;
 
 			beforeEach(done => validate(invalid, next(done)));
 
 			it('should not be valid', () => {
-				expect(error.toString()).to.contain('"src" is required');
+				expect(error.toString()).to.contain('"dest" is required');
 			});
 		});
 	});

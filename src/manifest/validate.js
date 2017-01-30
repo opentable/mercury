@@ -14,7 +14,7 @@ const schema = joi.object().keys({
 			src: joi.any().allow(joi.string(), notEmptyArray.items(joi.string())).required()
 		}).required(),
 		output: joi.object().keys({
-			src: joi.string().required()
+			dest: joi.string().required()
 		}).required()
 	}).required()).required()
 });
