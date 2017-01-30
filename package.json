@@ -35,11 +35,14 @@
   "dependencies": {
     "async": "^2.1.4",
     "config": "^1.24.0",
+    "deep-diff": "^0.3.4",
     "github": "^8.1.0",
     "joi": "^10.2.0",
     "js-yaml": "^3.7.0",
     "lodash": "^4.17.4",
     "micromatch": "^2.3.11",
-    "ot-logger": "^0.6.2"
+    "request": "^2.79.0",
+    "ot-logger": "^0.6.2",
+    "parse-glob": "^3.0.4"
   }
 }
