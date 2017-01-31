@@ -9,6 +9,30 @@ module.exports = {
         'test/github/path/file.json',
         'test/github/path/other-file.yml'
     ],
+    smartlingInfoMock: {
+        projectId: '2249fadc3',
+        projectName: 'Project 111',
+        accountUid: '48ade9f989',
+        sourceLocaleId: 'en-US',
+        sourceLocaleDescription: 'English (United States)',
+        archived : false,
+        targetLocales: [
+            {
+               localeId: 'de-DE',
+               description: 'German (Germany)',
+               enabled: true
+            }
+        ]
+    },
+    smartlingInfoNoResultsMock: {
+        targetLocales: [
+            {
+               localeId: 'de-DE',
+               description: 'German (Germany)',
+               enabled: false
+            }
+        ]
+    },
     smartlingMockNew: {
         response: {
             data: { overWritten: false }

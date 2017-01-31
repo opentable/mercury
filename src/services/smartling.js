@@ -1,11 +1,13 @@
 'use strict';
 
-const path = require('path');
-const request = require('request');
+const path      = require('path');
+const request   = require('request');
+
+const BASE_URL = 'https://api.smartling.com/';
 
 const authenticate = (options, next) => {
     const authenticateOptions = {
-        url: 'https://api.smartling.com/auth-api/v2/authenticate',
+        url: `${BASE_URL}auth-api/v2/authenticate`,
         method: 'POST',
         json: true,
         body: {
@@ -20,6 +22,50 @@ const authenticate = (options, next) => {
 };
 
 module.exports = {
+
+    fetchFile: (options, next) => {
+        authenticate(options, (err, accessToken) => {
+            if(err){ return next(err); }
+
+            const reqDetails = {
+                url: `${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            };
+
+            request(reqDetails, (err, response, body) => {
+                if(err || response.statusCode !== 200) {
+                    return next(new Error('Error when downloading Smartling Resource'));
+                }
+                                
+                next(null, body);
+            });
+        });
+    },
+
+    getProjectInfo: (options, next) => {
+        authenticate(options, (err, accessToken) => {
+            if(err){ return next(err); }
+
+            const reqDetails = {
+                url: `${BASE_URL}projects-api/v2/projects/${options.projectId}`,
+                json: true,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            };
+
+            request(reqDetails, (err, response, body) => {
+                if(err || response.statusCode !== 200) {
+                    return next(new Error('Error when downloading Smartling project Info'));
+                }
+                                
+                next(null, body.response.data);
+            });
+        });
+    },
+
     uploadFileContent: (content, options, next) => {
         authenticate(options, (err, accessToken) => {
             
@@ -40,7 +86,7 @@ module.exports = {
             };
 
             const smartlingUploadOptions = {
-                url: `https://api.smartling.com/files-api/v2/projects/${options.projectId}/file`,
+                url: `${BASE_URL}files-api/v2/projects/${options.projectId}/file`,
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
