@@ -5,7 +5,7 @@ const expect 	= require('chai').expect;
 
 const validate  = require('../../src/manifest/validate');
 
-describe.only('manifest.validate()', () => {
+describe('manifest.validate()', () => {
 
 	let error, result;
 
@@ -126,7 +126,31 @@ describe.only('manifest.validate()', () => {
 			beforeEach(done => validate(invalid, next(done)));
 
 			it('should not be valid', () => {
-				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale})/]]]]');
+				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale}\\/\\${filename})/]]]]');
+			});
+		});
+
+        describe(`when translation output doesn't contain $filename placeholder`, () => {
+
+			const invalid = _.cloneDeep(repository);
+			invalid.manifestContent.translations[0].output.dest = dest.replace('${filename}', '${YOLO}');
+
+			beforeEach(done => validate(invalid, next(done)));
+
+			it('should not be valid', () => {
+				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale}\\/\\${filename})/]]]]');
+			});
+		});
+
+        describe(`when translation output doesn't contain $filename or $locale placeholder`, () => {
+
+			const invalid = _.cloneDeep(repository);
+			invalid.manifestContent.translations[0].output.dest = dest.replace('${locale}/${filename}', '${lol}/${YOLO}');
+
+			beforeEach(done => validate(invalid, next(done)));
+
+			it('should not be valid', () => {
+				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale}\\/\\${filename})/]]]]');
 			});
 		});
 	});
