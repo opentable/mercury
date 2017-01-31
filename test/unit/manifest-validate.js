@@ -3,9 +3,9 @@
 const _			= require('lodash');
 const expect 	= require('chai').expect;
 
-describe('manifest.validate()', () => {
+const validate  = require('../../src/manifest/validate');
 
-	const validate = require('../../src/manifest/validate');
+describe.only('manifest.validate()', () => {
 
 	let error, result;
 
@@ -15,6 +15,8 @@ describe('manifest.validate()', () => {
 		done();
 	};
 
+    const dest = './src/locales/${locale}/${filename}.json';
+
 	const repository = {
 		manifestContent: {
 			smartlingProjectId: 'test-id',
@@ -23,7 +25,7 @@ describe('manifest.validate()', () => {
 					src: './src/locales/en-us/*.json'
 				},
 				output: {
-					dest: './src/locales/${locale}/${filename}.json'
+					dest
 				}
 			}]
 		}
@@ -113,6 +115,18 @@ describe('manifest.validate()', () => {
 
 			it('should not be valid', () => {
 				expect(error.toString()).to.contain('"dest" is required');
+			});
+		});
+
+        describe(`when translation output doesn't contain $locale placeholder`, () => {
+
+			const invalid = _.cloneDeep(repository);
+			invalid.manifestContent.translations[0].output.dest = dest.replace('${locale}', '${lol}');
+
+			beforeEach(done => validate(invalid, next(done)));
+
+			it('should not be valid', () => {
+				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale})/]]]]');
 			});
 		});
 	});
