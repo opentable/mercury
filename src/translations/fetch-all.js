@@ -46,7 +46,7 @@ module.exports = (repository, callback) => {
   }, (err) => {
 
 	if(err){
-		loggerService.log(err, errorTypes.failedSmartlingFetchFiles, repository);
+		loggerService.error(err, errorTypes.failedSmartlingFetchFiles, repository);
 		repository.skip = true;
 	}
 

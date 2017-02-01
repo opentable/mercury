@@ -1,6 +1,7 @@
 'use strict';
 
 const _ 				= require('lodash');
+const errorTypes 		= require('../resources/error-types');
 const joi 				= require('joi');
 const LoggerService 	= require('../services/logger-service');
 
@@ -24,7 +25,7 @@ module.exports = (repository, callback) => {
 	joi.validate(repository.manifestContent, schema, (err, normalisedManifest) => {
 
 		if(err){
-			loggerService.manifestFailedValidation(err, repository);
+			loggerService.error(new Error('Manifest is not valid'), errorTypes.manifestFailedValidation, repository);
 		}
 
 		if(!err && normalisedManifest){

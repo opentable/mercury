@@ -1,7 +1,7 @@
 'use strict';
 
 const config 		= require('config');
-const _				= require('lodash');
+const errorTypes 	= require('../resources/error-types');
 const github 		= require('../services/github');
 const LoggerService = require('../services/logger-service');
 
@@ -22,16 +22,12 @@ module.exports = (repository, callback) => {
 				repository.manifestContent = JSON.parse(content);
 			} catch(e){
 				err = new Error('An error happened when parsing manifest.json');
-
-				loggerService.failedToParseManifest(err, _.pick(options, ['path', 'repo', 'owner']));
+				loggerService.error(err, errorTypes.failedToParseManifest, repository);
+			repository.skip = true;
 			}
 		} else {
 			err = new Error('manifest.json not found. Skipping.');
-
-			loggerService.failedToLocateManifest(err, _.pick(options, ['path', 'repo', 'owner']));
-		}
-
-		if(err){
+			loggerService.error(err, errorTypes.failedToLocateManifest, repository);
 			repository.skip = true;
 		}
 

@@ -58,13 +58,13 @@ module.exports = (repository, callback) => {
 
 		if(err){
 			err = new Error('No translation files found. Skipping.');
-			loggerService.failedToLocateTranslationFilesInGithub(err, _.pick(githubOptions, ['repo', 'owner']));
+			loggerService.error(err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
 			repository.skip = true;
 			return callback(err, repository);
 		} else {
 			smartling.getProjectInfo(smartlingOptions, (err, info) => {
 				if(err){
-					loggerService.log(err, errorTypes.failedSmartlingFetchInfo, repository);
+					loggerService.error(err, errorTypes.failedSmartlingFetchInfo, repository);
 					repository.skip = true;
 				} else {
 					repository.sourceLocaleId = info.sourceLocaleId;
