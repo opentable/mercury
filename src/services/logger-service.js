@@ -28,45 +28,7 @@ module.exports = () => {
         };
     };
 
-    const failedToParseManifest = (error, options) => {
-        const msg = `Error while parsing ${options.path} from ${options.repo}`;
-        const errorType = 'failed-to-parse-manifest';
-
-        const metadata = buildMetaData(error, errorType, options);
-
-        log('error', msg, metadata);
-    };
-
-    const failedToLocateManifest = (error, options) => {
-        const msg = `Error while locating manifest ${options.path} from ${options.repo}`;
-        const errorType = 'failed-to-locate-manifest';
-
-        const metadata = buildMetaData(error, errorType, options);
-
-        log('error', msg, metadata);
-    };
-
-    const manifestFailedValidation = (error, options) => {
-
-        const msg = `Error manifest failed validation - ${options.path} from ${options.repo}`;
-        const errorType = 'manifest-failed-validation';
-
-        const metadata = buildMetaData(error, errorType, options);
-
-        log('error', msg, metadata);
-    };
-
-    const failedToLocateTranslationFilesInGithub = (error, options) => {
-
-        const msg = `Error Failed to locate translate files in github - ${options.path} from ${options.repo}`;
-        const errorType = 'failed-to-location-translation-files-in-github';
-
-        const metadata = buildMetaData(error, errorType, options);
-
-        log('error', msg, metadata);
-    };
-
-    const logGeneric = (error, errorType, repository) => {
+    const error = (error, errorType, repository) => {
         const options = {
             repo: repository.repo,
             owner: repository.owner
@@ -77,10 +39,6 @@ module.exports = () => {
     };
 
     return {
-        failedToParseManifest,
-        failedToLocateManifest,
-        log: logGeneric,
-        manifestFailedValidation,
-        failedToLocateTranslationFilesInGithub
+        error
     };
 };
