@@ -19,7 +19,7 @@ describe('translations.upload()', () => {
     
     const githubStub = sinon.stub().yields(null, testData.githubMock);
     
-    const repository = testData.postTranslationRepository;
+    const repository = testData.postSourceFetchRepository;
     
     describe('happy path', () => {
         

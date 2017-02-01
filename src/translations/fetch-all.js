@@ -1,9 +1,12 @@
 'use strict';
 
-const _					= require('lodash');
-const async			= require('async');
-const config		= require('config');
+const _			= require('lodash');
+const async		= require('async');
+const config	= require('config');
+const Logger 	= require('../services/logger-service');
 const smartling = require('../services/smartling');
+
+const loggerService = Logger();
 
 const getFullList = (repository) => {
 	const list = [];
@@ -27,7 +30,7 @@ module.exports = (repository, callback) => {
 
   const filesToDownload = getFullList(repository);
 
-  async.each(filesToDownload, (file, next) => {
+  async.eachSeries(filesToDownload, (file, next) => {
 	smartling.fetchFile(_.extend(smartlingOptions, file), (err, content) => {
 
 		if(!err && content){
@@ -42,6 +45,7 @@ module.exports = (repository, callback) => {
   }, (err) => {
 
 	if(err){
+		loggerService.log(err, 'failed-smartling-fetch-files', repository);
 		repository.skip = true;
 	}
 

@@ -142,7 +142,7 @@ describe('translations.getList()', () => {
         });
 
         it('should show an error', () => {
-            expect(err.toString()).to.contain('Error: Failed to fetch smartling project info for opentable/hobknob. Skipping.');
+            expect(err.toString()).to.contain('Error: I got an error');
         });
 
         it('should mark the repo for being skipped', () => {

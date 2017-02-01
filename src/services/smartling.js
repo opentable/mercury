@@ -25,18 +25,17 @@ module.exports = {
 
     fetchFile: (options, next) => {
         authenticate(options, (err, accessToken) => {
+
             if(err){ return next(err); }
 
             const reqDetails = {
                 url: `${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                headers: { Authorization: `Bearer ${accessToken}` }
             };
 
             request(reqDetails, (err, response, body) => {
                 if(err || response.statusCode !== 200) {
-                    return next(new Error('Error when downloading Smartling Resource'));
+                    return next(new Error(`Error when downloading Smartling Resource (${response.statusCode} - ${JSON.stringify(body)})`));
                 }
                                 
                 next(null, body);
@@ -46,19 +45,18 @@ module.exports = {
 
     getProjectInfo: (options, next) => {
         authenticate(options, (err, accessToken) => {
+
             if(err){ return next(err); }
 
             const reqDetails = {
                 url: `${BASE_URL}projects-api/v2/projects/${options.projectId}`,
-                json: true,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                headers: { Authorization: `Bearer ${accessToken}` },
+                json: true
             };
 
             request(reqDetails, (err, response, body) => {
                 if(err || response.statusCode !== 200) {
-                    return next(new Error('Error when downloading Smartling project Info'));
+                    return next(new Error('Error when downloading Smartling project Info (${response.statusCode} - ${JSON.stringify(body)})'));
                 }
                                 
                 next(null, body.response.data);

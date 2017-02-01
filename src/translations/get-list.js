@@ -63,7 +63,6 @@ module.exports = (repository, callback) => {
 		} else {
 			smartling.getProjectInfo(smartlingOptions, (err, info) => {
 				if(err){
-					err = new Error(`Failed to fetch smartling project info for ${githubOptions.owner}/${githubOptions.repo}. Skipping.`);
 					loggerService.log(err, 'failed-smartling-fetch-info', repository);
 					repository.skip = true;
 				} else {
