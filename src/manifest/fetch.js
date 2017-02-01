@@ -23,7 +23,7 @@ module.exports = (repository, callback) => {
 			} catch(e){
 				err = new Error('An error happened when parsing manifest.json');
 				loggerService.error(err, errorTypes.failedToParseManifest, repository);
-			repository.skip = true;
+				repository.skip = true;
 			}
 		} else {
 			err = new Error('manifest.json not found. Skipping.');
