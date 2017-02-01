@@ -1,10 +1,11 @@
 'use strict';
 
-const _			= require('lodash');
-const async		= require('async');
-const config	= require('config');
-const Logger 	= require('../services/logger-service');
-const smartling = require('../services/smartling');
+const _				= require('lodash');
+const async			= require('async');
+const config		= require('config');
+const errorTypes	= require('../resources/error-types');
+const Logger 		= require('../services/logger-service');
+const smartling 	= require('../services/smartling');
 
 const loggerService = Logger();
 
@@ -45,7 +46,7 @@ module.exports = (repository, callback) => {
   }, (err) => {
 
 	if(err){
-		loggerService.log(err, 'failed-smartling-fetch-files', repository);
+		loggerService.log(err, errorTypes.failedSmartlingFetchFiles, repository);
 		repository.skip = true;
 	}
 

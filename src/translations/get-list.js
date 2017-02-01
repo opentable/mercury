@@ -1,12 +1,13 @@
 'use strict';
 
-const _ 		= require('lodash');
-const config 	= require('config');
-const github 	= require('../services/github');
-const Logger 	= require('../services/logger-service');
-const mm 		= require('micromatch');
-const path      = require('path');
-const smartling = require('../services/smartling');
+const _ 			= require('lodash');
+const config 		= require('config');
+const errorTypes 	= require('../resources/error-types');
+const github 		= require('../services/github');
+const Logger 		= require('../services/logger-service');
+const mm 			= require('micromatch');
+const path      	= require('path');
+const smartling 	= require('../services/smartling');
 
 const loggerService = Logger();
 
@@ -63,7 +64,7 @@ module.exports = (repository, callback) => {
 		} else {
 			smartling.getProjectInfo(smartlingOptions, (err, info) => {
 				if(err){
-					loggerService.log(err, 'failed-smartling-fetch-info', repository);
+					loggerService.log(err, errorTypes.failedSmartlingFetchInfo, repository);
 					repository.skip = true;
 				} else {
 					repository.sourceLocaleId = info.sourceLocaleId;
