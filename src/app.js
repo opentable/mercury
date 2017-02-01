@@ -15,7 +15,9 @@ const processRepo = (repository, next) => {
         
         (repository, cb) => translations.getList(repository, cb),
         
-        (repository, cb) => translations.upload(repository, cb)
+        (repository, cb) => translations.upload(repository, cb),
+
+        (repository, cb) => translations.fetchAll(repository, cb)
 	
 	], (err, repository) => {
 

@@ -66,9 +66,20 @@ module.exports = () => {
         log('error', msg, metadata);
     };
 
+    const logGeneric = (error, errorType, repository) => {
+        const options = {
+            repo: repository.repo,
+            owner: repository.owner
+        };
+
+        const metadata = buildMetaData(error, errorType, options);
+        log('error', error.toString(), metadata);
+    };
+
     return {
         failedToParseManifest,
         failedToLocateManifest,
+        log: logGeneric,
         manifestFailedValidation,
         failedToLocateTranslationFilesInGithub
     };
