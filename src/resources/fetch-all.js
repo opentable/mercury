@@ -14,7 +14,7 @@ const mapFileName = (file, localeId, destGlob) => {
     return destGlob.replace('${locale}', localeId.toLowerCase()).replace('${filename}', path.basename(file));
 };
 
-const getFullList = (repository) => {
+const getAllGithubFilenames = (repository) => {
     const list = [];
     const destGlob = _.first(repository.manifestContent.translations).output.dest;
     
@@ -36,14 +36,12 @@ module.exports = (repository, callback) => {
 		owner: repository.owner
 	};
     
-    const filesToDownload = getFullList(repository);
-    
+    const filesToDownload = getAllGithubFilenames(repository);
+        
     async.eachSeries(filesToDownload, (file, next) => {
         
         githubOptions.path = file.fileName;
-        
-        console.log(githubOptions);
-        
+                
         github.getFileContent(githubOptions, (err, content) => {
                         
             if(!err && content){

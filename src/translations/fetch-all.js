@@ -9,7 +9,7 @@ const smartling 	= require('../services/smartling');
 
 const loggerService = Logger();
 
-const getFullList = (repository) => {
+const getAllSmartlingFilenames = (repository) => {
     const list = [];
     
     _.each(repository.translationFiles, (file) => {
@@ -29,7 +29,7 @@ module.exports = (repository, callback) => {
         projectId: repository.manifestContent.smartlingProjectId
     };
     
-    const filesToDownload = getFullList(repository);
+    const filesToDownload = getAllSmartlingFilenames(repository);
     
     async.eachSeries(filesToDownload, (file, next) => {
         smartling.fetchFile(_.extend(smartlingOptions, file), (err, content) => {
