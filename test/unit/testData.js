@@ -112,8 +112,8 @@ module.exports = {
                 smartling: 'files/file.json',
                 report: 'Test repo report',
                 locales: {
-                    'de-DE': { smartlingContent: 'file content', githubPath: 'src/locales/de-DE/file.json', githubContent: 'file content' },
-                    'nl-NL': { smartlingContent: 'file content', githubPath: 'src/locales/nl-NL/file.json', githubContent: 'file content' }
+                    'de-DE': { smartlingContent: 'file content', githubPath: 'src/locales/de-de/file.json', githubContent: 'file content' },
+                    'nl-NL': { smartlingContent: 'file content', githubPath: 'src/locales/nl-nl/file.json', githubContent: 'file content' }
                 }
             },
             {
@@ -121,8 +121,8 @@ module.exports = {
                 smartling: 'files/other-file.json',
                 report: 'Test repo report',
                 locales: {
-                    'de-DE': { smartlingContent: 'file content', githubPath: 'src/locales/de-DE/other-file.json', githubContent: 'file content' },
-                    'nl-NL': { smartlingContent: 'file content', githubPath: 'src/locales/nl-NL/other-file.json', githubContent: 'file content' }
+                    'de-DE': { smartlingContent: 'file content', githubPath: 'src/locales/de-de/other-file.json', githubContent: 'file content' },
+                    'nl-NL': { smartlingContent: 'file content', githubPath: 'src/locales/nl-nl/other-file.json', githubContent: 'file content' }
                 }
             }
         ],
