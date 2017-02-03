@@ -44,16 +44,18 @@ module.exports = (repository, callback) => {
                 
         github.getFileContent(githubOptions, (err, content) => {
                         
-            if(!err && content){
-                let current = _.find(repository.translationFiles, translationFile => {  
-                    return path.basename(translationFile.github) === path.basename(file.fileName);
-                });
-                
-                current.locales = current.locales || {};
-                _.assign(current.locales[file.localeId], { githubPath: file.fileName, githubContent: content });
+            if(err && err.code !== 404){
+                return next(new Error(err.message));    
             }
+            
+            let current = _.find(repository.translationFiles, translationFile => {  
+                return path.basename(translationFile.github) === path.basename(file.fileName);
+            });
+            
+            current.locales = current.locales || {};
+            _.assign(current.locales[file.localeId], { githubPath: file.fileName, githubContent: content });
                         
-            next(err);
+            next();
         });
     }, (err) => {
         

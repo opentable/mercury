@@ -40,13 +40,37 @@ describe('resources.fetchAll()', () => {
         });
     });
 
-    describe('when github resource fetch fails', () => {
+    describe('when github resource fetch fails with a File not Found', () => {
     
         let err, res;
         
         beforeEach((done) => {
             const repo = testData.postSmartlingFetchRepository;
-            const githubStub = sinon.stub().yields(new Error('I got a problem'));
+            const githubStub = sinon.stub().yields({ message: 'Not Found', code: 404 }, null);
+            
+            mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
+                err = error;
+                res = result;
+                done();
+            });
+        });
+
+        it('should show no errors', () => {
+            expect(err).to.be.null;
+        });
+
+        it('add a null value to githubContent', () => {
+            expect(res.translationFiles[0].locales['de-DE'].githubContent).to.be.null;
+        });
+    });
+    
+    describe('when github resource fetch fails with other error', () => {
+    
+        let err, res;
+        
+        beforeEach((done) => {
+            const repo = testData.postSmartlingFetchRepository;
+            const githubStub = sinon.stub().yields({ message: 'BOOM!', code: 500 }, null);
             
             mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
@@ -56,7 +80,7 @@ describe('resources.fetchAll()', () => {
         });
 
         it('should show an error', () => {
-            expect(err.toString()).to.contain('Error: I got a problem');
+            expect(err.message).to.contain('BOOM!');
         });
 
         it('should mark the repo for being skipped', () => {

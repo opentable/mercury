@@ -25,7 +25,8 @@ const processRepo = (repository, next) => {
 	], (err, repository) => {
 
 		console.log(`\ngot following result for ${repository.owner}/${repository.repo}:`);
-		console.log(err || JSON.stringify(repository, null, 2));
+		console.log(JSON.stringify(err, null, 2));
+        console.log(JSON.stringify(repository, null, 2));
 		next();
 	});
 };
