@@ -20,7 +20,7 @@ const getFileContent = (options, next) => {
 
     github.repos.getContent(options, (err, file) => {
         const getContent = f => new Buffer(f.content, f.encoding).toString();
-        const content = !err && file ? getContent(file) : undefined;
+        const content = !err && file ? getContent(file) : null;
         return next(err, content);
     });
 };

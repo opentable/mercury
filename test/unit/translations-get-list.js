@@ -28,7 +28,7 @@ describe('translations.getList()', () => {
             const githubStub = sinon.stub().yields(null, testData.githubMock);
             const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
             
-            mockedGetList(githubStub, smartlingStub)(_.clone(repo), (error, result) => {
+            mockedGetList(githubStub, smartlingStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -84,7 +84,7 @@ describe('translations.getList()', () => {
                 const githubStub = sinon.stub().yields(null, testData.githubMock);
                 const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
                 const repo = _.cloneDeep(repository); 
-                repo.manifestContent.translations[0].input.src = ['test/github/path/*.json', '!test/github/path/other-file.json'];
+                repo.manifestContent.translations[0].input.src = ['src/locales/en-us/*.json', '!src/locales/en-us/other-file.json'];
                 
                 mockedGetList(githubStub, smartlingStub)(repo, (error, result) => {
                     err = error;

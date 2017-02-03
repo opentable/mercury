@@ -8,23 +8,23 @@ const testData = require('./testData');
 
 describe('translations.fetchAll()', () => {
     
-    const mockedGetList = (smartlingStub) => injectr('../../src/translations/fetch-all.js', {
+    const mockedFetchAll = (smartlingStub) => injectr('../../src/translations/fetch-all.js', {
         '../services/smartling': {
             fetchFile: smartlingStub
         }
     });
     
-    const repository = testData.postFetchRepository;
+    const repository = testData.postSmartlingFetchRepository;
     
     describe('happy path', () => {
     
         let err, res;
         
         beforeEach((done) => {
-            const repo = _.cloneDeep(repository);
+            const repo = testData.postSourceFetchRepository;
             const smartlingStub = sinon.stub().yields(null, 'file content');
             
-            mockedGetList(smartlingStub)(_.clone(repo), (error, result) => {
+            mockedFetchAll(smartlingStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -45,10 +45,10 @@ describe('translations.fetchAll()', () => {
         let err, res;
         
         beforeEach((done) => {
-            const repo = _.cloneDeep(repository);
+            const repo = testData.postSourceFetchRepository;
             const smartlingStub = sinon.stub().yields(new Error('I got a problem'));
             
-            mockedGetList(smartlingStub)(_.clone(repo), (error, result) => {
+            mockedFetchAll(smartlingStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
                 done();

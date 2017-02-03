@@ -4,6 +4,7 @@ const _ 		   = require('lodash');
 const async  	   = require('async');
 const config 	   = require('config');
 const manifest 	   = require('./manifest');
+const resources    = require('./resources');
 const translations = require('./translations');
 
 const processRepo = (repository, next) => {
@@ -17,12 +18,15 @@ const processRepo = (repository, next) => {
         
         (repository, cb) => translations.upload(repository, cb),
 
-        (repository, cb) => translations.fetchAll(repository, cb)
+        (repository, cb) => translations.fetchAll(repository, cb),
+        
+        (repository, cb) => resources.fetchAll(repository, cb)
 	
 	], (err, repository) => {
 
 		console.log(`\ngot following result for ${repository.owner}/${repository.repo}:`);
-		console.log(err || repository);
+		console.log(JSON.stringify(err, null, 2));
+        console.log(JSON.stringify(repository, null, 2));
 		next();
 	});
 };
