@@ -2,7 +2,6 @@
 
 const _			= require('lodash');
 const expect 	= require('chai').expect;
-
 const validate  = require('../../src/manifest/validate');
 
 describe('manifest.validate()', () => {
@@ -15,14 +14,14 @@ describe('manifest.validate()', () => {
 		done();
 	};
 
-    const dest = './src/locales/${locale}/${filename}.json';
+    const dest = 'src/locales/${locale}/${filename}';
 
 	const repository = {
 		manifestContent: {
 			smartlingProjectId: 'test-id',
 			translations: [{
 				input: {
-					src: './src/locales/en-us/*.json'
+					src: 'src/locales/en-us/*.json'
 				},
 				output: {
 					dest

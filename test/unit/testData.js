@@ -2,12 +2,12 @@
 
 module.exports = {
     githubMock: [ 
-        'test/github/path/file.json',
-        'test/github/path/other-file.json'
+        'src/locales/en-us/file.json',
+        'src/locales/en-us/other-file.json'
     ],
     githubMockYml: [ 
-        'test/github/path/file.json',
-        'test/github/path/other-file.yml'
+        'src/locales/en-us/file.json',
+        'src/locales/en-us/other-file.yml'
     ],
     smartlingInfoMock: {
         projectId: '2249fadc3',
@@ -47,53 +47,82 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['test/github/path/*.json'] } } ]
+            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         }
     },
     postSourceFetchRepository: {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['test/github/path/*.json'] } } ]
+            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         },
         translationFiles: [ 
             {
-                github: 'test/github/path/file.json',
+                github: 'src/locales/en-us/file.json',
                 smartling: 'files/file.json',
-                report: 'Error when uploading Smartling file'
+                report: 'Test repo report'
             },
             {
-                github: 'test/github/path/other-file.json',
+                github: 'src/locales/en-us/other-file.json',
                 smartling: 'files/other-file.json',
-                report: 'Error when uploading Smartling file'
+                report: 'Test repo report'
             }
         ],
         sourceLocaleId: 'en-US',
         targetLocales: ['de-DE', 'nl-NL']
     },
-    postFetchRepository: {
+    postSmartlingFetchRepository: {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['test/github/path/*.json'] } } ]
+            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         },
         translationFiles: [ 
             {
-                github: 'test/github/path/file.json',
+                github: 'src/locales/en-us/file.json',
                 smartling: 'files/file.json',
-                report: 'Error when uploading Smartling file',
+                report: 'Test repo report',
                 locales: {
                     'de-DE': { smartlingContent: 'file content' },
                     'nl-NL': { smartlingContent: 'file content' }
                 }
             },
             {
-                github: 'test/github/path/other-file.json',
-                report: 'Error when uploading Smartling file',
+                github: 'src/locales/en-us/other-file.json',
+                report: 'Test repo report',
                 smartling: 'files/other-file.json',
                 locales: {
                     'de-DE': { smartlingContent: 'file content' },
                     'nl-NL': { smartlingContent: 'file content' }
+                }
+            }
+        ],
+        sourceLocaleId: 'en-US',
+        targetLocales: ['de-DE', 'nl-NL']
+    },
+    postGithubFetchRepository: {
+        owner: 'opentable',
+        repo: 'hobknob',
+        manifestContent: {
+            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+        },
+        translationFiles: [ 
+            {
+                github: 'src/locales/en-us/file.json',
+                smartling: 'files/file.json',
+                report: 'Test repo report',
+                locales: {
+                    'de-DE': { smartlingContent: 'file content', githubPath: 'src/locales/de-DE/file.json', githubContent: 'file content' },
+                    'nl-NL': { smartlingContent: 'file content', githubPath: 'src/locales/nl-NL/file.json', githubContent: 'file content' }
+                }
+            },
+            {
+                github: 'src/locales/en-us/other-file.json',
+                smartling: 'files/other-file.json',
+                report: 'Test repo report',
+                locales: {
+                    'de-DE': { smartlingContent: 'file content', githubPath: 'src/locales/de-DE/other-file.json', githubContent: 'file content' },
+                    'nl-NL': { smartlingContent: 'file content', githubPath: 'src/locales/nl-NL/other-file.json', githubContent: 'file content' }
                 }
             }
         ],
@@ -102,17 +131,17 @@ module.exports = {
     },
     translationFiles: [ 
         {
-            github: 'test/github/path/file.json',
+            github: 'src/locales/en-us/file.json',
             smartling: 'files/file.json'
         },
         {
-            github: 'test/github/path/other-file.json',
+            github: 'src/locales/en-us/other-file.json',
             smartling: 'files/other-file.json'
         }
     ],
     translationFilesGlob: [
         {
-            github: 'test/github/path/file.json',
+            github: 'src/locales/en-us/file.json',
             smartling: 'files/file.json'
         }
     ]

@@ -29,7 +29,7 @@ describe('translations.upload()', () => {
             beforeEach((done) => {
                 const smartlingStub = sinon.stub().yields(null, testData.smartlingMockNew);
                 
-                mockedUpload(githubStub, smartlingStub)(_.clone(repository), (error, result) => {
+                mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
                     err = error;
                     res = result;
                     done();
@@ -48,7 +48,7 @@ describe('translations.upload()', () => {
             beforeEach((done) => {
                 const smartlingStub = sinon.stub().yields(null, testData.smartlingMockExisting);
                 
-                mockedUpload(githubStub, smartlingStub)(_.clone(repository), (error, result) => {
+                mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
                     err = error;
                     res = result;
                     done();
@@ -68,7 +68,7 @@ describe('translations.upload()', () => {
         beforeEach((done) => {
             const smartlingStub = sinon.stub().yields(new Error('Error when uploading Smartling file'));
             
-            mockedUpload(githubStub, smartlingStub)(_.clone(repository), (error, result) => {
+            mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();

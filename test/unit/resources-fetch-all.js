@@ -6,25 +6,25 @@ const injectr	= require('injectr');
 const sinon		= require('sinon');
 const testData = require('./testData');
 
-describe('translations.fetchAll()', () => {
+describe('resources.fetchAll()', () => {
     
-    const mockedFetchAll = (smartlingStub) => injectr('../../src/translations/fetch-all.js', {
-        '../services/smartling': {
-            fetchFile: smartlingStub
+    const mockedFetchAll = (githubStub) => injectr('../../src/resources/fetch-all.js', {
+        '../services/github': {
+            getFileContent: githubStub
         }
-    });
+    }, { console });
     
-    const repository = testData.postSmartlingFetchRepository;
+    const repository = testData.postGithubFetchRepository;
     
     describe('happy path', () => {
     
         let err, res;
         
         beforeEach((done) => {
-            const repo = testData.postSourceFetchRepository;
-            const smartlingStub = sinon.stub().yields(null, 'file content');
+            const repo = testData.postSmartlingFetchRepository;
+            const githubStub = sinon.stub().yields(null, 'file content');
             
-            mockedFetchAll(smartlingStub)(_.cloneDeep(repo), (error, result) => {
+            mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -40,15 +40,15 @@ describe('translations.fetchAll()', () => {
         });
     });
 
-    describe('when smartling resource fetch fails', () => {
+    describe('when github resource fetch fails', () => {
     
         let err, res;
         
         beforeEach((done) => {
-            const repo = testData.postSourceFetchRepository;
-            const smartlingStub = sinon.stub().yields(new Error('I got a problem'));
+            const repo = testData.postSmartlingFetchRepository;
+            const githubStub = sinon.stub().yields(new Error('I got a problem'));
             
-            mockedFetchAll(smartlingStub)(_.cloneDeep(repo), (error, result) => {
+            mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
                 done();
