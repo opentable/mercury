@@ -7,7 +7,7 @@ const testData = require('./testData');
 
 describe('resources.diff()', () => {
     
-    const mockedDiff = () => injectr('../../src/resources/diff.js', {}, { console });
+    const mockedDiff = () => injectr('../../src/resources/diff.js');
         
     describe('happy path with diff returning no changes for any locale file', () => {
     
