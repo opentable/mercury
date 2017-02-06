@@ -30,7 +30,7 @@ describe('resources.diff()', () => {
         it('should append a false isChanged value to all locale files', () => {
             res.translationFiles.forEach(file => {
                 _.forEach(file.locales, locale => {
-                    expect(locale.isChanged).to.be.false;    
+                    expect(locale.isDifferent).to.be.false;    
                 });
             });
         });
@@ -56,7 +56,7 @@ describe('resources.diff()', () => {
         });
 
         it('should append a true isChanged value to the changed locale', () => {
-            expect(_.head(res.translationFiles).locales['de-DE'].isChanged).to.be.true
+            expect(_.head(res.translationFiles).locales['de-DE'].isDifferent).to.be.true
         });
     });
 });

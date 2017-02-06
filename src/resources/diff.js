@@ -9,10 +9,10 @@ module.exports = (repository, callback) => {
     _.forEach(repository.translationFiles, (file, fileIndex) => {
         _.forEach(file.locales, (locale, localeKey) => {
             if(locale.smartlingContent === locale.githubContent) {
-                result.translationFiles[fileIndex].locales[localeKey].isChanged = false;
+                result.translationFiles[fileIndex].locales[localeKey].isDifferent = false;
             }
             else {
-                result.translationFiles[fileIndex].locales[localeKey].isChanged = true;
+                result.translationFiles[fileIndex].locales[localeKey].isDifferent = true;
             }
         });
     });
