@@ -12,7 +12,7 @@ describe('resources.fetchAll()', () => {
         '../services/github': {
             getFileContent: githubStub
         }
-    }, { console });
+    });
     
     const repository = testData.postGithubFetchRepository;
     
