@@ -63,6 +63,30 @@ module.exports = {
             });
         });
     },
+    
+    getStatus: (options, next) => {
+        authenticate(options, (err, accessToken) => {
+            
+            if(err){ return next(err); }
+
+            const reqDetails = {
+                url: `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`,
+                headers: { Authorization: `Bearer ${accessToken}` },
+                qs: {
+                    fileUri: options.fileUri
+                },
+                json: true
+            };
+            
+            request(reqDetails, (err, response, body) => {
+                if(err || response.statusCode !== 200) {
+                    return next(new Error('Error when downloading Smartling status info (${response.statusCode} - ${JSON.stringify(body)})'));
+                }
+                                
+                next(null, body.response.data);
+            });
+        });
+    },
 
     uploadFileContent: (content, options, next) => {
         authenticate(options, (err, accessToken) => {
