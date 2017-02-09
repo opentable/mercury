@@ -40,12 +40,37 @@ describe('translations.getStatus()', () => {
         });
     });
     
-    describe('when smartling get-status fails', () => {
+    describe('when smartling get-status lacks a locale', () => {
     
         let err, res;
         
         beforeEach((done) => {
-            const repo = testData.postSourceFetchRepository;
+            const noLocaleTestData = _.remove(testData.smartlingStatus.items, item => item.localeId === 'de-DE');
+            const repo = testData.postSmartlingFetchRepository;
+            const smartlingStub = sinon.stub().yields(null, noLocaleTestData);
+            
+            mockedGetStatus(smartlingStub)(_.cloneDeep(repo), (error, result) => {
+                err = error;
+                res = result;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+
+        it('should append an empty smartling status object to that locale', () => {
+            expect(res.translationFiles[0].locales['de-DE'].smartlingStatus).to.eql({});
+        });
+    });
+    
+    describe('when smartling get-status call returns an error', () => {
+    
+        let err, res;
+        
+        beforeEach((done) => {
+            const repo = testData.postSmartlingFetchRepository;
             const smartlingStub = sinon.stub().yields(new Error('Error when downloading Smartling status info'));
             
             mockedGetStatus(smartlingStub)(_.cloneDeep(repo), (error, result) => {

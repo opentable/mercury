@@ -15,12 +15,16 @@ const mapLocaleStatus = (current, status, next) => {
         const smartlingRepoLocale = current.locales[localeKey];
         const smartlingStatusLocale = _.find(status.items, { localeId: localeKey });
         
-        smartlingRepoLocale.smartlingStatus = {
-            authorizedStringCount: smartlingStatusLocale.authorizedStringCount,
-            authorizedWordCount: smartlingStatusLocale.authorizedWordCount,
-            completedStringCount: smartlingStatusLocale.completedStringCount,
-            completedWordCount: smartlingStatusLocale.completedWordCount
-        };
+        if(smartlingStatusLocale) {
+            smartlingRepoLocale.smartlingStatus = {
+                authorizedStringCount: smartlingStatusLocale.authorizedStringCount,
+                authorizedWordCount: smartlingStatusLocale.authorizedWordCount,
+                completedStringCount: smartlingStatusLocale.completedStringCount,
+                completedWordCount: smartlingStatusLocale.completedWordCount
+            };
+        } else {
+            smartlingRepoLocale.smartlingStatus = {};
+        }
     });
     
     next();
