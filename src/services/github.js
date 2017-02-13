@@ -12,12 +12,13 @@ const github = new require('github')({
     timeout: 5000
 });
 
-const getFileContent = (options, next) => {
-    github.authenticate({
-        type: 'oauth',
-        token: options.apiToken
-    });
+github.authenticate({
+    type: 'oauth',
+    token: '5b2266e82788869e4b8626123b60229734a00633'
+});
 
+const getFileContent = (options, next) => {
+    
     github.repos.getContent(options, (err, file) => {
         const getContent = f => new Buffer(f.content, f.encoding).toString();
         const content = !err && file ? getContent(file) : null;
@@ -26,11 +27,7 @@ const getFileContent = (options, next) => {
 };
 
 const getReferenceSha = (options, next) => {
-    github.authenticate({
-        type: 'oauth',
-        token: options.apiToken
-    });
-
+    
     options.ref = 'heads/master';
 
     github.gitdata.getReference(options, (err, reference) => {
@@ -43,11 +40,6 @@ const getFilesList = (options, next) => {
     getReferenceSha(options, (err, sha) => {
 
         if(err){ return next(err); }
-
-        github.authenticate({
-            type: 'oauth',
-            token: options.apiToken
-        });
 
         options.recursive = true;
         options.sha = sha;
