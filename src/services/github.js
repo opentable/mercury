@@ -1,6 +1,7 @@
 'use strict';
 
-const _ = require('lodash');
+const _         = require('lodash');
+const config 	= require('config');
 
 const github = new require('github')({
     protocol: 'https',
@@ -14,7 +15,7 @@ const github = new require('github')({
 
 github.authenticate({
     type: 'oauth',
-    token: '5b2266e82788869e4b8626123b60229734a00633'
+    token: config.github.apiToken
 });
 
 const getFileContent = (options, next) => {

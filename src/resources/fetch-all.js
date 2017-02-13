@@ -33,10 +33,9 @@ const getAllGithubFilenames = (repository) => {
 module.exports = (repository, callback) => {
     
     const githubOptions = {
-        apiToken: config.github.apiToken,
-        repo: repository.repo,
-        owner: repository.owner
-    };
+		repo: repository.repo,
+		owner: repository.owner
+	};
     
     const filesToDownload = getAllGithubFilenames(repository);
         
