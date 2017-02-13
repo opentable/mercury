@@ -23,6 +23,8 @@ const baseOptions = {
     repo: 'mercury-sandbox'
 };
 
+const referenceName = 'heads/mercury';
+
 const getFileContent = (options, next) => {
     
     github.repos.getContent(options, (err, file) => {
@@ -123,8 +125,46 @@ const createBlob = (content, next) => {
     github.gitdata.createBlob(options, (err, blob) => {
         next(err, blob ? blob.sha : undefined);
     });
-}
+};
+
+const createTree = (baseTreeSha, blobSha, next) => {
     
+    const options = _.cloneDeep(baseOptions);
+    options.base_tree = baseTreeSha;
+    options.tree = [];
+    options.tree.push({
+        path: 'test.txt',
+        mode: '100644',
+        type: 'blob',
+        sha: blobSha 
+    });
+    
+    github.gitdata.createTree(options, (err, tree) => {
+        next(err, tree ? tree.sha : undefined);
+    });
+};
+
+const createCommit = (treeSha, headCommitSha, next) => {
+    
+    const options = _.cloneDeep(baseOptions);
+    options.message = 'test commit';
+    options.tree = treeSha;
+    options.parents = [headCommitSha];
+    
+    github.gitdata.createCommit(options, (err, commit) => {
+        next(err, commit ? commit.sha : undefined);
+    });
+};
+
+const updateReference = (commitSha, next) => {
+    
+    const options = _.cloneDeep(baseOptions);
+    options.ref = referenceName;
+    options.sha = commitSha;
+    
+    github.gitdata.updateReference(options, next);
+};
+
 module.exports = {
     getFileContent,
     getFilesList,
@@ -132,5 +172,8 @@ module.exports = {
     getMasterReference,
     ensureBranchReference,
     getHeadCommit,
-    createBlob
+    createBlob,
+    createTree,
+    createCommit,
+    updateReference
 };
