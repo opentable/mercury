@@ -1,4 +1,5 @@
-const _ = require('lodash');
+const _         = require('lodash');
+const service   = require('./src/services/github');
 
 const github = new require('github')({
     protocol: 'https',
@@ -30,6 +31,42 @@ const forkOptions = {
 
 console.log('>> Creating fork');
 
+const content = 'test file content';
+
+const doStuff = callback => {
+
+    service.ensureFork(err => {
+        if(err) { return callback(err); }
+
+        service.getMasterReference((err, masterReferenceSha) => {
+            if(err) { return callback(err); }
+
+            service.ensureBranchReference(masterReferenceSha, (err, branchReferenceSha) => {
+                if(err) { return callback(err); }
+
+                service.getHeadCommit(branchReferenceSha, (err, headCommitSha) => {
+                    if(err) { return callback(err); }
+
+                    service.createBlob(content, (err, blobSha) => {
+                        if(err) { return callback(err); }
+
+                        console.log('done');
+                        console.log(blobSha);
+
+                    });
+                });
+            });
+        });
+    });
+};
+
+doStuff(err => {
+    console.log('There was an error: ' + err);
+});
+
+
+
+/*
 github.repos.fork(forkOptions, (err, fork) => {
     
     console.log('>> Getting master reference');
@@ -120,5 +157,5 @@ github.repos.fork(forkOptions, (err, fork) => {
             });
         });    
     });
-
 });
+*/
