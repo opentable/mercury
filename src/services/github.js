@@ -18,6 +18,11 @@ github.authenticate({
     token: config.github.apiToken
 });
 
+const baseOptions = {
+    owner: 'mercurybot',
+    repo: 'mercury-sandbox'
+};
+
 const getFileContent = (options, next) => {
     
     github.repos.getContent(options, (err, file) => {
@@ -51,7 +56,81 @@ const getFilesList = (options, next) => {
     });
 };
 
+const ensureFork = next => {
+
+    const options = {
+        owner: 'opentable',
+        repo: 'mercury-sandbox'
+    };
+
+    github.repos.fork(options, next);
+};
+
+const getReference = (referencePath, next) => {
+
+    const options = _.cloneDeep(baseOptions);
+    options.ref = referencePath;
+
+    github.gitdata.getReference(options, (err, reference) => {
+        next(err, reference ? reference.object.sha : undefined);
+    });
+};
+
+const getMasterReference = next => getReference('heads/master', next);
+
+const getBranchReference = next => getReference('heads/mercury', next);
+
+const ensureBranchReference = (sourceSha, next) => {
+
+    getBranchReference((err, branchReferenceSha) => {
+
+        if(branchReferenceSha) {
+            return next(err, branchReferenceSha);
+        }
+
+        const options = _.cloneDeep(baseOptions);
+        options.ref = 'refs/heads/mercury';
+        options.sha = sourceSha;
+
+        github.gitdata.createReference(options, (err, branchReference) => {
+            if(err) { return next(err); }
+            next(null, branchReference.object.sha);
+        });
+    });
+};
+
+const getHeadCommit = (referenceSha, next) => {
+
+    const options = _.cloneDeep(baseOptions);
+    options.sha = referenceSha;
+    
+    github.gitdata.getCommit(options, (err, commit) => {
+        if(err) { return next(err); }
+        
+        next(null, {
+            sha: commit.sha,
+            treeSha: commit.tree.sha
+        });
+    });
+};
+
+const createBlob = (content, next) => {
+    
+    const options = _.cloneDeep(baseOptions);
+    options.content = content;
+    options.encoding = 'utf-8';
+    
+    github.gitdata.createBlob(options, (err, blob) => {
+        next(err, blob ? blob.sha : undefined);
+    });
+}
+    
 module.exports = {
     getFileContent,
-    getFilesList
+    getFilesList,
+    ensureFork,
+    getMasterReference,
+    ensureBranchReference,
+    getHeadCommit,
+    createBlob
 };
