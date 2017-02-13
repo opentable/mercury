@@ -29,8 +29,6 @@ const forkOptions = {
     repo: 'mercury-sandbox'
 };
 
-console.log('>> Creating fork');
-
 const content = 'test file content';
 
 const doStuff = callback => {
@@ -50,9 +48,20 @@ const doStuff = callback => {
                     service.createBlob(content, (err, blobSha) => {
                         if(err) { return callback(err); }
 
-                        console.log('done');
-                        console.log(blobSha);
-
+                        service.createTree(headCommitSha.treeSha, blobSha, (err, treeSha) => {
+                            if(err) { return callback(err); }
+                            
+                            service.createCommit(treeSha, headCommitSha.sha, (err, commitSha) => {
+                                if(err) { return callback(err) }; 
+                            
+                                service.updateReference(commitSha, (err, result) => {
+                                    if(err) { return callback(err) }; 
+                                
+                                    console.log('done');
+                                    console.log(result);
+                                }); 
+                            });                   
+                        });
                     });
                 });
             });
@@ -63,99 +72,3 @@ const doStuff = callback => {
 doStuff(err => {
     console.log('There was an error: ' + err);
 });
-
-
-
-/*
-github.repos.fork(forkOptions, (err, fork) => {
-    
-    console.log('>> Getting master reference');
-
-    const masterRefOptions = _.cloneDeep(baseOptions);
-    masterRefOptions.ref = 'heads/master';
-
-    github.gitdata.getReference(masterRefOptions, (err, masterReference) => {
-        
-        console.log('>> Getting branch reference');
-
-        const branchRefOptions = _.cloneDeep(baseOptions);
-        branchRefOptions.ref = referenceName;
-        
-        github.gitdata.getReference(branchRefOptions, (err, branchReference) => {
-
-            console.log('>> Creating branch reference');
-
-            const createReferenceOptions = _.cloneDeep(baseOptions);
-            createReferenceOptions.ref = `refs/${referenceName}`;
-            createReferenceOptions.sha = masterReference.object.sha;
-
-            github.gitdata.createReference(createReferenceOptions, (err, branchReference) => {
-
-                console.log('>> Getting commit');
-
-                const getCommitOptions = _.cloneDeep(baseOptions);
-                getCommitOptions.sha = branchReference.object.sha;
-                
-                github.gitdata.getCommit(getCommitOptions, (err, commit) => {
-                    
-                    console.log('>> Creating blob');
-
-                    const parentCommitSha = commit.sha;
-                    const baseTreeSha = commit.tree.sha;
-                    const createBlobOptions = _.cloneDeep(baseOptions);
-                    createBlobOptions.content = 'test file content';
-                    createBlobOptions.encoding = 'utf-8';
-                    
-                    github.gitdata.createBlob(createBlobOptions, (err, blob) => {
-                        
-                        console.log('>> Getting tree');
-
-                        const createdBlobSha = blob.sha;
-                        const getBaseTreeOptions = _.cloneDeep(baseOptions);
-                        getBaseTreeOptions.sha = baseTreeSha;
-                        
-                        github.gitdata.getTree(getBaseTreeOptions, (err, baseTree) => {
-                            
-                            console.log('>> Creating tree');
-
-                            const createTreeOptions = _.cloneDeep(baseOptions);
-                            createTreeOptions.base_tree = baseTreeSha;
-                            createTreeOptions.tree = [];
-                            createTreeOptions.tree.push({
-                                path: 'test.txt',
-                                mode: '100644',
-                                type: 'blob',
-                                sha: createdBlobSha 
-                            });
-                            
-                            github.gitdata.createTree(createTreeOptions, (err, tree) => {
-                                
-                                console.log('>> Creating commit');
-
-                                const createCommitOptions = _.cloneDeep(baseOptions);
-                                createCommitOptions.message = 'test commit';
-                                createCommitOptions.tree = tree.sha;
-                                createCommitOptions.parents = [parentCommitSha];
-                                
-                                github.gitdata.createCommit(createCommitOptions, (err, newCommit) => {
-                                    
-                                    console.log('>> Pushing');
-
-                                    const updateReferenceOptions = _.cloneDeep(baseOptions);
-                                    updateReferenceOptions.ref = referenceName;
-                                    updateReferenceOptions.sha = newCommit.sha;
-                                    
-                                    github.gitdata.updateReference(updateReferenceOptions, (err, result) => {
-                                        console.log(err);
-                                        console.log(result);
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });    
-    });
-});
-*/
