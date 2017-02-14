@@ -21,7 +21,7 @@ describe('resources.fetchAll()', () => {
         let err, res;
         
         beforeEach((done) => {
-            const repo = testData.postSmartlingFetchRepository;
+            const repo = testData.postSmartlingStatusFetchRepository;
             const githubStub = sinon.stub().yields(null, 'file content');
             
             mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
