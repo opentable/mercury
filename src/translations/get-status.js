@@ -41,15 +41,15 @@ module.exports = (repository, callback) => {
     async.eachSeries(repository.translationFiles, (file, next) => {
         smartling.getStatus(_.extend(smartlingOptions, { fileUri: file.smartling }), (err, status) => {
                         
-            if(!err && status){
-                let current = _.find(repository.translationFiles, { smartling: file.smartling });
-                
-                current.totalStringCount = status.totalStringCount;
-                current.totalWordCount = status.totalWordCount;
-                return mapLocaleStatus(current, status, next);
+            if(err || !status){
+                return next(err);
             }
             
-            next(err);
+            let current = _.find(repository.translationFiles, { smartling: file.smartling });
+            
+            current.totalStringCount = status.totalStringCount;
+            current.totalWordCount = status.totalWordCount;
+            return mapLocaleStatus(current, status, next);
         });
     }, (err) => {
         

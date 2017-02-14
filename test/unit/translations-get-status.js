@@ -12,7 +12,7 @@ describe('translations.getStatus()', () => {
         '../services/smartling': {
             getStatus: smartlingStub
         }
-    }, { console });
+    });
     
     const repository = testData.postSmartlingStatusFetchRepository;
     
