@@ -101,23 +101,19 @@ const ensureBranchReference = (sourceSha, next) => {
     });
 };
 
-const upsertFile = (content, next) => {
-    
-    const options = _.cloneDeep(baseOptions);
-    options.path = 'test.txt';
-    options.ref = 'mercury';
+const upsertFile = (options, next) => {
     
     github.repos.getContent(options, (err, existingFile) => {
         
-        const bytes = utf8.encode('content');
+        const bytes = utf8.encode(options.content);
         const encoded = base64.encode(bytes);
         options.content = encoded;
-        options.message = 'test commit';
         
-        if(err && err.status !== 'Not Found') { return next(err); }
+        if(err && err.status !== 'Not Found') { console.log(err); return next(err); }
         if(existingFile) {
+            _.set(options, 'branch', options.ref);
+            _.unset(options, 'ref');
             options.sha = existingFile.sha;
-            options.branch = 'mercury';
             github.repos.updateFile(options, next);    
         } else {
             github.repos.createFile(options, next);
@@ -125,25 +121,16 @@ const upsertFile = (content, next) => {
     });
 };
 
-const ensurePullRequest = (next) => {
+const ensurePullRequest = (options, next) => {
     
-    const options = {
-        owner: 'opentable',
-        repo: 'mercury-sandbox',
-        head: 'mercurybot:mercury'
-    };
-    
-    github.pullRequests.getAll(options, (err, existingPullRequest) => {
-        
-        options.title = 'Mercury Pull Request';
-        options.head = 'mercurybot:mercury';
-        options.base = 'master';
-        options.body = 'test description';
+    github.pullRequests.getAll(options, (err, existingPullRequests) => {
         
         if(err && err.status !== 'Not Found') { return next(err); }
         
+        const existingPullRequest = _.head(existingPullRequests);
+        
         if(existingPullRequest) {
-            options.number = existingPullRequest[0].number;
+            options.number = existingPullRequest.number;
             github.pullRequests.update(options, next);
         } else {
             github.pullRequests.create(options, next);    

@@ -24,7 +24,9 @@ const processRepo = (repository, next) => {
         
         (repository, cb) => resources.fetchAll(repository, cb),
         
-        (repository, cb) => resources.diff(repository, cb)
+        (repository, cb) => resources.diff(repository, cb),
+        
+        (repository, cb) => resources.handlePullRequest(repository, cb)
 	
 	], (err, repository) => {
 

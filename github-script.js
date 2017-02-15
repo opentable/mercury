@@ -18,7 +18,7 @@ github.authenticate({
 
 const content = 'test file content';
 
-const doStuff = callback => {
+const handlePullRequest = callback => {
 
     service.ensureFork(err => {
         if(err) { return callback(err); }
@@ -44,6 +44,6 @@ const doStuff = callback => {
     });
 };
 
-doStuff(err => {
+handlePullRequest(err => {
     console.log('There was an error: ' + err);
 });
