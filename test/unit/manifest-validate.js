@@ -120,36 +120,25 @@ describe('manifest.validate()', () => {
         describe(`when translation output doesn't contain $locale placeholder`, () => {
 
 			const invalid = _.cloneDeep(repository);
-			invalid.manifestContent.translations[0].output.dest = dest.replace('${locale}', '${lol}');
+			invalid.manifestContent.translations[0].output.dest = dest.replace(/locale/gi, 'lol');
 
 			beforeEach(done => validate(invalid, next(done)));
 
 			it('should not be valid', () => {
-				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale}\\/\\${filename})/]]]]');
+				expect(error.toString()).to.contain('fails to match the required pattern: /locale/]]]]');
 			});
 		});
 
         describe(`when translation output doesn't contain $filename placeholder`, () => {
 
-			const invalid = _.cloneDeep(repository);
-			invalid.manifestContent.translations[0].output.dest = dest.replace('${filename}', '${YOLO}');
+			const cloned = _.cloneDeep(repository);
+			cloned.manifestContent.translations[0].output.dest = dest.replace('${filename}', 'hardcoded-filename');
 
-			beforeEach(done => validate(invalid, next(done)));
+			beforeEach(done => validate(cloned, next(done)));
 
-			it('should not be valid', () => {
-				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale}\\/\\${filename})/]]]]');
-			});
-		});
-
-        describe(`when translation output doesn't contain $filename or $locale placeholder`, () => {
-
-			const invalid = _.cloneDeep(repository);
-			invalid.manifestContent.translations[0].output.dest = dest.replace('${locale}/${filename}', '${lol}/${YOLO}');
-
-			beforeEach(done => validate(invalid, next(done)));
-
-			it('should not be valid', () => {
-				expect(error.toString()).to.contain('fails to match the required pattern: /(\\${locale}\\/\\${filename})/]]]]');
+			it('should be valid', () => {
+				expect(error).to.be.null;
+				expect(result).to.be.eql(cloned);
 			});
 		});
 	});

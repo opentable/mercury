@@ -1,18 +1,20 @@
 'use strict';
 
-const _			 = require('lodash');
-const async		 = require('async');
-const config	 = require('config');
-const errorTypes = require('../resources/error-types');
-const Logger 	 = require('../services/logger-service');
-const github 	 = require('../services/github');
-const path       = require('path');
+const _                 = require('lodash');
+const async             = require('async');
+const config            = require('config');
+const errorTypes        = require('../resources/error-types');
+const github            = require('../services/github');
+const Logger            = require('../services/logger-service');
+const path              = require('path');
+const stringToTemplate  = require('string-to-template');
 
 const loggerService = Logger();
 
-const mapFileName = (file, localeId, destGlob) => {
-    return destGlob.replace('${locale}', localeId.toLowerCase()).replace('${filename}', path.basename(file));
-};
+const mapFileName = (file, locale, destGlob) => stringToTemplate(destGlob, {
+    locale,
+    filename: path.basename(file)
+});
 
 const getAllGithubFilenames = (repository) => {
     const list = [];
@@ -21,7 +23,7 @@ const getAllGithubFilenames = (repository) => {
     _.each(repository.translationFiles, (file) => {
         _.each(repository.targetLocales, (localeId) => {
             const fileName = mapFileName(file.github, localeId, destGlob);
-            list.push({ localeId, fileName });
+            list.push({ localeId, fileName, source: file.github });
         });
     });
     
@@ -31,10 +33,10 @@ const getAllGithubFilenames = (repository) => {
 module.exports = (repository, callback) => {
     
     const githubOptions = {
-		apiToken: config.github.apiToken,
-		repo: repository.repo,
-		owner: repository.owner
-	};
+        apiToken: config.github.apiToken,
+        repo: repository.repo,
+        owner: repository.owner
+    };
     
     const filesToDownload = getAllGithubFilenames(repository);
         
@@ -47,9 +49,9 @@ module.exports = (repository, callback) => {
             if(err && err.code !== 404){
                 return next(new Error(err.message));    
             }
-            
-            let current = _.find(repository.translationFiles, translationFile => {  
-                return path.basename(translationFile.github) === path.basename(file.fileName);
+
+            let current = _.find(repository.translationFiles, translationFile => {
+                return translationFile.github === file.source
             });
             
             current.locales = current.locales || {};
