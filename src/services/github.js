@@ -1,7 +1,9 @@
 'use strict';
 
 const _         = require('lodash');
+const base64    = require('base-64');
 const config 	= require('config');
+const utf8      = require('utf8');
 
 const github = new require('github')({
     protocol: 'https',
@@ -22,8 +24,6 @@ const baseOptions = {
     owner: 'mercurybot',
     repo: 'mercury-sandbox'
 };
-
-const referenceName = 'heads/mercury';
 
 const getFileContent = (options, next) => {
     
@@ -101,79 +101,62 @@ const ensureBranchReference = (sourceSha, next) => {
     });
 };
 
-const getHeadCommit = (referenceSha, next) => {
-
-    const options = _.cloneDeep(baseOptions);
-    options.sha = referenceSha;
+const upsertFile = (content, next) => {
     
-    github.gitdata.getCommit(options, (err, commit) => {
-        if(err) { return next(err); }
+    const options = _.cloneDeep(baseOptions);
+    options.path = 'test.txt';
+    options.ref = 'mercury';
+    
+    github.repos.getContent(options, (err, existingFile) => {
         
-        next(null, {
-            sha: commit.sha,
-            treeSha: commit.tree.sha
-        });
+        const bytes = utf8.encode('content');
+        const encoded = base64.encode(bytes);
+        options.content = encoded;
+        options.message = 'test commit';
+        
+        if(err && err.status !== 'Not Found') { return next(err); }
+        if(existingFile) {
+            options.sha = existingFile.sha;
+            options.branch = 'mercury';
+            github.repos.updateFile(options, next);    
+        } else {
+            github.repos.createFile(options, next);
+        }
     });
 };
 
-const createBlob = (content, next) => {
+const ensurePullRequest = (next) => {
     
-    const options = _.cloneDeep(baseOptions);
-    options.content = content;
-    options.encoding = 'utf-8';
+    const options = {
+        owner: 'opentable',
+        repo: 'mercury-sandbox',
+        head: 'mercurybot:mercury'
+    };
     
-    github.gitdata.createBlob(options, (err, blob) => {
-        next(err, blob ? blob.sha : undefined);
+    github.pullRequests.getAll(options, (err, existingPullRequest) => {
+        
+        options.title = 'Mercury Pull Request';
+        options.head = 'mercurybot:mercury';
+        options.base = 'master';
+        options.body = 'test description';
+        
+        if(err && err.status !== 'Not Found') { return next(err); }
+        
+        if(existingPullRequest) {
+            options.number = existingPullRequest[0].number;
+            github.pullRequests.update(options, next);
+        } else {
+            github.pullRequests.create(options, next);    
+        }
     });
-};
-
-const createTree = (baseTreeSha, blobSha, next) => {
-    
-    const options = _.cloneDeep(baseOptions);
-    options.base_tree = baseTreeSha;
-    options.tree = [];
-    options.tree.push({
-        path: 'test.txt',
-        mode: '100644',
-        type: 'blob',
-        sha: blobSha 
-    });
-    
-    github.gitdata.createTree(options, (err, tree) => {
-        next(err, tree ? tree.sha : undefined);
-    });
-};
-
-const createCommit = (treeSha, headCommitSha, next) => {
-    
-    const options = _.cloneDeep(baseOptions);
-    options.message = 'test commit';
-    options.tree = treeSha;
-    options.parents = [headCommitSha];
-    
-    github.gitdata.createCommit(options, (err, commit) => {
-        next(err, commit ? commit.sha : undefined);
-    });
-};
-
-const updateReference = (commitSha, next) => {
-    
-    const options = _.cloneDeep(baseOptions);
-    options.ref = referenceName;
-    options.sha = commitSha;
-    
-    github.gitdata.updateReference(options, next);
-};
+}
 
 module.exports = {
+    ensureBranchReference,
+    ensureFork,
     getFileContent,
     getFilesList,
-    ensureFork,
     getMasterReference,
-    ensureBranchReference,
-    getHeadCommit,
-    createBlob,
-    createTree,
-    createCommit,
-    updateReference
+    ensurePullRequest,
+    upsertFile
 };
