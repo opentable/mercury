@@ -2,7 +2,6 @@
 
 const _                 = require('lodash');
 const async             = require('async');
-const config            = require('config');
 const errorTypes        = require('../resources/error-types');
 const github            = require('../services/github');
 const Logger            = require('../services/logger-service');
@@ -33,10 +32,9 @@ const getAllGithubFilenames = (repository) => {
 module.exports = (repository, callback) => {
     
     const githubOptions = {
-        apiToken: config.github.apiToken,
-        repo: repository.repo,
-        owner: repository.owner
-    };
+		repo: repository.repo,
+		owner: repository.owner
+	};
     
     const filesToDownload = getAllGithubFilenames(repository);
         

@@ -35,7 +35,6 @@ module.exports = (repository, callback) => {
     const srcGlobs = _.first(repository.manifestContent.translations).input.src;
 
     const githubOptions = {
-		apiToken: config.github.apiToken,
 		repo: repository.repo,
 		owner: repository.owner
 	};
