@@ -16,6 +16,7 @@ module.exports = (repository, callback) => {
         if(err) { return callback(err); }
         
         const branchOptions = {
+            branch: config.github.branch,
             owner: config.github.owner,
             repo: repository.repo
         };
