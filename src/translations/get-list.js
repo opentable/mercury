@@ -11,45 +11,50 @@ const smartling 	= require('../services/smartling');
 
 const loggerService = Logger();
 
-const getMatchingFiles = (list, srcGlobs) => {
-	let result = list;
-    
-	_.each(srcGlobs, glob => {
-        result = mm.match(result, glob);
-    });
+const getMatchingFiles = (list, srcGlobsCollection) => {
+	let collection = [];
 
-	return mapFileObjects(result);
+	_.each(srcGlobsCollection, srcGlobs => {
+
+		let result = list;
+		
+		_.each(srcGlobs, glob => {
+			result = mm.match(result, glob);
+		});
+
+		collection = _.union(collection, result);
+	});
+
+	return mapFileObjects(_.uniq(collection));
 };
 
 const mapFileObjects = (files) => {
-    return _.map(files, file => ({
-        github: file,
-        smartling: `files/${path.basename(file)}`
-    }));
+	return _.map(files, file => ({
+		github: file,
+		smartling: `files/${path.basename(file)}`
+	}));
 };
 
 module.exports = (repository, callback) => {
-    
-    // TODO: reiterate on each translation item
 
-    const srcGlobs = _.first(repository.manifestContent.translations).input.src;
+	const srcGlobs = _.map(repository.manifestContent.translations, item => item.input.src);
 
-    const githubOptions = {
+	const githubOptions = {
 		repo: repository.repo,
 		owner: repository.owner
 	};
 
-    const smartlingOptions = {
-        userIdentifier: config.smartling.userIdentifier,
-        userSecret: config.smartling.userSecret,
-        projectId: repository.manifestContent.smartlingProjectId 
-    };
+	const smartlingOptions = {
+		userIdentifier: config.smartling.userIdentifier,
+		userSecret: config.smartling.userSecret,
+		projectId: repository.manifestContent.smartlingProjectId 
+	};
 
-    github.getFilesList(githubOptions, (err, list) => {
-                 
+	github.getFilesList(githubOptions, (err, list) => {
+
 		if(!err && list){
 			repository.translationFiles = getMatchingFiles(list, srcGlobs);
-            
+			
 			if(_.isEmpty(repository.translationFiles)){
 				err = true;
 			}
@@ -72,7 +77,7 @@ module.exports = (repository, callback) => {
 						repository.skip = true;
 					}
 				}
-        
+		
 				callback(err, repository);
 			});
 		}
