@@ -2,11 +2,17 @@
 
 const _ = require('lodash');
 const async = require('async');
+const config = require('config');
 const github = require('../services/github');
 
 module.exports = (repository, callback) => {
+    
+    const forkOptions = {
+        owner: repository.owner,
+        repo: repository.repo
+    };
         
-    github.ensureFork(err => {
+    github.ensureFork(forkOptions, err => {
         if(err) { return callback(err); }
         
         github.getMasterReference((err, masterReferenceSha) => {
@@ -18,29 +24,29 @@ module.exports = (repository, callback) => {
                 async.eachSeries(repository.translationFiles, (file, callback) => {
                     async.eachOfSeries(file.locales, (locale, localeId, callback) => {
                         
-                        const options = {
-                            owner: 'mercurybot',
+                        const commitOptions = {
+                            owner: config.github.owner,
                             repo: repository.repo,
                             path: locale.githubPath,
-                            ref: 'mercury',
+                            ref: config.github.branch,
                             content: locale.smartlingContent,
                             message: `Automatic Mercury commit for adding ${localeId} to file ${locale.githubPath}`
                         };
                         
-                        github.getFileContent(options, (err, content) => {
+                        github.getFileContent(commitOptions, (err, content) => {
                             if(err && err.status !== 'Not Found') { return callback(err); }
                                                     
                             if(locale.isDifferent) {
                                 if(!content) {
-                                    _.set(options, 'branch', options.ref);
-                                    _.unset(options, 'ref');
-                                    return github.createFile(options, callback);
+                                    _.set(commitOptions, 'branch', commitOptions.ref);
+                                    _.unset(commitOptions, 'ref');
+                                    return github.createFile(commitOptions, callback);
                                 } else if(content && content !== locale.smartlingContent) {
-                                    github.getFileSha(options, (err, sha) => {
-                                        options.sha = sha;
-                                        _.set(options, 'branch', options.ref);
-                                        _.unset(options, 'ref');
-                                        return github.updateFile(options, callback);
+                                    github.getFileSha(commitOptions, (err, sha) => {
+                                        commitOptions.sha = sha;
+                                        _.set(commitOptions, 'branch', commitOptions.ref);
+                                        _.unset(commitOptions, 'ref');
+                                        return github.updateFile(commitOptions, callback);
                                     });
                                 } else {
                                     return callback();
@@ -57,16 +63,16 @@ module.exports = (repository, callback) => {
                 }, (err) => {
                     if(err) { return callback(err); }
 
-                    const options = {
+                    const prOptions = {
                         owner: repository.owner,
                         repo: repository.repo,
-                        head: 'mercurybot:mercury',
+                        head: `${config.github.owner}:${config.github.branch}`,
                         title: 'Mercury Pull Request',
                         base: 'master',
                         body: `Placeholder for Smartling status.`
                     };
 
-                    github.ensurePullRequest(options, (err) => {
+                    github.ensurePullRequest(prOptions, (err) => {
                         if(err) { return callback(err); }
                         
                         callback(err, repository);
