@@ -8,7 +8,6 @@ const smartling = require('../services/smartling');
 module.exports = (repository, callback) => {
     
     const githubOptions = {
-		apiToken: config.github.apiToken,
 		repo: repository.repo,
 		owner: repository.owner
 	};

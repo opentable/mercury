@@ -1,6 +1,5 @@
 'use strict';
 
-const config 		= require('config');
 const errorTypes 	= require('../resources/error-types');
 const github 		= require('../services/github');
 const LoggerService = require('../services/logger-service');
@@ -10,7 +9,6 @@ module.exports = (repository, callback) => {
 	const loggerService = LoggerService();
 
 	const options = {
-		apiToken: config.github.apiToken,
 		path: 'mercury.json',
 		repo: repository.repo,
 		owner: repository.owner
