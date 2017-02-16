@@ -145,6 +145,34 @@ module.exports = {
         sourceLocaleId: 'en-US',
         targetLocales: ['de-DE', 'nl-NL']
     },
+    postSmartlingStatusFetchRepositoryComplex: {
+        owner: 'opentable',
+        repo: 'hobknob',
+        manifestContent: {
+            translations: [{ input: { src: ['src/locales/Strings.resx'] }, output: { dest: 'src/locales/${filename.split(".")[0]}.${locale.toLowerCase()}.resx' } } ]
+        },
+        translationFiles: [ 
+            {
+                github: 'src/locales/Strings.resx',
+                smartling: 'files/Strings.resx',
+                report: 'Test repo report',
+                totalStringCount: 1,
+                totalWordCount: 2,
+                locales: {
+                    'de-DE': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 0, completedWordCount: 0 } 
+                    },
+                    'nl-NL': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 1, completedWordCount: 2 } 
+                    }
+                }
+            }
+        ],
+        sourceLocaleId: 'en-US',
+        targetLocales: ['de-DE', 'nl-NL']
+    },
     postGithubFetchRepository: {
         owner: 'opentable',
         repo: 'hobknob',
@@ -162,13 +190,13 @@ module.exports = {
                     'de-DE': { 
                         smartlingContent: 'file content',
                         smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 0, completedWordCount: 0 },
-                        githubPath: 'src/locales/de-de/file.json', 
+                        githubPath: 'src/locales/de-DE/file.json', 
                         githubContent: 'file content' 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
                         smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 1, completedWordCount: 2 },
-                        githubPath: 'src/locales/nl-nl/file.json', 
+                        githubPath: 'src/locales/nl-NL/file.json', 
                         githubContent: 'file content' 
                     }
                 }
@@ -183,13 +211,45 @@ module.exports = {
                     'de-DE': { 
                         smartlingContent: 'file content',
                         smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 0, completedWordCount: 0 },
-                        githubPath: 'src/locales/de-de/other-file.json',
+                        githubPath: 'src/locales/de-DE/other-file.json',
                         githubContent: 'file content'
                     },
                     'nl-NL': {
                         smartlingContent: 'file content',
                         smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 1, completedWordCount: 2 },
-                        githubPath: 'src/locales/nl-nl/other-file.json',
+                        githubPath: 'src/locales/nl-NL/other-file.json',
+                        githubContent: 'file content' 
+                    }
+                }
+            }
+        ],
+        sourceLocaleId: 'en-US',
+        targetLocales: ['de-DE', 'nl-NL']
+    },
+    postGithubFetchRepositoryComplex: {
+        owner: 'opentable',
+        repo: 'hobknob',
+        manifestContent: {
+            translations: [ { input: { src: ['src/locales/Strings.resx'] }, output: { dest: 'src/locales/${filename.split(".")[0]}.${locale.toLowerCase()}.resx' } } ]
+        },
+        translationFiles: [ 
+            {
+                github: 'src/locales/Strings.resx',
+                smartling: 'files/Strings.resx',
+                report: 'Test repo report',
+                totalStringCount: 1,
+                totalWordCount: 2,
+                locales: {
+                    'de-DE': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 0, completedWordCount: 0 },
+                        githubPath: 'src/locales/Strings.de-de.resx', 
+                        githubContent: 'file content' 
+                    },
+                    'nl-NL': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 1, completedWordCount: 2 },
+                        githubPath: 'src/locales/Strings.nl-nl.resx', 
                         githubContent: 'file content' 
                     }
                 }

@@ -14,14 +14,38 @@ describe('resources.fetchAll()', () => {
         }
     });
     
-    const repository = testData.postGithubFetchRepository;
-    
     describe('happy path', () => {
     
+        const repository = testData.postGithubFetchRepository;
         let err, res;
         
         beforeEach((done) => {
             const repo = testData.postSmartlingStatusFetchRepository;
+            const githubStub = sinon.stub().yields(null, 'file content');
+            
+            mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
+                err = error;
+                res = result;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+
+        it('should append all files with content', () => {
+            expect(res).to.eql(repository);
+        });
+    });
+    
+    describe('complex scenario', () => {
+    
+        const repository = testData.postGithubFetchRepositoryComplex;
+        let err, res;
+        
+        beforeEach((done) => {
+            const repo = testData.postSmartlingStatusFetchRepositoryComplex;
             const githubStub = sinon.stub().yields(null, 'file content');
             
             mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
