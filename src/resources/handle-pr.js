@@ -15,15 +15,20 @@ module.exports = (repository, callback) => {
     github.ensureFork(forkOptions, err => {
         if(err) { return callback(err); }
         
-        github.getMasterReference((err, masterReferenceSha) => {
+        const branchOptions = {
+            owner: config.github.owner,
+            repo: repository.repo
+        };
+        
+        github.getMasterReference(branchOptions, (err, masterReferenceSha) => {
             if(err) { return callback(err); }
 
-            github.ensureBranchReference(masterReferenceSha, (err) => {
+            github.ensureBranchReference(branchOptions, masterReferenceSha, (err) => {
                 if(err) { return callback(err); }
                                 
                 async.eachSeries(repository.translationFiles, (file, callback) => {
                     async.eachOfSeries(file.locales, (locale, localeId, callback) => {
-                        
+                                    
                         const commitOptions = {
                             owner: config.github.owner,
                             repo: repository.repo,
@@ -61,6 +66,7 @@ module.exports = (repository, callback) => {
                         callback();
                     });
                 }, (err) => {
+                                        
                     if(err) { return callback(err); }
 
                     const prOptions = {
