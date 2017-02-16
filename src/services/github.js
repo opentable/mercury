@@ -20,11 +20,6 @@ github.authenticate({
     token: config.github.apiToken
 });
 
-const baseOptions = {
-    owner: config.github.owner,
-    repo: config.github.repo
-};
-
 const encodeContent = (content) => {
     const bytes = utf8.encode(content);
     const encoded = base64.encode(bytes);
@@ -68,9 +63,8 @@ const ensureFork = (options, next) => {
     github.repos.fork(options, next);
 };
 
-const getReference = (referencePath, next) => {
+const getReference = (options, referencePath, next) => {
 
-    const options = _.cloneDeep(baseOptions);
     options.ref = referencePath;
 
     github.gitdata.getReference(options, (err, reference) => {
@@ -78,19 +72,18 @@ const getReference = (referencePath, next) => {
     });
 };
 
-const getMasterReference = next => getReference('heads/master', next);
+const getMasterReference = (options, next) => getReference(options, 'heads/master', next);
 
-const getBranchReference = next => getReference('heads/mercury', next);
+const getBranchReference = (options, next) => getReference(options, 'heads/mercury', next);
 
-const ensureBranchReference = (sourceSha, next) => {
+const ensureBranchReference = (options, sourceSha, next) => {
 
-    getBranchReference((err, branchReferenceSha) => {
+    getBranchReference(options, (err, branchReferenceSha) => {
 
         if(branchReferenceSha) {
             return next(err, branchReferenceSha);
         }
-
-        const options = _.cloneDeep(baseOptions);
+        
         options.ref = 'refs/heads/mercury';
         options.sha = sourceSha;
 
