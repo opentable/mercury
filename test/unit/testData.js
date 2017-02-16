@@ -5,6 +5,10 @@ module.exports = {
         'src/locales/en-us/file.json',
         'src/locales/en-us/other-file.json'
     ],
+    githubMockComplex: [ 
+        'components/header/header.json',
+        'components/footer/footer.json'
+    ],
     githubMockYml: [ 
         'src/locales/en-us/file.json',
         'src/locales/en-us/other-file.yml'
@@ -293,6 +297,16 @@ module.exports = {
         {
             github: 'src/locales/en-us/file.json',
             smartling: 'files/file.json'
+        }
+    ],
+    translationFilesGlobComplex: [
+        {
+            github: 'components/header/header.json',
+            smartling: 'files/header.json'
+        },
+        {
+            github: 'components/footer/footer.json',
+            smartling: 'files/footer.json'
         }
     ]
 }
