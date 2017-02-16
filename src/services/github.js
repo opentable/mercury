@@ -21,8 +21,8 @@ github.authenticate({
 });
 
 const baseOptions = {
-    owner: 'mercurybot',
-    repo: 'mercury-sandbox'
+    owner: config.github.owner,
+    repo: config.github.repo
 };
 
 const encodeContent = (content) => {
@@ -64,13 +64,7 @@ const getFilesList = (options, next) => {
     });
 };
 
-const ensureFork = next => {
-
-    const options = {
-        owner: 'opentable',
-        repo: 'mercury-sandbox'
-    };
-
+const ensureFork = (options, next) => {
     github.repos.fork(options, next);
 };
 
