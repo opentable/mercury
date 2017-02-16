@@ -25,6 +25,12 @@ const baseOptions = {
     repo: 'mercury-sandbox'
 };
 
+const encodeContent = (content) => {
+    const bytes = utf8.encode(content);
+    const encoded = base64.encode(bytes);
+    return encoded;
+};
+
 const getFileContent = (options, next) => {
     
     github.repos.getContent(options, (err, file) => {
@@ -101,24 +107,23 @@ const ensureBranchReference = (sourceSha, next) => {
     });
 };
 
-const upsertFile = (options, next) => {
-    
-    github.repos.getContent(options, (err, existingFile) => {
-        
-        const bytes = utf8.encode(options.content);
-        const encoded = base64.encode(bytes);
-        options.content = encoded;
-        
-        if(err && err.status !== 'Not Found') { console.log(err); return next(err); }
-        if(existingFile) {
-            _.set(options, 'branch', options.ref);
-            _.unset(options, 'ref');
-            options.sha = existingFile.sha;
-            github.repos.updateFile(options, next);    
-        } else {
-            github.repos.createFile(options, next);
-        }
+const getFileSha = (options, next) => {
+    github.repos.getContent(options, (err, file) => {
+        const sha = !err && file ? file.sha : null;
+        return next(err, sha);
     });
+};
+
+const createFile = (options, next) => {
+    const encodedContent = encodeContent(options.content);
+    _.set(options, 'content', encodedContent);
+    github.repos.createFile(options, next);
+};
+
+const updateFile = (options, next) => {
+    const encodedContent = encodeContent(options.content);
+    _.set(options, 'content', encodedContent);
+    github.repos.updateFile(options, next);
 };
 
 const ensurePullRequest = (options, next) => {
@@ -142,8 +147,10 @@ module.exports = {
     ensureBranchReference,
     ensureFork,
     getFileContent,
+    getFileSha,
     getFilesList,
     getMasterReference,
     ensurePullRequest,
-    upsertFile
+    createFile,
+    updateFile
 };

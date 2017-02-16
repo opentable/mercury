@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const async = require('async');
 const github = require('../services/github');
 
@@ -26,17 +27,29 @@ module.exports = (repository, callback) => {
                             message: `Automatic Mercury commit for adding ${localeId} to file ${locale.githubPath}`
                         };
                         
-                        if(locale.isDifferent) {
-                            
-                            github.upsertFile(options, (err) => {
-                                if(err) { return callback(err); }                    
-                                
-                                return callback();
-                            });
-                        } else {
-                            callback();
-                        }
-        
+                        github.getFileContent(options, (err, content) => {
+                            if(err && err.status !== 'Not Found') { return callback(err); }
+                                                    
+                            if(locale.isDifferent) {
+                                if(!content) {
+                                    _.set(options, 'branch', options.ref);
+                                    _.unset(options, 'ref');
+                                    return github.createFile(options, callback);
+                                } else if(content && content !== locale.smartlingContent) {
+                                    github.getFileSha(options, (err, sha) => {
+                                        options.sha = sha;
+                                        _.set(options, 'branch', options.ref);
+                                        _.unset(options, 'ref');
+                                        return github.updateFile(options, callback);
+                                    });
+                                } else {
+                                    return callback();
+                                }
+                            } else {
+                                callback();
+                            }
+                        });
+                        
                     }, (err) => {
                         if (err) { return callback(err); }
                         callback();
@@ -53,11 +66,8 @@ module.exports = (repository, callback) => {
                         body: `Placeholder for Smartling status.`
                     };
 
-                    github.ensurePullRequest(options, (err, result) => {
+                    github.ensurePullRequest(options, (err) => {
                         if(err) { return callback(err); }
-                        
-                        console.log(err);
-                        console.log(result);
                         
                         callback(err, repository);
                     });
