@@ -2,7 +2,6 @@
 
 const _                 = require('lodash');
 const async             = require('async');
-const config            = require('config');
 const errorTypes        = require('../resources/error-types');
 const github            = require('../services/github');
 const Logger            = require('../services/logger-service');
