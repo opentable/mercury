@@ -18,6 +18,7 @@ const processRepo = (repository, next) => {
 		translations.getStatus,
 		resources.fetchAll,
 		resources.diff,
+        resources.ensureFork,
 		resources.handlePullRequest
 	);
 

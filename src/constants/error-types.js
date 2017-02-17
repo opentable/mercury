@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+    failedGithubFork: 'failed-to-fork-github-repo',
 	failedToLocateTranslationFilesInGithub: 'failed-to-location-translation-files-in-github',
 	failedSmartlingFetchFiles: 'failed-smartling-fetch-files',
 	failedSmartlingInfo: 'failed-smartling-fetch-info',
