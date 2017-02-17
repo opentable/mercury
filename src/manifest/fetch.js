@@ -7,6 +7,7 @@ const LoggerService = require('../services/logger-service');
 module.exports = (repository, callback) => {
 
 	const loggerService = LoggerService();
+	loggerService.info(`Fetching manifest from github for ${repository.owner}/${repository.repo}`);
 
 	const options = {
 		path: 'mercury.json',

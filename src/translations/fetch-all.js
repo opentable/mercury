@@ -22,6 +22,8 @@ const getAllSmartlingFilenames = (repository) => {
 };
 
 module.exports = (repository, callback) => {
+
+    loggerService.info(`Fetching secondary language files from smartling for ${repository.owner}/${repository.repo}`);
     
     const smartlingOptions = {
         userIdentifier: config.smartling.userIdentifier,
