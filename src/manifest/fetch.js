@@ -30,6 +30,17 @@ module.exports = (repository, callback) => {
 			repository.skip = true;
 		}
 
-		callback(err, repository);
+		if(err){ return callback(err, repository); }
+
+		github.getFileChangedInfo(options, (err, changedDate) => {
+			if(err){
+				err = new Error('An error happened when fetching manifest.json info');
+				loggerService.error(err, errorTypes.failedToFetchManifestInfo, repository);
+				repository.skip = true;
+			}
+
+			repository.manifestUpdated = changedDate;
+			callback(err, repository);
+		});
 	});
 };

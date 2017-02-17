@@ -26,6 +26,19 @@ const encodeContent = (content) => {
     return encoded;
 };
 
+const getFileChangedInfo = (options, next) => {
+
+    options['per_page'] = 1;
+
+    github.repos.getCommits(options, (err, commits) => {
+        if(err || _.isEmpty(commits)){
+            return next(err);
+        }
+
+        next(null, commits[0].commit.author.date);
+    });
+};
+
 const getFile = (options, next) => {
     
     github.repos.getContent(options, (err, file) => {
@@ -132,6 +145,7 @@ module.exports = {
     ensureBranchReference,
     ensureFork,
     getFile,
+    getFileChangedInfo,
     getFilesList,
     getMasterReference,
     ensurePullRequest,
