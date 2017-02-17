@@ -38,7 +38,10 @@ module.exports = () => {
         log('error', error.toString(), metadata);
     };
 
+    const info = (msg) => console.log(`[${new Date()}] ${msg}`);
+
     return {
-        error
+        error,
+        info
     };
 };

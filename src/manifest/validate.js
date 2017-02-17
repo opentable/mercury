@@ -22,6 +22,8 @@ const schema = joi.object().keys({
 
 module.exports = (repository, callback) => {
 
+	loggerService.info(`Validating manifest for ${repository.owner}/${repository.repo}`);
+
 	joi.validate(repository.manifestContent, schema, (err, normalisedManifest) => {
 
 		if(err){
