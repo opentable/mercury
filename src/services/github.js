@@ -99,13 +99,6 @@ const ensureBranchReference = (options, sourceSha, next) => {
     });
 };
 
-const getFileSha = (options, next) => {
-    github.repos.getContent(options, (err, file) => {
-        const sha = !err && file ? file.sha : null;
-        return next(err, sha);
-    });
-};
-
 const createFile = (options, next) => {
     const encodedContent = encodeContent(options.content);
     _.set(options, 'content', encodedContent);
@@ -139,7 +132,6 @@ module.exports = {
     ensureBranchReference,
     ensureFork,
     getFile,
-    getFileSha,
     getFilesList,
     getMasterReference,
     ensurePullRequest,

@@ -1,7 +1,7 @@
 'use strict';
 
 const _ 				= require('lodash');
-const errorTypes 		= require('../resources/error-types');
+const errorTypes 		= require('../constants/error-types');
 const joi 				= require('joi');
 const LoggerService 	= require('../services/logger-service');
 
@@ -21,6 +21,8 @@ const schema = joi.object().keys({
 });
 
 module.exports = (repository, callback) => {
+
+	loggerService.info(`Validating manifest for ${repository.owner}/${repository.repo}`);
 
 	joi.validate(repository.manifestContent, schema, (err, normalisedManifest) => {
 

@@ -1,8 +1,13 @@
 'use strict';
 
-const _ = require('lodash')
+const _         = require('lodash');
+const Logger    = require('../services/logger-service');
+
+const loggerService = Logger();
 
 module.exports = (repository, callback) => {
+
+    loggerService.info(`Diffing secondary language files for ${repository.owner}/${repository.repo}`);
     
     let result = repository;
     

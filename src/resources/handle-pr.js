@@ -1,11 +1,16 @@
 'use strict';
 
-const _ = require('lodash');
-const async = require('async');
-const config = require('config');
-const github = require('../services/github');
+const _         = require('lodash');
+const async     = require('async');
+const config    = require('config');
+const github    = require('../services/github');
+const Logger    = require('../services/logger-service');
+
+const loggerService = Logger();
 
 module.exports = (repository, callback) => {
+
+    loggerService.info(`Creating github pull request for ${repository.owner}/${repository.repo}`);
     
     const forkOptions = {
         owner: repository.owner,

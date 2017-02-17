@@ -38,7 +38,14 @@ module.exports = () => {
         log('error', error.toString(), metadata);
     };
 
+    const info = (msg) => {
+        if(process.env.NODE_ENV !== 'TEST'){
+            console.log(`[${new Date()}] ${msg}`)
+        }
+    };
+
     return {
-        error
+        error,
+        info
     };
 };

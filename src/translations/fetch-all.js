@@ -3,7 +3,7 @@
 const _				= require('lodash');
 const async			= require('async');
 const config		= require('config');
-const errorTypes	= require('../resources/error-types');
+const errorTypes	= require('../constants/error-types');
 const Logger 		= require('../services/logger-service');
 const smartling 	= require('../services/smartling');
 
@@ -22,6 +22,8 @@ const getAllSmartlingFilenames = (repository) => {
 };
 
 module.exports = (repository, callback) => {
+
+    loggerService.info(`Fetching secondary language files from smartling for ${repository.owner}/${repository.repo}`);
     
     const smartlingOptions = {
         userIdentifier: config.smartling.userIdentifier,

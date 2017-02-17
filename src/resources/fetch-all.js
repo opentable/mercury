@@ -2,7 +2,7 @@
 
 const _                 = require('lodash');
 const async             = require('async');
-const errorTypes        = require('../resources/error-types');
+const errorTypes        = require('../constants/error-types');
 const github            = require('../services/github');
 const Logger            = require('../services/logger-service');
 const path              = require('path');
@@ -30,6 +30,8 @@ const getAllGithubFilenames = (repository) => {
 };
 
 module.exports = (repository, callback) => {
+
+    loggerService.info(`Fetching secondary language files from github for ${repository.owner}/${repository.repo}`);
     
     const githubOptions = {
 		repo: repository.repo,
