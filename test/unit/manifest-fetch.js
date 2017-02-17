@@ -8,7 +8,7 @@ describe('manifest.fetch()', () => {
 
 	const getMockedFetch = githubStub => injectr('../../src/manifest/fetch.js', {
 		'../services/github': {
-			getFileContent: githubStub
+			getFile: githubStub
 		}
 	});
 
@@ -25,9 +25,7 @@ describe('manifest.fetch()', () => {
 		describe('when content is valid', () => {
 
 			beforeEach(done => {
-				const fetch = getMockedFetch(sinon.stub().yields(null, JSON.stringify({
-					hello: 'world'
-				})));
+				const fetch = getMockedFetch(sinon.stub().yields(null, { content: JSON.stringify({ hello: 'world' }) }));
 
 				fetch({
 					owner: 'opentable',

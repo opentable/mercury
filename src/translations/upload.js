@@ -23,7 +23,10 @@ module.exports = (repository, callback) => {
         githubOptions.path = translation.github;
         smartlingOptions.path = translation.smartling;
         
-        github.getFileContent(githubOptions, (err, githubFileContent) => {
+        github.getFile(githubOptions, (err, file) => {
+            
+            const githubFileContent = file.content;
+            
             smartling.uploadFileContent(githubFileContent, smartlingOptions, (err, smartlingUploadResult) => {
                 
                 if(err) {
