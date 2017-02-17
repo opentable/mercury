@@ -31,7 +31,12 @@ const getFileContent = (options, next) => {
     github.repos.getContent(options, (err, file) => {
         const getContent = f => new Buffer(f.content, f.encoding).toString();
         const content = !err && file ? getContent(file) : null;
-        return next(err, content);
+        const sha = !err && file ? file.sha : null;
+        const result = {
+            content,
+            sha
+        };
+        return next(err, result);
     });
 };
 
@@ -74,7 +79,7 @@ const getReference = (options, referencePath, next) => {
 
 const getMasterReference = (options, next) => getReference(options, 'heads/master', next);
 
-const getBranchReference = (options, next) => getReference(options, `heads/${options.branch}`, next);
+const getBranchReference = (options, next) => getReference(options, 'heads/mercury', next);
 
 const ensureBranchReference = (options, sourceSha, next) => {
 
@@ -84,7 +89,7 @@ const ensureBranchReference = (options, sourceSha, next) => {
             return next(err, branchReferenceSha);
         }
         
-        options.ref = `refs/heads/${options.branch}`;
+        options.ref = 'refs/heads/mercury';
         options.sha = sourceSha;
 
         github.gitdata.createReference(options, (err, branchReference) => {

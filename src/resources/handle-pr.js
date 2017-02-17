@@ -39,8 +39,11 @@ module.exports = (repository, callback) => {
                             message: `Automatic Mercury commit for adding ${localeId} to file ${locale.githubPath}`
                         };
                         
-                        github.getFileContent(commitOptions, (err, content) => {
+                        github.getFileContent(commitOptions, (err, file) => {
                             if(err && err.status !== 'Not Found') { return callback(err); }
+                            
+                            const content = file.content;
+                            const sha = file.sha;
                                                     
                             if(locale.isDifferent) {
                                 if(!content) {
@@ -48,12 +51,10 @@ module.exports = (repository, callback) => {
                                     _.unset(commitOptions, 'ref');
                                     return github.createFile(commitOptions, callback);
                                 } else if(content && content !== locale.smartlingContent) {
-                                    github.getFileSha(commitOptions, (err, sha) => {
-                                        commitOptions.sha = sha;
-                                        _.set(commitOptions, 'branch', commitOptions.ref);
-                                        _.unset(commitOptions, 'ref');
-                                        return github.updateFile(commitOptions, callback);
-                                    });
+                                    commitOptions.sha = sha;
+                                    _.set(commitOptions, 'branch', commitOptions.ref);
+                                    _.unset(commitOptions, 'ref');
+                                    return github.updateFile(commitOptions, callback);
                                 } else {
                                     return callback();
                                 }
