@@ -42,7 +42,7 @@ module.exports = (repository, callback) => {
         
         githubOptions.path = file.fileName;
                 
-        github.getFileContent(githubOptions, (err, content) => {
+        github.getFileContent(githubOptions, (err, githubFile) => {
                         
             if(err && err.code !== 404){
                 return next(new Error(err.message));    
@@ -53,7 +53,7 @@ module.exports = (repository, callback) => {
             });
             
             current.locales = current.locales || {};
-            _.assign(current.locales[file.localeId], { githubPath: file.fileName, githubContent: content });
+            _.assign(current.locales[file.localeId], { githubPath: file.fileName, githubContent: githubFile.content });
                         
             next();
         });

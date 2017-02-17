@@ -14,10 +14,10 @@ module.exports = (repository, callback) => {
 		owner: repository.owner
 	};
 
-	github.getFileContent(options, (err, content) => {
-		if(!err && content){
+	github.getFileContent(options, (err, file) => {
+		if(!err && file !== null){
 			try {
-				repository.manifestContent = JSON.parse(content);
+				repository.manifestContent = JSON.parse(file.content);
 			} catch(e){
 				err = new Error('An error happened when parsing manifest.json');
 				loggerService.error(err, errorTypes.failedToParseManifest, repository);
