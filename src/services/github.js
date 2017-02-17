@@ -26,12 +26,17 @@ const encodeContent = (content) => {
     return encoded;
 };
 
-const getFileContent = (options, next) => {
+const getFile = (options, next) => {
     
     github.repos.getContent(options, (err, file) => {
         const getContent = f => new Buffer(f.content, f.encoding).toString();
         const content = !err && file ? getContent(file) : null;
-        return next(err, content);
+        const sha = !err && file ? file.sha : null;
+        const result = {
+            content,
+            sha
+        };
+        return next(err, result);
     });
 };
 
@@ -133,7 +138,7 @@ const ensurePullRequest = (options, next) => {
 module.exports = {
     ensureBranchReference,
     ensureFork,
-    getFileContent,
+    getFile,
     getFileSha,
     getFilesList,
     getMasterReference,

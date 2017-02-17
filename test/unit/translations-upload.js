@@ -10,7 +10,7 @@ describe('translations.upload()', () => {
     
     const mockedUpload = (githubStub, smartlingStub) => injectr('../../src/translations/upload.js', {
         '../services/github': {
-            getFileContent: githubStub
+            getFile: githubStub
         },
         '../services/smartling': {
             uploadFileContent: smartlingStub
