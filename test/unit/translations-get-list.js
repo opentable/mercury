@@ -98,6 +98,35 @@ describe('translations.getList()', () => {
                 expect(res.translationFiles).to.be.eql(testData.translationFilesGlob);
             });
         });
+
+        describe('when using multiple values as translations', () => {
+        
+            let err, res;          
+            
+            beforeEach((done) => {
+                const githubStub = sinon.stub().yields(null, testData.githubMockComplex);
+                const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
+                const repo = _.cloneDeep(repository); 
+                repo.manifestContent.translations = [{
+                    input: { src: ['components/header/header.json'] },
+                    output: { dest: 'components/header/locales.${locale}.json' } 
+                }, {
+                    input: { src: ['components/footer/footer.json'] },
+                    output: { dest: 'components/footer/locales.${locale}.json' } 
+                }];
+                
+                mockedGetList(githubStub, smartlingStub)(repo, (error, result) => {
+                    err = error;
+                    res = result;
+                    done();
+                });
+            });
+            
+            it('should map them all', () => {
+                expect(err).to.be.null;
+                expect(res.translationFiles).to.be.eql(testData.translationFilesGlobComplex);
+            });
+        });
     });
 
     describe('when getList returns no results', () => {
