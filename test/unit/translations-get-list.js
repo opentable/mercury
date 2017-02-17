@@ -134,7 +134,7 @@ describe('translations.getList()', () => {
         let err, res;
 
         beforeEach(done => {
-            const githubStub = sinon.stub().yields(new Error('404 file not found'), { content: [] });
+            const githubStub = sinon.stub().yields(new Error('404 file not found'), []);
             const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
             const repo = _.cloneDeep(repository);
 
