@@ -8,28 +8,20 @@ const resources    = require('./resources');
 const translations = require('./translations');
 
 const processRepo = (repository, next) => {
-	async.waterfall([
 
-		cb => manifest.fetch(repository, cb),
-		
-		(repository, cb) => manifest.validate(repository, cb),
-        
-        (repository, cb) => translations.getList(repository, cb),
-        
-        (repository, cb) => translations.upload(repository, cb),
+	const mercury = async.seq(
+		manifest.fetch,
+		manifest.validate,
+		translations.getList,
+		translations.upload,
+		translations.fetchAll,
+		translations.getStatus,
+		resources.fetchAll,
+		resources.diff,
+		resources.handlePullRequest
+	);
 
-        (repository, cb) => translations.fetchAll(repository, cb),
-        
-        (repository, cb) => translations.getStatus(repository, cb),
-        
-        (repository, cb) => resources.fetchAll(repository, cb),
-        
-        (repository, cb) => resources.diff(repository, cb),
-        
-        (repository, cb) => resources.handlePullRequest(repository, cb)
-	
-	], (err, repository) => {
-
+	mercury(repository, (err, repository) => {
 		console.log(`\ngot following result for ${repository.owner}/${repository.repo}:`);
 		console.log(JSON.stringify(err, null, 2));
         console.log(JSON.stringify(repository, null, 2));
