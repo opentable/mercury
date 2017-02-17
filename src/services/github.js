@@ -79,7 +79,7 @@ const getReference = (options, referencePath, next) => {
 
 const getMasterReference = (options, next) => getReference(options, 'heads/master', next);
 
-const getBranchReference = (options, next) => getReference(options, 'heads/mercury', next);
+const getBranchReference = (options, next) => getReference(options, `heads/${options.branch}`, next);
 
 const ensureBranchReference = (options, sourceSha, next) => {
 
@@ -89,7 +89,7 @@ const ensureBranchReference = (options, sourceSha, next) => {
             return next(err, branchReferenceSha);
         }
         
-        options.ref = 'refs/heads/mercury';
+        options.ref = `refs/heads/${options.branch}`;
         options.sha = sourceSha;
 
         github.gitdata.createReference(options, (err, branchReference) => {
