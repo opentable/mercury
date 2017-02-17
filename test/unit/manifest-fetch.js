@@ -8,7 +8,7 @@ describe('manifest.fetch()', () => {
 
 	const getMockedFetch = githubStub => injectr('../../src/manifest/fetch.js', {
 		'../services/github': {
-			getFileContent: githubStub
+			getFile: githubStub
 		}
 	});
 

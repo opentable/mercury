@@ -10,7 +10,7 @@ describe('resources.fetchAll()', () => {
     
     const mockedFetchAll = (githubStub) => injectr('../../src/resources/fetch-all.js', {
         '../services/github': {
-            getFileContent: githubStub
+            getFile: githubStub
         }
     });
     

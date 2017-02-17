@@ -14,7 +14,7 @@ module.exports = (repository, callback) => {
 		owner: repository.owner
 	};
 
-	github.getFileContent(options, (err, file) => {
+	github.getFile(options, (err, file) => {
 		if(!err && file !== null){
 			try {
 				repository.manifestContent = JSON.parse(file.content);

@@ -42,7 +42,7 @@ module.exports = (repository, callback) => {
         
         githubOptions.path = file.fileName;
                 
-        github.getFileContent(githubOptions, (err, githubFile) => {
+        github.getFile(githubOptions, (err, githubFile) => {
                         
             if(err && err.code !== 404){
                 return next(new Error(err.message));    

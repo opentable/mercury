@@ -39,7 +39,7 @@ module.exports = (repository, callback) => {
                             message: `Automatic Mercury commit for adding ${localeId} to file ${locale.githubPath}`
                         };
                         
-                        github.getFileContent(commitOptions, (err, file) => {
+                        github.getFile(commitOptions, (err, file) => {
                             if(err && err.status !== 'Not Found') { return callback(err); }
                             
                             const content = file.content;
