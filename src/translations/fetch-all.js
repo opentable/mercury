@@ -3,7 +3,7 @@
 const _				= require('lodash');
 const async			= require('async');
 const config		= require('config');
-const errorTypes	= require('../resources/error-types');
+const errorTypes	= require('../constants/error-types');
 const Logger 		= require('../services/logger-service');
 const smartling 	= require('../services/smartling');
 

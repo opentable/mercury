@@ -1,6 +1,6 @@
 'use strict';
 
-const errorTypes 	= require('../resources/error-types');
+const errorTypes 	= require('../constants/error-types');
 const github 		= require('../services/github');
 const LoggerService = require('../services/logger-service');
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const _ 				= require('lodash');
-const errorTypes 		= require('../resources/error-types');
+const errorTypes 		= require('../constants/error-types');
 const joi 				= require('joi');
 const LoggerService 	= require('../services/logger-service');
 
