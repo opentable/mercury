@@ -3,9 +3,14 @@
 const async = require('async');
 const config = require('config');
 const github = require('../services/github');
+const Logger        = require('../services/logger-service');
 const smartling = require('../services/smartling');
 
+const loggerService = Logger();
+
 module.exports = (repository, callback) => {
+
+    loggerService.info(`Uploading source files to smartling for ${repository.owner}/${repository.repo}`);
     
     const githubOptions = {
 		repo: repository.repo,
