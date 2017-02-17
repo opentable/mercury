@@ -26,7 +26,7 @@ const encodeContent = (content) => {
     return encoded;
 };
 
-const getFileContent = (options, next) => {
+const getFile = (options, next) => {
     
     github.repos.getContent(options, (err, file) => {
         const getContent = f => new Buffer(f.content, f.encoding).toString();
@@ -138,7 +138,7 @@ const ensurePullRequest = (options, next) => {
 module.exports = {
     ensureBranchReference,
     ensureFork,
-    getFileContent,
+    getFile,
     getFileSha,
     getFilesList,
     getMasterReference,
