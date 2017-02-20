@@ -6,9 +6,10 @@ const sinon		= require('sinon');
 
 describe('manifest.fetch()', () => {
 
-	const getMockedFetch = githubStub => injectr('../../src/manifest/fetch.js', {
+	const getMockedFetch = (getFileStub, getFileChangedInfoStub) => injectr('../../src/manifest/fetch.js', {
 		'../services/github': {
-			getFile: githubStub
+			getFile: getFileStub,
+			getFileChangedInfo: getFileChangedInfoStub
 		}
 	});
 
@@ -25,7 +26,9 @@ describe('manifest.fetch()', () => {
 		describe('when content is valid', () => {
 
 			beforeEach(done => {
-				const fetch = getMockedFetch(sinon.stub().yields(null, { content: JSON.stringify({ hello: 'world' }) }));
+				const getFileStub = sinon.stub().yields(null, { content: JSON.stringify({ hello: 'world' }) });
+				const getFileChangedInfoStub = sinon.stub().yields(null, '2011-04-14T16:00:49Z');
+				const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
 
 				fetch({
 					owner: 'opentable',
@@ -33,14 +36,13 @@ describe('manifest.fetch()', () => {
 				}, next(done));
 			});
 
-			it('should append parsed content to repo key', () => {
+			it('should append parsed content and last updated to repository', () => {
 				expect(error).to.be.null;
 				expect(result).to.be.eql({
 					owner: 'opentable',
 					repo: 'hobknob',
-					manifestContent: {
-						hello: 'world'
-					}
+					manifestContent: { hello: 'world' },
+					manifestUpdated: '2011-04-14T16:00:49Z'
 				});
 			});
 		});
@@ -48,7 +50,9 @@ describe('manifest.fetch()', () => {
 		describe('when content is not valid', () => {
 
 			beforeEach(done => {
-				const fetch = getMockedFetch(sinon.stub().yields(null, 'a-string'));
+				const getFileStub = sinon.stub().yields(null, 'a-string');
+				const getFileChangedInfoStub = sinon.stub().yields(null, '2011-04-14T16:00:49Z');
+				const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
 
 				fetch({
 					owner: 'opentable',
@@ -64,12 +68,36 @@ describe('manifest.fetch()', () => {
 				expect(result.skip).to.be.true;
 			});
 		});
+
+		describe('when content is valid but info fetch fails', () => {
+
+			beforeEach(done => {
+				const getFileStub = sinon.stub().yields(null, { content: JSON.stringify({ hello: 'world' }) });
+				const getFileChangedInfoStub = sinon.stub().yields('an error!');
+				const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
+
+				fetch({
+					owner: 'opentable',
+					repo: 'hobknob'
+				}, next(done));
+			});
+
+			it('should show an error', () => {
+				expect(error.toString()).to.contain('An error happened when fetching manifest.json info');
+			});
+
+			it('should mark the repo for being skipped', () => {
+				expect(result.skip).to.be.true;
+			});
+		});
 	});
 
 	describe('when fetch fails', () => {
 
 		beforeEach(done => {
-			const fetch = getMockedFetch(sinon.stub().yields(new Error('404 file not found')));
+			const getFileStub = sinon.stub().yields(new Error('404 file not found'));
+			const getFileChangedInfoStub = sinon.stub().yields(null, '2011-04-14T16:00:49Z');
+			const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
 
 			fetch({
 				owner: 'opentable',

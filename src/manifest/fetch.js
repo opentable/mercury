@@ -16,7 +16,11 @@ module.exports = (repository, callback) => {
 	};
 
 	github.getFile(options, (err, file) => {
-		if(!err && file !== null){
+		if(err){
+			err = new Error('manifest.json not found. Skipping.');
+			loggerService.error(err, errorTypes.failedToLocateManifest, repository);
+			repository.skip = true;
+		} else {
 			try {
 				repository.manifestContent = JSON.parse(file.content);
 			} catch(e){
@@ -24,12 +28,19 @@ module.exports = (repository, callback) => {
 				loggerService.error(err, errorTypes.failedToParseManifest, repository);
 				repository.skip = true;
 			}
-		} else {
-			err = new Error('manifest.json not found. Skipping.');
-			loggerService.error(err, errorTypes.failedToLocateManifest, repository);
-			repository.skip = true;
 		}
 
-		callback(err, repository);
+		if(err){ return callback(err, repository); }
+
+		github.getFileChangedInfo(options, (err, changedDate) => {
+			if(err){
+				err = new Error('An error happened when fetching manifest.json info');
+				loggerService.error(err, errorTypes.failedToFetchManifestInfo, repository);
+				repository.skip = true;
+			}
+
+			repository.manifestUpdated = changedDate;
+			callback(err, repository);
+		});
 	});
 };
