@@ -16,7 +16,11 @@ module.exports = (repository, callback) => {
 	};
 
 	github.getFile(options, (err, file) => {
-		if(!err && file !== null){
+		if(err){
+			err = new Error('manifest.json not found. Skipping.');
+			loggerService.error(err, errorTypes.failedToLocateManifest, repository);
+			repository.skip = true;
+		} else {
 			try {
 				repository.manifestContent = JSON.parse(file.content);
 			} catch(e){
@@ -24,10 +28,6 @@ module.exports = (repository, callback) => {
 				loggerService.error(err, errorTypes.failedToParseManifest, repository);
 				repository.skip = true;
 			}
-		} else {
-			err = new Error('manifest.json not found. Skipping.');
-			loggerService.error(err, errorTypes.failedToLocateManifest, repository);
-			repository.skip = true;
 		}
 
 		if(err){ return callback(err, repository); }
