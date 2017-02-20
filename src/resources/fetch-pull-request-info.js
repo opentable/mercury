@@ -14,15 +14,20 @@ module.exports = (repository, callback) => {
 		owner: repository.owner,
 		repo: repository.repo
 	};
-
 	github.getPullRequestInfo(prOptions, (err, prInfo) => {
+
 		if(err){
 			err = new Error('Failed while fetching pull request info');
 			loggerService.error(err, errorTypes.failedToFetchPrInfo, repository);
 			repository.skip = true;
+		} else {
+			repository.prInfo = prInfo;
+
+			if(repository.prInfo.found){
+				repository.prInfo.outdated = new Date(repository.prInfo.createdAt) < new Date(repository.manifestUpdated);
+			}
 		}
 
-		repository.prInfo = prInfo;
 		callback(err, repository);
 	});
 };
