@@ -35,7 +35,6 @@ describe('resources.fetchPullRequestInfo()', () => {
 
 		it('should not error', () => {
 			expect(err).to.be.null;
-
 		});
 
 		it('should append prInfo to repository', () => {
