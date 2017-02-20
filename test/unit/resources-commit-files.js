@@ -26,7 +26,7 @@ describe('resources.commitFiles()', () => {
         let err;
             
         beforeEach((done) => {
-            githubGetFileStub = sinon.stub().yields();
+            githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
             githubCreateFileStub = sinon.stub().yields();
             githubUpdateFileStub = sinon.stub().yields();
             
@@ -68,10 +68,6 @@ describe('resources.commitFiles()', () => {
         it('should never call updateFile', () => {
             expect(githubUpdateFileStub.called).to.be.false;
         });
-        
-        it('should never call getFile', () => {
-            expect(githubGetFileStub.called).to.be.false;
-        });
     });
     
     describe('happy path with file update', () => {
@@ -79,7 +75,7 @@ describe('resources.commitFiles()', () => {
         let err;
         
         beforeEach((done) => {
-            githubGetFileStub = sinon.stub().yields(null, { sha: 'test_sha' });
+            githubGetFileStub = sinon.stub().yields(null, { content: 'file content', sha: 'test_sha' });
             githubCreateFileStub = sinon.stub().yields();
             githubUpdateFileStub = sinon.stub().yields();
             
@@ -121,10 +117,6 @@ describe('resources.commitFiles()', () => {
         it('should call updateFile once', () => {
             expect(githubUpdateFileStub.called).to.be.true;
         });
-        
-        it('should call getFile once', () => {
-            expect(githubGetFileStub.called).to.be.true;
-        });
     });
     
     describe('happy path with no action', () => {
@@ -132,7 +124,7 @@ describe('resources.commitFiles()', () => {
         let err;
         
         beforeEach((done) => {
-            githubGetFileStub = sinon.stub().yields();
+            githubGetFileStub = sinon.stub().yields(null, { content: 'translated file content', sha: 'test_sha' });
             githubCreateFileStub = sinon.stub().yields();
             githubUpdateFileStub = sinon.stub().yields();
             
@@ -222,10 +214,6 @@ describe('resources.commitFiles()', () => {
         
         it('should never call updateFile', () => {
             expect(githubUpdateFileStub.called).to.be.false;
-        });
-        
-        it('should call getFile once', () => {
-            expect(githubGetFileStub.called).to.be.true;
         });
     });
 });

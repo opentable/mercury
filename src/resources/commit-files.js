@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const async = require('async');
 const config = require('config');
 const errorTypes = require('../constants/error-types');
@@ -19,29 +20,34 @@ module.exports = (repository, callback) => {
                 owner: config.github.owner,
                 repo: repository.repo,
                 path: locale.githubPath,
-                branch: config.github.branch,
+                ref: config.github.branch,
                 content: locale.smartlingContent,
                 message: `Mercury commit for ${localeId} to file ${locale.githubPath}`
             };
-                
-            const content = locale.githubContent;
-            
-            if(locale.isDifferent) {
-                if(!content) {
-                    return github.createFile(options, callback);
-                } else {
-                    github.getFile(options, (err, file) => {
-                        
-                        if(err && err.code !== 404){
-                            return callback(new Error(err.message));    
-                        }
-                        
-                        options.sha = file.sha;
+
+            if(locale.isDifferent) {                
+                github.getFile(options, (err, file) => {
+                    if(err && err.code !== 404){
+                        return callback(new Error(err.message));    
+                    }
+                    
+                    const content = file.content;
+                    const sha = file.sha;
+                    
+                    _.set(options, 'branch', options.ref);
+                    _.unset(options, 'ref');
+                    
+                    if(!content) {
+                        return github.createFile(options, callback);
+                    } else if(content && content !== locale.smartlingContent) {
+                        options.sha = sha;
                         return github.updateFile(options, callback);
-                    });
-                } 
+                    } else {
+                        return callback();
+                    }
+                });
             } else {
-                return callback();
+                callback();
             }
                                     
         }, (err) => {
@@ -53,7 +59,7 @@ module.exports = (repository, callback) => {
             callback();
         });
     }, (err) => {
-                            
+                                    
         if(err){
             loggerService.error(err, errorTypes.failedGithubCommit, repository);
             repository.skip = true;
