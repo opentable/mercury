@@ -139,16 +139,42 @@ const ensurePullRequest = (options, next) => {
             github.pullRequests.create(options, next);    
         }
     });
-}
+};
+
+const getPullRequestInfo = (options, next) => {
+
+    const prOptions = _.extend(_.clone(options), {
+        head: `${config.github.owner}:${config.github.branch}`,
+        per_page: 1,
+        state: 'open'
+    });
+
+    github.pullRequests.getAll(prOptions, (err, prs) => {
+        if(err && err.status === 'Not Found'){
+            return next(null, { found: false });
+        } else if(err) {
+            return next(err);
+        }
+
+        const pr = _.head(prs);
+
+        next(null, {
+            createdAt: pr.created_at,
+            found: true,
+            number: pr.number
+        });
+    });
+};
 
 module.exports = {
+    createFile,
     ensureBranchReference,
     ensureFork,
+    ensurePullRequest,
     getFile,
     getFileChangedInfo,
     getFilesList,
     getMasterReference,
-    ensurePullRequest,
-    createFile,
+    getPullRequestInfo,
     updateFile
 };
