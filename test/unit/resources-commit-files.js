@@ -70,7 +70,7 @@ describe('resources.commitFiles()', () => {
         });
         
         it('should never call getFile', () => {
-            expect(githubUpdateFileStub.called).to.be.false;
+            expect(githubGetFileStub.called).to.be.false;
         });
     });
     
@@ -123,7 +123,7 @@ describe('resources.commitFiles()', () => {
         });
         
         it('should call getFile once', () => {
-            expect(githubUpdateFileStub.called).to.be.true;
+            expect(githubGetFileStub.called).to.be.true;
         });
     });
     
@@ -176,7 +176,56 @@ describe('resources.commitFiles()', () => {
         });
         
         it('should never call getFile', () => {
+            expect(githubGetFileStub.called).to.be.false;
+        });
+    });
+    
+    describe('error when getting file sha', () => {
+    
+        let err;
+        
+        beforeEach((done) => {
+            githubGetFileStub = sinon.stub().yields({ message: 'Failed to get SHA', code: 422 }, { sha: null });
+            githubCreateFileStub = sinon.stub().yields();
+            githubUpdateFileStub = sinon.stub().yields();
+            
+            const testRepo = _.cloneDeep(repository);
+            testRepo.translationFiles = [
+                {
+                    locales: {
+                        'de-DE': { 
+                            smartlingContent: 'translated file content',
+                            githubPath: 'src/locales/de-DE/file.json', 
+                            githubContent: 'file content',
+                            isDifferent: true
+                        }
+                    }    
+                }
+            ];
+            
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+                err = error;
+                done();
+            });
+        });
+        
+        after((done) => {
+            githubGetFileStub.reset();
+            githubCreateFileStub.reset();
+            githubUpdateFileStub.reset();
+            done();
+        });
+
+        it('should show an error', () => {
+            expect(err.message).to.contain('Failed to get SHA');
+        });
+        
+        it('should never call updateFile', () => {
             expect(githubUpdateFileStub.called).to.be.false;
+        });
+        
+        it('should call getFile once', () => {
+            expect(githubGetFileStub.called).to.be.true;
         });
     });
 });
