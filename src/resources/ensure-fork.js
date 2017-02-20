@@ -10,12 +10,12 @@ module.exports = (repository, callback) => {
 
     loggerService.info(`Ensuring existence of a Mercury fork for ${repository.owner}/${repository.repo}`);
     
-    const forkOptions = {
+    const options = {
         owner: repository.owner,
         repo: repository.repo
     };
         
-    github.ensureFork(forkOptions, (err, result) => {
+    github.ensureFork(options, (err, result) => {
         
         if(err){
             loggerService.error(err, errorTypes.failedGithubFork, repository);

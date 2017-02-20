@@ -13,10 +13,10 @@ describe('resources.ensureFork()', () => {
             ensureFork: githubStub
         }
     });
+    const repository = testData.postGithubFetchRepository;
     
     describe('happy path', () => {
     
-        const repository = testData.postGithubFetchRepository;
         let err, res;
         
         beforeEach((done) => {
@@ -40,14 +40,13 @@ describe('resources.ensureFork()', () => {
     });
     
     describe('when forking fails with an error', () => {
-    
+        
         let err, res;
         
         beforeEach((done) => {
-            const repo = testData.postSmartlingFetchRepository;
             const githubStub = sinon.stub().yields({ message: 'Could not create the fork', code: 422 }, { content: null });
             
-            mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
+            mockedFetchAll(githubStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
