@@ -41,8 +41,38 @@ describe('resources.fetchPullRequestInfo()', () => {
 			expect(res.prInfo).to.eql({
 				createdAt: '2017-02-16T15:29:05Z',
 				found: true,
+				number: 15,
+				outdated: false
+			});
+		});
+	});
+	
+	describe('when PR is outdated', () => {
+	
+		const repository = _.cloneDeep(testData.postGithubFetchRepository);
+		let err, res;
+		
+		beforeEach((done) => {
+			repository.manifestUpdated = '2017-02-16T18:29:05Z';
+			const githubStub = sinon.stub().yields(null, {
+				createdAt: '2017-02-16T15:29:05Z',
+				found: true,
 				number: 15
 			});
+			
+			mockedFetchAll(githubStub)(repository, (error, result) => {
+				err = error;
+				res = result;
+				done();
+			});
+		});
+
+		it('should not error', () => {
+			expect(err).to.be.null;
+		});
+
+		it('should mark as outdated', () => {
+			expect(res.prInfo.outdated).to.be.true;
 		});
 	});
 	
