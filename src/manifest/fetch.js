@@ -17,14 +17,14 @@ module.exports = (repository, callback) => {
 
 	github.getFile(options, (err, file) => {
 		if(err){
-			err = new Error('manifest.json not found. Skipping.');
+			err = new Error('mercury.json not found. Skipping.');
 			loggerService.error(err, errorTypes.failedToLocateManifest, repository);
 			repository.skip = true;
 		} else {
 			try {
 				repository.manifestContent = JSON.parse(file.content);
 			} catch(e){
-				err = new Error('An error happened when parsing manifest.json');
+				err = new Error('An error happened when parsing mercury.json');
 				loggerService.error(err, errorTypes.failedToParseManifest, repository);
 				repository.skip = true;
 			}
@@ -34,7 +34,7 @@ module.exports = (repository, callback) => {
 
 		github.getFileChangedInfo(options, (err, changedDate) => {
 			if(err){
-				err = new Error('An error happened when fetching manifest.json info');
+				err = new Error('An error happened when fetching mercury.json info');
 				loggerService.error(err, errorTypes.failedToFetchManifestInfo, repository);
 				repository.skip = true;
 			}

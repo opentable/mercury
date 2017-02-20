@@ -61,7 +61,7 @@ describe('manifest.fetch()', () => {
 			});
 
 			it('should show an error', () => {
-				expect(error.toString()).to.contain('An error happened when parsing manifest.json');
+				expect(error.toString()).to.contain('An error happened when parsing mercury.json');
 			});
 
 			it('should mark the repo for being skipped', () => {
@@ -83,7 +83,7 @@ describe('manifest.fetch()', () => {
 			});
 
 			it('should show an error', () => {
-				expect(error.toString()).to.contain('An error happened when fetching manifest.json info');
+				expect(error.toString()).to.contain('An error happened when fetching mercury.json info');
 			});
 
 			it('should mark the repo for being skipped', () => {
@@ -106,7 +106,7 @@ describe('manifest.fetch()', () => {
 		});
 
 		it('should show an error', () => {
-			expect(error.toString()).to.contain('manifest.json not found. Skipping.');
+			expect(error.toString()).to.contain('mercury.json not found. Skipping.');
 		});
 
 		it('should mark the repo for being skipped', () => {
