@@ -27,6 +27,8 @@ module.exports = (repository, callback) => {
 			repository.skip = true;
 		}
 
+		repository.prInfo.closed = true;
+
 		callback(err, repository);
 	});
 };
