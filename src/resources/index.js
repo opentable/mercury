@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+    closePullRequestIfOutdated: require('./close-pull-request-if-outdated'),
     diff: require('./diff'),
     ensureBranch: require('./ensure-branch'),
     ensureFork: require('./ensure-fork'),
