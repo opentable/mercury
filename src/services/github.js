@@ -150,10 +150,10 @@ const getPullRequestInfo = (options, next) => {
     });
 
     github.pullRequests.getAll(prOptions, (err, prs) => {
-        if(err && err.status === 'Not Found'){
-            return next(null, { found: false });
-        } else if(err) {
+        if(err){
             return next(err);
+        } else if(_.isEmpty(prs)){
+            return next(null, { found: false });
         }
 
         const pr = _.head(prs);
