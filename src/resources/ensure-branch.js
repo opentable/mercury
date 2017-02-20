@@ -24,14 +24,13 @@ module.exports = (repository, callback) => {
             return callback(err, repository);
         }
         
-        github.ensureBranchReference(branchOptions, masterReferenceSha, (err, result) => {
+        github.ensureBranchReference(branchOptions, masterReferenceSha, (err, mercuryReferenceSha) => {
             if(err){
                 loggerService.error(err, errorTypes.failedGithubBranch, repository);
                 repository.skip = true;
             }
                     
-            repository.mercuryBranchReference = result;
-                                    
+            repository.mercuryBranchReference = mercuryReferenceSha;
             callback(err, repository);
         });
     });
