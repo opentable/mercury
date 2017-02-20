@@ -8,7 +8,7 @@ const testData = require('./testData');
 
 describe('resources.ensureFork()', () => {
     
-    const mockedFetchAll = (githubStub) => injectr('../../src/resources/ensure-fork.js', {
+    const mockedEnsureFork = (githubStub) => injectr('../../src/resources/ensure-fork.js', {
         '../services/github': {
             ensureFork: githubStub
         }
@@ -22,7 +22,7 @@ describe('resources.ensureFork()', () => {
         beforeEach((done) => {
             const githubStub = sinon.stub().yields(null, { full_name: 'testOwner/testRepo', owner: { login: 'testOwner' } });
             
-            mockedFetchAll(githubStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureFork(githubStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -46,7 +46,7 @@ describe('resources.ensureFork()', () => {
         beforeEach((done) => {
             const githubStub = sinon.stub().yields({ message: 'Could not create the fork', code: 422 }, { content: null });
             
-            mockedFetchAll(githubStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureFork(githubStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();

@@ -2,6 +2,7 @@
 
 module.exports = {
     closePullRequestIfOutdated: require('./close-pull-request-if-outdated'),
+    commitFiles: require('./commit-files'),
     diff: require('./diff'),
     ensureBranch: require('./ensure-branch'),
     ensureFork: require('./ensure-fork'),

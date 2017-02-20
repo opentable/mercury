@@ -8,7 +8,7 @@ const testData = require('./testData');
 
 describe('resources.ensureBranch()', () => {
     
-    const mockedFetchAll = (githubGetMasterStub, githubEnsureBranchStub) => injectr('../../src/resources/ensure-branch.js', {
+    const mockedEnsureBranch = (githubGetMasterStub, githubEnsureBranchStub) => injectr('../../src/resources/ensure-branch.js', {
         '../services/github': {
             getMasterReference: githubGetMasterStub,
             ensureBranchReference: githubEnsureBranchStub
@@ -25,7 +25,7 @@ describe('resources.ensureBranch()', () => {
             const githubGetMasterStub = sinon.stub().yields(null, 'test_master_sha');
             const githubEnsureBranchStub = sinon.stub().yields(null, 'test_branch_sha');
             
-            mockedFetchAll(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureBranch(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -49,7 +49,7 @@ describe('resources.ensureBranch()', () => {
             const githubGetMasterStub = sinon.stub().yields({ message: 'Could not get the master branch reference', code: 422 }, null);
             const githubEnsureBranchStub = sinon.stub().yields(null, null);
             
-            mockedFetchAll(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureBranch(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -73,7 +73,7 @@ describe('resources.ensureBranch()', () => {
             const githubGetMasterStub = sinon.stub().yields(null, 'test_master_sha');
             const githubEnsureBranchStub = sinon.stub().yields({ message: 'Could not create mercury branch reference', code: 422 }, null);
             
-            mockedFetchAll(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureBranch(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
