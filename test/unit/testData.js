@@ -52,7 +52,8 @@ module.exports = {
         repo: 'hobknob',
         manifestContent: {
             translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
-        }
+        },
+        manifestUpdated: '2017-02-15T15:29:05Z'
     },
     postSourceFetchRepository: {
         owner: 'opentable',
@@ -60,6 +61,7 @@ module.exports = {
         manifestContent: {
             translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         },
+        manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
@@ -81,6 +83,7 @@ module.exports = {
         manifestContent: {
             translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         },
+        manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
@@ -110,6 +113,7 @@ module.exports = {
         manifestContent: {
             translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         },
+        manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
@@ -155,6 +159,7 @@ module.exports = {
         manifestContent: {
             translations: [{ input: { src: ['src/locales/Strings.resx'] }, output: { dest: 'src/locales/${filename.split(".")[0]}.${locale.toLowerCase()}.resx' } } ]
         },
+        manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/Strings.resx',
@@ -183,6 +188,7 @@ module.exports = {
         manifestContent: {
             translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         },
+        manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
@@ -236,6 +242,7 @@ module.exports = {
         manifestContent: {
             translations: [ { input: { src: ['src/locales/Strings.resx'] }, output: { dest: 'src/locales/${filename.split(".")[0]}.${locale.toLowerCase()}.resx' } } ]
         },
+        manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/Strings.resx',
