@@ -6,7 +6,7 @@ const injectr	= require('injectr');
 const sinon		= require('sinon');
 const testData = require('./testData');
 
-describe.only('resources.commitFiles()', () => {
+describe('resources.commitFiles()', () => {
     
     const mockedCommitFiles = (githubGetFileStub, githubCreateFileStub, githubUpdateFileStub) => injectr('../../src/resources/commit-files.js', {
         '../services/github': {
