@@ -110,8 +110,8 @@ describe('resources.closePullRequestIfOutdated()', () => {
 				expect(githubStub.args[0][0].number).to.equal(123);
 			});
 
-			it('should leave the repository object untouched', () => {
-				expect(res).to.be.eql(repository);
+			it('should append to repo that pr has been closed', () => {
+				expect(res.prInfo.closed).to.be.true;
 			});
 		});
 
