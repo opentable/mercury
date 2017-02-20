@@ -143,7 +143,7 @@ const ensurePullRequest = (options, next) => {
 
 const getPullRequestInfo = (options, next) => {
 
-    const prOptions = _.extend(_.clone(options), {
+    const prOptions = _.extend(_.cloneDeep(options), {
         head: `${config.github.owner}:${config.github.branch}`,
         per_page: 1,
         state: 'open'
@@ -166,7 +166,13 @@ const getPullRequestInfo = (options, next) => {
     });
 };
 
+const closePullRequest = (options, next) => {
+    options.state = 'closed';
+    github.pullRequests.update(options, next);
+};
+
 module.exports = {
+    closePullRequest,
     createFile,
     ensureBranchReference,
     ensureFork,
