@@ -269,6 +269,63 @@ module.exports = {
         sourceLocaleId: 'en-US',
         targetLocales: ['de-DE', 'nl-NL']
     },
+    postPullRequestFetchInfoRepository: {
+        owner: 'opentable',
+        repo: 'hobknob',
+        manifestContent: {
+            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+        },
+        manifestUpdated: '2017-02-15T15:29:05Z',
+        translationFiles: [ 
+            {
+                github: 'src/locales/en-us/file.json',
+                smartling: 'files/file.json',
+                report: 'Test repo report',
+                totalStringCount: 1,
+                totalWordCount: 2,
+                locales: {
+                    'de-DE': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 0, completedWordCount: 0 },
+                        githubPath: 'src/locales/de-DE/file.json', 
+                        githubContent: 'file content' 
+                    },
+                    'nl-NL': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 1, completedWordCount: 2 },
+                        githubPath: 'src/locales/nl-NL/file.json', 
+                        githubContent: 'file content' 
+                    }
+                }
+            },
+            {
+                github: 'src/locales/en-us/other-file.json',
+                smartling: 'files/other-file.json',
+                report: 'Test repo report',
+                totalStringCount: 1,
+                totalWordCount: 2,
+                locales: {
+                    'de-DE': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 0, completedWordCount: 0 },
+                        githubPath: 'src/locales/de-DE/other-file.json',
+                        githubContent: 'file content'
+                    },
+                    'nl-NL': {
+                        smartlingContent: 'file content',
+                        smartlingStatus: { authorizedStringCount: 1, authorizedWordCount: 2, completedStringCount: 1, completedWordCount: 2 },
+                        githubPath: 'src/locales/nl-NL/other-file.json',
+                        githubContent: 'file content' 
+                    }
+                }
+            }
+        ],
+        sourceLocaleId: 'en-US',
+        targetLocales: ['de-DE', 'nl-NL'],
+        prInfo: {
+            found: false
+        }
+    },
     smartlingStatus: {
         fileUri: 'files/file.json',
         totalStringCount: 1,

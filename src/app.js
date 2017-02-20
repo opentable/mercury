@@ -21,6 +21,7 @@ const processRepo = (repository, next) => {
         resources.ensureFork,
         resources.ensureBranch,
         resources.fetchPullRequestInfo,
+        resources.closePullRequestIfOutdated,
 		resources.handlePullRequest
 	);
 
