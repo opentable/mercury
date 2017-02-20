@@ -11,20 +11,20 @@ module.exports = (repository, callback) => {
 
     loggerService.info(`Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
     
-    const branchOptions = {
+    const options = {
         branch: config.github.branch,
         owner: repository.mercuryForkOwner,
         repo: repository.repo
     };
     
-    github.getMasterReference(branchOptions, (err, masterReferenceSha) => {
+    github.getMasterReference(options, (err, masterReferenceSha) => {
         if(err){
             loggerService.error(err, errorTypes.failedGithubBranch, repository);
             repository.skip = true;
             return callback(err, repository);
         }
         
-        github.ensureBranchReference(branchOptions, masterReferenceSha, (err, mercuryReferenceSha) => {
+        github.ensureBranchReference(options, masterReferenceSha, (err, mercuryReferenceSha) => {
             if(err){
                 loggerService.error(err, errorTypes.failedGithubBranch, repository);
                 repository.skip = true;
