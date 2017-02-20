@@ -19,6 +19,7 @@ const processRepo = (repository, next) => {
 		resources.fetchAll,
 		resources.diff,
         resources.ensureFork,
+        resources.ensureBranch,
 		resources.handlePullRequest
 	);
 
