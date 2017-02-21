@@ -124,22 +124,9 @@ const updateFile = (options, next) => {
     github.repos.updateFile(options, next);
 };
 
-const ensurePullRequest = (options, next) => {
-    
-    github.pullRequests.getAll(options, (err, existingPullRequests) => {
-        
-        if(err && err.status !== 'Not Found') { return next(err); }
-        
-        const existingPullRequest = _.head(existingPullRequests);
-        
-        if(existingPullRequest) {
-            options.number = existingPullRequest.number;
-            github.pullRequests.update(options, next);
-        } else {
-            github.pullRequests.create(options, next);    
-        }
-    });
-};
+const createPullRequest = github.pullRequests.create;
+
+const updatePullRequest = github.pullRequests.update;
 
 const getPullRequestInfo = (options, next) => {
 
@@ -173,14 +160,15 @@ const closePullRequest = (options, next) => {
 
 module.exports = {
     closePullRequest,
+    createPullRequest,
     createFile,
     ensureBranchReference,
     ensureFork,
-    ensurePullRequest,
     getFile,
     getFileChangedInfo,
     getFilesList,
     getMasterReference,
     getPullRequestInfo,
-    updateFile
+    updateFile,
+    updatePullRequest
 };
