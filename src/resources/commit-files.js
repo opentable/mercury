@@ -38,18 +38,10 @@ module.exports = (repository, callback) => {
                     _.unset(options, 'ref');
                     
                     if(!content) {
-                        github.createFile(options, err => {
-                            if(err) { return callback(new Error(err.message)); }
-                            
-                            callback();
-                        });
+                        github.createFile(options, callback);
                     } else if(content && content !== locale.smartlingContent) {
                         options.sha = sha;
-                        github.updateFile(options, err => {
-                            if(err) { return callback(new Error(err.message)); }
-                            
-                            callback();
-                        });
+                        github.updateFile(options, callback);
                     } else {
                         return callback();
                     }
@@ -58,17 +50,11 @@ module.exports = (repository, callback) => {
                 callback();
             }
                                     
-        }, (err) => {
-            
-            if(err){
-                return callback(err);
-            }
-            
-            callback();
-        });
+        }, callback);
     }, (err) => {
                                     
         if(err){
+            err = new Error(err.message);
             loggerService.error(err, errorTypes.failedGithubCommit, repository);
             repository.skip = true;
         }
