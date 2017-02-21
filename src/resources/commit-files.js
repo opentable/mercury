@@ -38,10 +38,18 @@ module.exports = (repository, callback) => {
                     _.unset(options, 'ref');
                     
                     if(!content) {
-                        return github.createFile(options, callback);
+                        github.createFile(options, err => {
+                            if(err) { return callback(new Error(err.message)); }
+                            
+                            callback();
+                        });
                     } else if(content && content !== locale.smartlingContent) {
                         options.sha = sha;
-                        return github.updateFile(options, callback);
+                        github.updateFile(options, err => {
+                            if(err) { return callback(new Error(err.message)); }
+                            
+                            callback();
+                        });
                     } else {
                         return callback();
                     }

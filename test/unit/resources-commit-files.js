@@ -216,4 +216,86 @@ describe('resources.commitFiles()', () => {
             expect(githubUpdateFileStub.called).to.be.false;
         });
     });
+    
+    describe('error when creating file', () => {
+    
+        let err;
+        
+        beforeEach((done) => {
+            githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
+            githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', code: 500 });
+            githubUpdateFileStub = sinon.stub().yields();
+            
+            const testRepo = _.cloneDeep(repository);
+            testRepo.translationFiles = [
+                {
+                    locales: {
+                        'de-DE': { 
+                            smartlingContent: 'file content',
+                            githubPath: 'src/locales/de-DE/file.json', 
+                            githubContent: null,
+                            isDifferent: true
+                        }
+                    }    
+                }
+            ];
+            
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+                err = error;
+                done();
+            });
+        });
+        
+        after((done) => {
+            githubGetFileStub.reset();
+            githubCreateFileStub.reset();
+            githubUpdateFileStub.reset();
+            done();
+        });
+
+        it('should show an error', () => {
+            expect(err.message).to.contain('Error when creating file');
+        });
+    });
+    
+    describe('error when updating file', () => {
+    
+        let err;
+        
+        beforeEach((done) => {
+            githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
+            githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', code: 500 });
+            githubUpdateFileStub = sinon.stub().yields();
+            
+            const testRepo = _.cloneDeep(repository);
+            testRepo.translationFiles = [
+                {
+                    locales: {
+                        'de-DE': { 
+                            smartlingContent: 'file content',
+                            githubPath: 'src/locales/de-DE/file.json', 
+                            githubContent: null,
+                            isDifferent: true
+                        }
+                    }    
+                }
+            ];
+            
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+                err = error;
+                done();
+            });
+        });
+        
+        after((done) => {
+            githubGetFileStub.reset();
+            githubCreateFileStub.reset();
+            githubUpdateFileStub.reset();
+            done();
+        });
+
+        it('should show an error', () => {
+            expect(err.message).to.contain('Error when creating file');
+        });
+    });
 });
