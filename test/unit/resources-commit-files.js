@@ -49,13 +49,6 @@ describe('resources.commitFiles()', () => {
                 done();
             });
         });
-        
-        after((done) => {
-            githubGetFileStub.reset();
-            githubCreateFileStub.reset();
-            githubUpdateFileStub.reset();
-            done();
-        });
 
         it('should not error', () => {
             expect(err).to.be.null;
@@ -97,13 +90,6 @@ describe('resources.commitFiles()', () => {
                 err = error;
                 done();
             });
-        });
-        
-        after((done) => {
-            githubGetFileStub.reset();
-            githubCreateFileStub.reset();
-            githubUpdateFileStub.reset();
-            done();
         });
 
         it('should not error', () => {
@@ -148,13 +134,6 @@ describe('resources.commitFiles()', () => {
             });
         });
         
-        after((done) => {
-            githubGetFileStub.reset();
-            githubCreateFileStub.reset();
-            githubUpdateFileStub.reset();
-            done();
-        });
-
         it('should not error', () => {
             expect(err).to.be.null;
         });
@@ -200,13 +179,6 @@ describe('resources.commitFiles()', () => {
                 done();
             });
         });
-        
-        after((done) => {
-            githubGetFileStub.reset();
-            githubCreateFileStub.reset();
-            githubUpdateFileStub.reset();
-            done();
-        });
 
         it('should show an error', () => {
             expect(err.message).to.contain('Failed to get SHA');
@@ -245,13 +217,6 @@ describe('resources.commitFiles()', () => {
                 done();
             });
         });
-        
-        after((done) => {
-            githubGetFileStub.reset();
-            githubCreateFileStub.reset();
-            githubUpdateFileStub.reset();
-            done();
-        });
 
         it('should show an error', () => {
             expect(err.message).to.contain('Error when creating file');
@@ -286,14 +251,7 @@ describe('resources.commitFiles()', () => {
                 done();
             });
         });
-        
-        after((done) => {
-            githubGetFileStub.reset();
-            githubCreateFileStub.reset();
-            githubUpdateFileStub.reset();
-            done();
-        });
-
+    
         it('should show an error', () => {
             expect(err.message).to.contain('Error when creating file');
         });
