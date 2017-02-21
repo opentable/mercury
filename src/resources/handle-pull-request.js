@@ -1,6 +1,7 @@
 'use strict';
 
 const config    = require('config');
+const errorTypes = require('../constants/error-types');
 const github    = require('../services/github');
 const Logger    = require('../services/logger-service');
 
@@ -31,5 +32,12 @@ module.exports = (repository, callback) => {
         handlePr = github.createPullRequest;
     }
 
-    handlePr(prOptions, (err) => callback(err, repository));
+    handlePr(prOptions, (err) => {
+        if(err){
+            err = new Error(`Failed while ${action.toLowerCase()} pull request`);
+            loggerService.error(err, errorTypes[`failed${action}PullRequest`], repository);
+        }
+
+        callback(err, repository);
+    });
 };
