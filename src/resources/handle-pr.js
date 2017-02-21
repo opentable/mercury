@@ -10,7 +10,10 @@ const loggerService = Logger();
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Creating github pull request for ${repository.owner}/${repository.repo}`);
+    const prAlreadyExists = repository.prInfo.found && !repository.prInfo.outdated;
+    const action = prAlreadyExists ? 'Updating' : 'Creating';
+
+    loggerService.info(`${action} github pull request for ${repository.owner}/${repository.repo}`);
                 
     async.eachSeries(repository.translationFiles, (file, callback) => {
         async.eachOfSeries(file.locales, (locale, localeId, callback) => {
@@ -48,10 +51,7 @@ module.exports = (repository, callback) => {
                 }
             });
             
-        }, (err) => {
-            if (err) { return callback(err); }
-            callback();
-        });
+        }, callback);
     }, (err) => {
                             
         if(err) { return callback(err); }
@@ -65,10 +65,15 @@ module.exports = (repository, callback) => {
             body: `Placeholder for Smartling status.`
         };
 
-        github.ensurePullRequest(prOptions, (err) => {
-            if(err) { return callback(err); }
-            
-            callback(err, repository);
-        });
+        let action;
+
+        if(prAlreadyExists){
+            prOptions.number = repository.prInfo.number;
+            action = github.updatePullRequest;
+        } else {
+            action = github.createPullRequest;
+        }
+
+        action(prOptions, (err) => callback(err, repository));
     });
 };
