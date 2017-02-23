@@ -8,9 +8,9 @@ const testData = require('./testData');
 
 describe('resources.ensureBranch()', () => {
     
-    const mockedEnsureBranch = (githubGetMasterStub, githubEnsureBranchStub) => injectr('../../src/resources/ensure-branch.js', {
+    const mockedEnsureBranch = (githubgetBranchReferenceStub, githubEnsureBranchStub) => injectr('../../src/resources/ensure-branch.js', {
         '../services/github': {
-            getMasterReference: githubGetMasterStub,
+            getBranchReference: githubgetBranchReferenceStub,
             ensureBranchReference: githubEnsureBranchStub
         }
     });
@@ -22,10 +22,10 @@ describe('resources.ensureBranch()', () => {
         let err, res;
         
         beforeEach((done) => {
-            const githubGetMasterStub = sinon.stub().yields(null, 'test_master_sha');
+            const githubgetBranchReferenceStub = sinon.stub().yields(null, 'test_master_sha');
             const githubEnsureBranchStub = sinon.stub().yields(null, 'test_branch_sha');
             
-            mockedEnsureBranch(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureBranch(githubgetBranchReferenceStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -46,10 +46,10 @@ describe('resources.ensureBranch()', () => {
         let err, res;
         
         beforeEach((done) => {
-            const githubGetMasterStub = sinon.stub().yields({ message: 'Could not get the master branch reference', code: 422 }, null);
+            const githubgetBranchReferenceStub = sinon.stub().yields({ message: 'Could not get the master branch reference', code: 422 }, null);
             const githubEnsureBranchStub = sinon.stub().yields(null, null);
             
-            mockedEnsureBranch(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureBranch(githubgetBranchReferenceStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
@@ -70,10 +70,10 @@ describe('resources.ensureBranch()', () => {
         let err, res;
         
         beforeEach((done) => {
-            const githubGetMasterStub = sinon.stub().yields(null, 'test_master_sha');
+            const githubgetBranchReferenceStub = sinon.stub().yields(null, 'test_master_sha');
             const githubEnsureBranchStub = sinon.stub().yields({ message: 'Could not create mercury branch reference', code: 422 }, null);
             
-            mockedEnsureBranch(githubGetMasterStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
+            mockedEnsureBranch(githubgetBranchReferenceStub, githubEnsureBranchStub)(_.cloneDeep(repository), (error, result) => {
                 err = error;
                 res = result;
                 done();
