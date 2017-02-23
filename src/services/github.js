@@ -57,5 +57,6 @@ module.exports = {
     getFilesList,
     getPullRequestInfo: pullRequest.get,
     updateFile: file.update,
-    updatePullRequest: pullRequest.update
+    updatePullRequest: pullRequest.update,
+    updateReference: reference.update
 };
