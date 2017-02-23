@@ -29,8 +29,15 @@ module.exports = (github) => {
         });
     };
 
+    const update = (options, next) => {
+        options.ref = `heads/${options.branch}`;
+        options.sha = options.reference;
+        github.gitdata.updateReference(options, next);
+    };
+
 	return {
 		get: getReference,
-		getOrCreate
+		getOrCreate,
+        update
 	};
 };
