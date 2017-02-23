@@ -1,11 +1,13 @@
 'use strict';
 
-const _         = require('lodash');
-const base64    = require('base-64');
-const config 	= require('config');
-const utf8      = require('utf8');
+const _             = require('lodash');
+const config        = require('config');
+const File          = require('./github/file');
+const Github        = require('github');
+const PullRequest   = require('./github/pull-request');
+const Reference     = require('./github/reference');
 
-const github = new require('github')({
+const github = new Github({
     protocol: 'https',
     host: 'api.github.com',
     headers: {
@@ -20,51 +22,15 @@ github.authenticate({
     token: config.github.apiToken
 });
 
-const encodeContent = (content) => {
-    const bytes = utf8.encode(content);
-    const encoded = base64.encode(bytes);
-    return encoded;
-};
-
-const getFileChangedInfo = (options, next) => {
-
-    options['per_page'] = 1;
-
-    github.repos.getCommits(options, (err, commits) => {
-        if(err || _.isEmpty(commits)){
-            return next(err);
-        }
-
-        next(null, commits[0].commit.author.date);
-    });
-};
-
-const getFile = (options, next) => {
-    
-    github.repos.getContent(options, (err, file) => {
-        const getContent = f => new Buffer(f.content, f.encoding).toString();
-        const content = !err && file ? getContent(file) : null;
-        const sha = !err && file ? file.sha : null;
-        const result = {
-            content,
-            sha
-        };
-        return next(err, result);
-    });
-};
-
-const getReferenceSha = (options, next) => {
-    
-    options.ref = 'heads/master';
-
-    github.gitdata.getReference(options, (err, reference) => {
-        next(err, reference ? reference.object.sha : undefined);
-    });
-};
+const file = File(github);
+const pullRequest = PullRequest(github);
+const reference = Reference(github);
 
 const getFilesList = (options, next) => {
 
-    getReferenceSha(options, (err, sha) => {
+    options.branch = 'master';
+
+    reference.get(options, (err, sha) => {
 
         if(err){ return next(err); }
 
@@ -77,98 +43,19 @@ const getFilesList = (options, next) => {
     });
 };
 
-const ensureFork = (options, next) => {
-    github.repos.fork(options, next);
-};
-
-const getReference = (options, referencePath, next) => {
-
-    options.ref = referencePath;
-
-    github.gitdata.getReference(options, (err, reference) => {
-        next(err, reference ? reference.object.sha : undefined);
-    });
-};
-
-const getMasterReference = (options, next) => getReference(options, 'heads/master', next);
-
-const getBranchReference = (options, next) => getReference(options, `heads/${options.branch}`, next);
-
-const ensureBranchReference = (options, sourceSha, next) => {
-
-    getBranchReference(options, (err, branchReferenceSha) => {
-
-        if(branchReferenceSha) {
-            return next(err, branchReferenceSha);
-        }
-        
-        options.ref = `refs/heads/${options.branch}`;
-        options.sha = sourceSha;
-
-        github.gitdata.createReference(options, (err, branchReference) => {
-            if(err) { return next(err); }
-            next(null, branchReference.object.sha);
-        });
-    });
-};
-
-const createFile = (options, next) => {
-    const encodedContent = encodeContent(options.content);
-    _.set(options, 'content', encodedContent);
-    github.repos.createFile(options, next);
-};
-
-const updateFile = (options, next) => {
-    const encodedContent = encodeContent(options.content);
-    _.set(options, 'content', encodedContent);
-    github.repos.updateFile(options, next);
-};
-
-const createPullRequest = github.pullRequests.create;
-
-const updatePullRequest = github.pullRequests.update;
-
-const getPullRequestInfo = (options, next) => {
-
-    const prOptions = _.extend(_.cloneDeep(options), {
-        head: `${config.github.owner}:${config.github.branch}`,
-        per_page: 1,
-        state: 'open'
-    });
-
-    github.pullRequests.getAll(prOptions, (err, prs) => {
-        if(err){
-            return next(err);
-        } else if(_.isEmpty(prs)){
-            return next(null, { found: false });
-        }
-
-        const pr = _.head(prs);
-
-        next(null, {
-            createdAt: pr.created_at,
-            found: true,
-            number: pr.number
-        });
-    });
-};
-
-const closePullRequest = (options, next) => {
-    options.state = 'closed';
-    github.pullRequests.update(options, next);
-};
+const ensureFork = github.repos.fork;
 
 module.exports = {
-    closePullRequest,
-    createPullRequest,
-    createFile,
-    ensureBranchReference,
+    closePullRequest: pullRequest.close,
+    createPullRequest: pullRequest.create,
+    createFile: file.create,
+    ensureBranchReference: reference.getOrCreate,
     ensureFork,
-    getFile,
-    getFileChangedInfo,
+    getBranchReference: reference.get,
+    getFile: file.get,
+    getFileChangedInfo: file.lastUpdated,
     getFilesList,
-    getMasterReference,
-    getPullRequestInfo,
-    updateFile,
-    updatePullRequest
+    getPullRequestInfo: pullRequest.get,
+    updateFile: file.update,
+    updatePullRequest: pullRequest.update
 };
