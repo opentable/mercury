@@ -14,6 +14,7 @@ module.exports = (repository, callback) => {
 		owner: repository.owner,
 		repo: repository.repo
 	};
+    
 	github.getPullRequestInfo(prOptions, (err, prInfo) => {
 
 		if(err){
