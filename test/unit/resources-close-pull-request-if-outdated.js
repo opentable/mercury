@@ -144,6 +144,6 @@ describe('resources.closePullRequestIfOutdated()', () => {
 			it('should mark the repo for being skipped', () => {
 				expect(res.skip).to.be.true;
 			});
-		})
+		});
 	});
 });
