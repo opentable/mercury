@@ -14,7 +14,7 @@ const github = new Github({
         'user-agent': 'mercury'
     },
     followRedirects: false,
-    timeout: 5000
+    timeout: 20000
 });
 
 github.authenticate({
@@ -49,6 +49,7 @@ module.exports = {
     closePullRequest: pullRequest.close,
     createPullRequest: pullRequest.create,
     createFile: file.create,
+    deleteReference: reference.delete,
     ensureBranchReference: reference.getOrCreate,
     ensureFork,
     getBranchReference: reference.get,
