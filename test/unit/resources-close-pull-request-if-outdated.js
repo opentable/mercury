@@ -14,7 +14,7 @@ describe('resources.closePullRequestIfOutdated()', () => {
 		}
 	});
 	
-	describe('when pr does not exists yet', () => {
+	describe('when pr does not exist yet', () => {
 	
 		const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
 		let err, res, githubStub;
