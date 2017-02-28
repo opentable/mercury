@@ -13,7 +13,7 @@ module.exports = (repository, callback) => {
 		return callback(null, repository);
 	}
 
-	loggerService.info(`Resetting outdated branch for ${repository.mercuryForkOwner}/${repository.repo}`);
+	loggerService.info(`Deleting outdated reference for ${repository.mercuryForkOwner}/${repository.repo}`);
 
 	const options = {
 		owner: repository.mercuryForkOwner,
@@ -23,7 +23,7 @@ module.exports = (repository, callback) => {
 
 	github.deleteReference(options, (err) => {
 		if(err){
-			err = new Error('Failed while deleting outdated branch');
+			err = new Error('Failed while deleting outdated reference');
 			loggerService.error(err, errorTypes.failedToDeleteOutdatedBranch, repository);
 			repository.skip = true;
 		}
