@@ -1,6 +1,11 @@
 'use strict';
 
 module.exports = (github) => {
+    
+    const deleteReference = (options, next) => {
+        options.ref = `heads/${options.branch}`;
+        github.gitdata.deleteReference(options, next);
+    };
 
 	const getReference = (options, next) => {
 
@@ -36,6 +41,7 @@ module.exports = (github) => {
     };
 
 	return {
+        delete: deleteReference,
 		get: getReference,
 		getOrCreate,
         update
