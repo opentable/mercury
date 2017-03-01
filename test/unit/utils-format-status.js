@@ -67,4 +67,20 @@ describe('statusFormatter.format()', () => {
             expect(res).to.include('| **nl-NL** | 0 out of 30 | 0% |');
         });
     });
+    
+    describe('missing smartlingStatus', () => {
+        
+        let res;
+                
+        beforeEach((done) => {
+            const repo = statusFormatRepository;
+            delete repo.translationFiles[0].locales['de-DE'].smartlingStatus.completedStringCount;
+            res = statusFormatter.format(_.cloneDeep(repo));
+            done();
+        });
+        
+        it('should insert N/A everywhere for that locale', () => {
+            expect(res).to.include('| **de-DE** | N/A | N/A |');
+        });
+    });
 });
