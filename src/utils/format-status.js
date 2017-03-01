@@ -8,20 +8,26 @@ const percent = (completedStringCount, totalStringCount) => {
     return roundToTwo((completedStringCount / totalStringCount) * 100);
 }
 
+const buildHeader = (status, file) => {
+    let header = `\n**Translation status of ${file.github}:**\n\n| | completed | % |\n|---|---|---|\n`;
+    status = status.concat(header);
+    return status;
+}
+
 const format = (repository) => {
     let status = '';
     
     repository.translationFiles.forEach(file => {
-        status = status.concat(`Translation status of ${file.github}:\n`);
+        status = buildHeader(status, file);
+        
         const totalStringCount = file.totalStringCount;
         
         for (let locale in file.locales) {
             const localeStatus = file.locales[locale].smartlingStatus;
             const completedStringCount = localeStatus.completedStringCount;
             const percentage = percent(completedStringCount, totalStringCount);
-            const stringToken = completedStringCount === 1 ? 'string' : 'strings';
             
-            status = status.concat(`${locale} locale: ${completedStringCount} completed ${stringToken} out of ${totalStringCount} (${percentage}%)\n`)
+            status = status.concat(`| **${locale}** | ${completedStringCount} out of ${totalStringCount} | ${percentage}% |\n`)
         }
     });
     

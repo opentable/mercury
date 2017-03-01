@@ -45,16 +45,26 @@ describe('statusFormatter.format()', () => {
             done();
         });
         
-        it('should include the status of src/locales/en-us/file.json', () => {
+        it('should include a headline for src/locales/en-us/file.json', () => {
             expect(res).to.include('Translation status of src/locales/en-us/file.json:');
-            expect(res).to.include('de-DE locale: 1 completed string out of 10 (10%)');
-            expect(res).to.include('nl-NL locale: 10 completed strings out of 10 (100%)');
+        });
+        
+        it('should include a headline for src/locales/en-us/other-file.json', () => {
+            expect(res).to.include('Translation status of src/locales/en-us/other-file.json:');
+        });
+        
+        it('should include a header for the locale table', () => {
+            expect(res).to.include('| completed | % |\n|---|---|---|');
+        });
+        
+        it('should include the status of src/locales/en-us/file.json', () => {
+            expect(res).to.include('| **de-DE** | 1 out of 10 | 10% |');
+            expect(res).to.include('| **nl-NL** | 10 out of 10 | 100% |');
         });
         
         it('should include the status of src/locales/en-us/other-file.json', () => {
-            expect(res).to.include('Translation status of src/locales/en-us/other-file.json:');
-            expect(res).to.include('de-DE locale: 22 completed strings out of 30 (73.3%)');
-            expect(res).to.include('nl-NL locale: 0 completed strings out of 30 (0%)');
+            expect(res).to.include('| **de-DE** | 22 out of 30 | 73.3% |');
+            expect(res).to.include('| **nl-NL** | 0 out of 30 | 0% |');
         });
     });
 });
