@@ -1,9 +1,10 @@
 'use strict';
 
-const config    = require('config');
-const errorTypes = require('../constants/error-types');
-const github    = require('../services/github');
-const Logger    = require('../services/logger-service');
+const config          = require('config');
+const errorTypes      = require('../constants/error-types');
+const github          = require('../services/github');
+const Logger          = require('../services/logger-service');
+const statusFormatter = require('../utils/format-status');
 
 const loggerService = Logger();
 
@@ -20,7 +21,7 @@ module.exports = (repository, callback) => {
         head: `${config.github.owner}:${config.github.branch}`,
         title: 'Mercury Pull Request',
         base: 'master',
-        body: `Placeholder for Smartling status.`
+        body: statusFormatter.format(repository)
     };
 
     let handlePr;
