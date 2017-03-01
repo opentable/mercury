@@ -17,10 +17,7 @@ const mapLocaleStatus = (current, status, next) => {
         
         if(smartlingStatusLocale) {
             smartlingRepoLocale.smartlingStatus = {
-                authorizedStringCount: smartlingStatusLocale.authorizedStringCount,
-                authorizedWordCount: smartlingStatusLocale.authorizedWordCount,
-                completedStringCount: smartlingStatusLocale.completedStringCount,
-                completedWordCount: smartlingStatusLocale.completedWordCount
+                completedStringCount: smartlingStatusLocale.completedStringCount
             };
         } else {
             smartlingRepoLocale.smartlingStatus = {};
@@ -50,7 +47,6 @@ module.exports = (repository, callback) => {
             let current = _.find(repository.translationFiles, { smartling: file.smartling });
             
             current.totalStringCount = status.totalStringCount;
-            current.totalWordCount = status.totalWordCount;
             return mapLocaleStatus(current, status, next);
         });
     }, (err) => {
