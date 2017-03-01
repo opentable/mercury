@@ -9,7 +9,7 @@ const percent = (completedStringCount, totalStringCount) => {
 };
 
 const buildHeader = (status, file) => {
-    let header = `\n**Translation status of ${file.github}:**\n\n| | completed | % |\n|---|---|---|\n`;
+    const header = `\n**Translation status of ${file.github}:**\n\n| | completed | % |\n|---|---|---|\n`;
     status = status.concat(header);
     return status;
 };
