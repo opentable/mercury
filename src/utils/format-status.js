@@ -6,13 +6,21 @@ function roundToTwo(num) {
 
 const percent = (completedStringCount, totalStringCount) => {
     return roundToTwo((completedStringCount / totalStringCount) * 100);
-}
+};
 
 const buildHeader = (status, file) => {
     let header = `\n**Translation status of ${file.github}:**\n\n| | completed | % |\n|---|---|---|\n`;
     status = status.concat(header);
     return status;
-}
+};
+
+const buildPercentageStat = (percentage) => {
+    return percentage || percentage === 0 ? `${percentage.toString()}%` : 'N/A';
+};
+
+const buildCompletionStat = (completedStringCount, totalStringCount) => {
+    return completedStringCount || completedStringCount === 0 ? `${completedStringCount} out of ${totalStringCount}` : 'N/A';
+};
 
 const format = (repository) => {
     let status = '';
@@ -27,7 +35,7 @@ const format = (repository) => {
             const completedStringCount = localeStatus.completedStringCount;
             const percentage = percent(completedStringCount, totalStringCount);
             
-            status = status.concat(`| **${locale}** | ${completedStringCount} out of ${totalStringCount} | ${percentage}% |\n`)
+            status = status.concat(`| **${locale}** | ${buildCompletionStat(completedStringCount, totalStringCount)} | ${buildPercentageStat(percentage)} |\n`)
         }
     });
     
