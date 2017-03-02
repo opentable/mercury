@@ -119,15 +119,15 @@ module.exports = {
                 github: 'src/locales/en-us/file.json',
                 smartling: 'files/file.json',
                 report: 'Test repo report',
-                totalStringCount: 1,
+                totalStringCount: 10,
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 } 
+                        smartlingStatus: { completedStringCount: 1, percentCompleted: 10 } 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 } 
+                        smartlingStatus: { completedStringCount: 10, percentCompleted: 100 } 
                     }
                 }
             },
@@ -135,15 +135,15 @@ module.exports = {
                 github: 'src/locales/en-us/other-file.json',
                 report: 'Test repo report',
                 smartling: 'files/other-file.json',
-                totalStringCount: 1,
+                totalStringCount: 30,
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 } 
+                        smartlingStatus: { completedStringCount: 22, percentCompleted: 73.3 } 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 } 
+                        smartlingStatus: { completedStringCount: 0, percentCompleted: 0 } 
                     }
                 }
             }
@@ -167,11 +167,11 @@ module.exports = {
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 } 
+                        smartlingStatus: { completedStringCount: 1, percentCompleted: 10 } 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 } 
+                        smartlingStatus: { completedStringCount: 10, percentCompleted: 100 }  
                     }
                 }
             }
@@ -191,17 +191,17 @@ module.exports = {
                 github: 'src/locales/en-us/file.json',
                 smartling: 'files/file.json',
                 report: 'Test repo report',
-                totalStringCount: 1,
+                totalStringCount: 10,
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 },
+                        smartlingStatus: { completedStringCount: 1, percentCompleted: 10 },
                         githubPath: 'src/locales/de-DE/file.json', 
                         githubContent: 'file content' 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 },
+                        smartlingStatus: { completedStringCount: 10, percentCompleted: 100 },
                         githubPath: 'src/locales/nl-NL/file.json', 
                         githubContent: 'file content' 
                     }
@@ -211,17 +211,17 @@ module.exports = {
                 github: 'src/locales/en-us/other-file.json',
                 smartling: 'files/other-file.json',
                 report: 'Test repo report',
-                totalStringCount: 1,
+                totalStringCount: 30,
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 },
+                        smartlingStatus: { completedStringCount: 22, percentCompleted: 73.3 },
                         githubPath: 'src/locales/de-DE/other-file.json',
                         githubContent: 'file content'
                     },
                     'nl-NL': {
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 },
+                        smartlingStatus: { completedStringCount: 0, percentCompleted: 0 },
                         githubPath: 'src/locales/nl-NL/other-file.json',
                         githubContent: 'file content' 
                     }
@@ -247,13 +247,13 @@ module.exports = {
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 },
+                        smartlingStatus: { completedStringCount: 1, percentCompleted: 10 },
                         githubPath: 'src/locales/Strings.de-de.resx', 
                         githubContent: 'file content' 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 },
+                        smartlingStatus: { completedStringCount: 10, percentCompleted: 100 },
                         githubPath: 'src/locales/Strings.nl-nl.resx', 
                         githubContent: 'file content' 
                     }
@@ -275,17 +275,17 @@ module.exports = {
                 github: 'src/locales/en-us/file.json',
                 smartling: 'files/file.json',
                 report: 'Test repo report',
-                totalStringCount: 1,
+                totalStringCount: 10,
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 },
+                        smartlingStatus: { completedStringCount: 1, percentCompleted: 10 },
                         githubPath: 'src/locales/de-DE/file.json', 
                         githubContent: 'file content' 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 },
+                        smartlingStatus: { completedStringCount: 10, percentCompleted: 100 },
                         githubPath: 'src/locales/nl-NL/file.json', 
                         githubContent: 'file content' 
                     }
@@ -295,17 +295,17 @@ module.exports = {
                 github: 'src/locales/en-us/other-file.json',
                 smartling: 'files/other-file.json',
                 report: 'Test repo report',
-                totalStringCount: 1,
+                totalStringCount: 30,
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 0 },
+                        smartlingStatus: { completedStringCount: 22, percentCompleted: 73.3 },
                         githubPath: 'src/locales/de-DE/other-file.json',
                         githubContent: 'file content'
                     },
                     'nl-NL': {
                         smartlingContent: 'file content',
-                        smartlingStatus: { completedStringCount: 1 },
+                        smartlingStatus: { completedStringCount: 0, percentCompleted: 0 },
                         githubPath: 'src/locales/nl-NL/other-file.json',
                         githubContent: 'file content' 
                     }
@@ -318,24 +318,31 @@ module.exports = {
             found: false
         }
     },
-    smartlingStatus: {
+    smartlingStatusFirst: {
         fileUri: 'files/file.json',
-        totalStringCount: 1,
-        totalWordCount: 2,
+        totalStringCount: 10,
         items: [
             {
                 localeId: 'de-DE',
-                authorizedStringCount: 1,
-                authorizedWordCount: 2,
-                completedStringCount: 0,
-                completedWordCount: 0
+                completedStringCount: 1
             },
             {
                 localeId: 'nl-NL',
-                authorizedStringCount: 1,
-                authorizedWordCount: 2,
-                completedStringCount: 1,
-                completedWordCount: 2
+                completedStringCount: 10
+            }
+        ]
+    },
+    smartlingStatusSecond: {
+        fileUri: 'files/other-file.json',
+        totalStringCount: 30,
+        items: [
+            {
+                localeId: 'de-DE',
+                completedStringCount: 22
+            },
+            {
+                localeId: 'nl-NL',
+                completedStringCount: 0
             }
         ]
     },
