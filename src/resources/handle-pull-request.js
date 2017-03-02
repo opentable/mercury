@@ -4,7 +4,7 @@ const config          = require('config');
 const errorTypes      = require('../constants/error-types');
 const github          = require('../services/github');
 const Logger          = require('../services/logger-service');
-const statusFormatter = require('../utils/format-status');
+const metadataFormatter = require('../utils/format-pr-metadata');
 
 const loggerService = Logger();
 
@@ -14,14 +14,16 @@ module.exports = (repository, callback) => {
     const action = prAlreadyExists ? 'Updating' : 'Creating';
 
     loggerService.info(`${action} github pull request for ${repository.owner}/${repository.repo}`);
+    
+    const pullRequestMetadata = metadataFormatter.format(repository);
 
     const prOptions = {
         owner: repository.owner,
         repo: repository.repo,
         head: `${config.github.owner}:${config.github.branch}`,
-        title: 'Mercury Pull Request',
+        title: pullRequestMetadata.title,
         base: 'master',
-        body: statusFormatter.format(repository)
+        body: pullRequestMetadata.body
     };
 
     let handlePr;

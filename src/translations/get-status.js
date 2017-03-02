@@ -1,11 +1,12 @@
 'use strict';
 
-const _				= require('lodash');
-const async			= require('async');
-const config		= require('config');
-const errorTypes	= require('../constants/error-types');
-const Logger 		= require('../services/logger-service');
-const smartling 	= require('../services/smartling');
+const _				  = require('lodash');
+const async			  = require('async');
+const config		  = require('config');
+const errorTypes	  = require('../constants/error-types');
+const Logger 		  = require('../services/logger-service');
+const smartling 	  = require('../services/smartling');
+const metadataFormatter = require('../utils/format-pr-metadata');
 
 const loggerService = Logger();
 
@@ -17,7 +18,8 @@ const mapLocaleStatus = (current, status, next) => {
         
         if(smartlingStatusLocale) {
             smartlingRepoLocale.smartlingStatus = {
-                completedStringCount: smartlingStatusLocale.completedStringCount
+                completedStringCount: smartlingStatusLocale.completedStringCount,
+                percentCompleted: metadataFormatter.calculatePercent(smartlingStatusLocale.completedStringCount, current.totalStringCount)
             };
         } else {
             smartlingRepoLocale.smartlingStatus = {};
