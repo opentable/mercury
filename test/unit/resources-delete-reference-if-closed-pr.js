@@ -37,14 +37,17 @@ describe('resources.deleteReferenceIfClosedPr()', () => {
 		});
 	});
     
-    describe('when pr exists', () => {
+    describe('when pr exists and valid', () => {
 	
 		const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
 		let err, githubStub;
 		
 		beforeEach((done) => {
 			repository.prInfo = {
-				found: true
+				found: true,
+				createdAt: '2017-02-14T15:29:05Z',
+				number: 123,
+				outdated: false
 			}
 
 			githubStub = sinon.stub().yields(null, 'ok');
@@ -61,6 +64,37 @@ describe('resources.deleteReferenceIfClosedPr()', () => {
 
 		it('should not call the deleteReference function', () => {
 			expect(githubStub.called).to.be.false;
+		});
+	});
+    
+    describe('when pr found and already closed', () => {
+	
+		const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
+		let err, githubStub;
+		
+		beforeEach((done) => {
+			repository.prInfo = {
+				found: true,
+				createdAt: '2017-02-14T15:29:05Z',
+				number: 123,
+				outdated: true,
+				closed: true
+			}
+
+			githubStub = sinon.stub().yields(null, 'ok');
+			
+			mockedDeleteReference(githubStub)(repository, (error) => {
+				err = error;
+				done();
+			});
+		});
+
+		it('should not error', () => {
+			expect(err).to.be.null;
+		});
+
+		it('should call the deleteReference function', () => {
+			expect(githubStub.called).to.be.true;
 		});
 	});
     
