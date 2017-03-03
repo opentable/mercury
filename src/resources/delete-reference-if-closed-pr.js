@@ -9,7 +9,7 @@ const loggerService = Logger();
 
 module.exports = (repository, callback) => {
     
-	if(repository.prInfo.found){
+	if(repository.prInfo.found && !repository.prInfo.closed){
 		return callback(null, repository);
 	}
 
