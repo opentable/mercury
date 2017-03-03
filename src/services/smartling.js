@@ -104,7 +104,8 @@ module.exports = {
                     }
                 },
                 fileUri: options.path,
-                fileType: 'json'
+                fileType: 'json',
+                authorize: 'true'
             };
 
             const smartlingUploadOptions = {
