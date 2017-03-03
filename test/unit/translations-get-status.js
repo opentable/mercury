@@ -22,7 +22,8 @@ describe('translations.getStatus()', () => {
         
         beforeEach((done) => {
             const repo = testData.postSmartlingFetchRepository;
-            const smartlingStub = sinon.stub().yields(null, testData.smartlingStatus);
+            const smartlingStub = sinon.stub().yields(null, testData.smartlingStatusFirst);
+            smartlingStub.onSecondCall().yields(null, testData.smartlingStatusSecond);
             
             mockedGetStatus(smartlingStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
@@ -45,7 +46,7 @@ describe('translations.getStatus()', () => {
         let err, res;
         
         beforeEach((done) => {
-            const noLocaleTestData = _.remove(testData.smartlingStatus.items, item => item.localeId === 'de-DE');
+            const noLocaleTestData = _.remove(testData.smartlingStatusFirst.items, item => item.localeId === 'de-DE');
             const repo = testData.postSmartlingFetchRepository;
             const smartlingStub = sinon.stub().yields(null, noLocaleTestData);
             
