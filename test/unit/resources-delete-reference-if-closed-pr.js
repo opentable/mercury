@@ -98,6 +98,35 @@ describe('resources.deleteReferenceIfClosedPr()', () => {
 		});
 	});
     
+    describe('when the reference has been manually deleted by the repo owner', () => {
+
+        const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
+        let err, res;
+
+        beforeEach((done) => {
+            repository.prInfo = {
+                found: false
+            };
+
+            const githubStub = sinon.stub().yields(new Error('Reference has already been manually deleted by the repo owners'));
+            
+            mockedDeleteReference(githubStub)(repository, (error, result) => {
+                err = error;
+                res = result;
+                done();
+            });
+        });
+
+        it('should not return an error', () => {
+            console.log(err);
+            expect(err).to.be.null;
+        });
+
+        it('should not mark the repo for being skipped', () => {
+            expect(res.skip).to.be.undefined;
+        });
+    });
+    
     describe('when github fails to delete the reference', () => {
 
         const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
