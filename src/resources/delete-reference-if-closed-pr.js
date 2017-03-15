@@ -22,11 +22,15 @@ module.exports = (repository, callback) => {
 	};
 
 	github.deleteReference(options, (err) => {
-		if(err){
+        
+		if(err && err.message != 'Reference has already been manually deleted by the repo owners'){
 			err = new Error('Failed while deleting outdated reference');
 			loggerService.error(err, errorTypes.failedToDeleteOutdatedBranch, repository);
 			repository.skip = true;
 		}
+        else {
+            err = null;
+        }
         
 		callback(err, repository);
 	});
