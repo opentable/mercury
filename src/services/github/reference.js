@@ -4,7 +4,14 @@ module.exports = (github) => {
     
     const deleteReference = (options, next) => {
         options.ref = `heads/${options.branch}`;
-        github.gitdata.deleteReference(options, next);
+        
+        getReference(options, (err, branchReferenceSha) => {
+            
+            if(branchReferenceSha) { 
+                return github.gitdata.deleteReference(options, next); 
+            }
+            next(new Error('Reference has already been manually deleted by the repo owners'));
+        });
     };
 
 	const getReference = (options, next) => {
