@@ -18,7 +18,7 @@ describe('manifest.validate()', () => {
 
 	const repository = {
 		manifestContent: {
-			smartlingProjectId: 'test-id',
+			smartlingProjectId: 'testid001',
 			translations: [{
 				input: {
 					src: 'src/locales/en-us/*.json'
@@ -52,6 +52,18 @@ describe('manifest.validate()', () => {
 
 			it('should not be valid', () => {
 				expect(error.toString()).to.contain('"smartlingProjectId" is required');
+			});
+		});
+        
+        describe('when invalid smartlingProjectId', () => {
+
+            const invalid = _.cloneDeep(repository);
+            invalid.manifestContent.smartlingProjectId = 'invalid';
+            
+			beforeEach(done => validate(invalid, next(done)));
+
+			it('should not be valid', () => {
+				expect(error.toString()).to.contain('"smartlingProjectId" length must be 9 characters long');
 			});
 		});
 
