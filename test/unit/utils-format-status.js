@@ -20,7 +20,7 @@ describe('metadataFormatter.format()', () => {
             });
             
             it('should include a title for the Pull Request', () => {
-                expect(res.title).to.include('Mercury Pull Request [WIP - 45.8% Complete]');
+                expect(res.title).to.include('Mercury Pull Request [WIP - 45.8% Overall Completion]');
             });
         });
         
@@ -61,7 +61,7 @@ describe('metadataFormatter.format()', () => {
             });
             
             it('should include a title for the Pull Request', () => {
-                expect(res.title).to.include('Mercury Pull Request [READY TO MERGE - 100% Complete]');
+                expect(res.title).to.include('Mercury Pull Request [READY TO MERGE - 100% Overall Completion]');
             });
         });
     });
