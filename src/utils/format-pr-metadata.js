@@ -28,7 +28,7 @@ const buildPercentageStat = (percentage) => {
 
 const buildPullRequestStatus = (averageCompletion) => {
     const status = averageCompletion !== 100 ? 'WIP' : 'READY TO MERGE';
-    return `[${status} - ${buildPercentageStat(averageCompletion)} Complete]`;
+    return `[${status} - ${buildPercentageStat(averageCompletion)} Overall Completion]`;
 };
 
 const format = (repository) => {
