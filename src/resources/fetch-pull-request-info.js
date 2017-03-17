@@ -16,7 +16,7 @@ module.exports = (repository, callback) => {
 	};
     
 	github.getPullRequestInfo(prOptions, (err, prInfo) => {
-
+        
 		if(err){
 			err = new Error('Failed while fetching pull request info');
 			loggerService.error(err, errorTypes.failedToFetchPrInfo, repository);

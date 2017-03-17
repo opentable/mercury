@@ -15,10 +15,10 @@ module.exports = (github) => {
     };
 
 	const getReference = (options, next) => {
-
         options.ref = `heads/${options.branch}`;
 
         github.gitdata.getReference(options, (err, reference) => {
+            
             next(err, reference ? reference.object.sha : undefined);
         });
     };
@@ -44,6 +44,7 @@ module.exports = (github) => {
     const update = (options, next) => {
         options.ref = `heads/${options.branch}`;
         options.sha = options.reference;
+                
         github.gitdata.updateReference(options, next);
     };
 

@@ -35,15 +35,14 @@ const processRepo = (repository, next) => {
 	});
 };
 
-_.each(config.repositories, (repositories, owner) => {
+async.eachOfSeries(config.repositories, (repositories, owner, next) => {
 	async.eachSeries(repositories, (repo, next) => {
 
 		processRepo({ owner, repo }, next);
 		
-	}, () => {
-
-		const date = new Date();
-		console.log(`\n\nMercury just ran - ${date}`);
-		process.exit(0);
-	});
+	}, next);
+}, () => {
+    const date = new Date();
+    console.log(`\n\nMercury just ran - ${date}`);
+    process.exit(0);
 });
