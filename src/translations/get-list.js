@@ -31,7 +31,7 @@ const getMatchingFiles = (list, srcGlobsCollection) => {
 const mapFileObjects = (files) => {
 	return _.map(files, file => ({
 		github: file,
-		smartling: `files/${path.basename(file)}`
+		smartling: `/files/${path.basename(file)}`
 	}));
 };
 
