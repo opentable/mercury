@@ -65,12 +65,12 @@ module.exports = {
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
-                smartling: 'files/file.json',
+                smartling: '/files/file.json',
                 report: 'Test repo report'
             },
             {
                 github: 'src/locales/en-us/other-file.json',
-                smartling: 'files/other-file.json',
+                smartling: '/files/other-file.json',
                 report: 'Test repo report'
             }
         ],
@@ -87,7 +87,7 @@ module.exports = {
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
-                smartling: 'files/file.json',
+                smartling: '/files/file.json',
                 report: 'Test repo report',
                 locales: {
                     'de-DE': { smartlingContent: 'file content' },
@@ -97,7 +97,7 @@ module.exports = {
             {
                 github: 'src/locales/en-us/other-file.json',
                 report: 'Test repo report',
-                smartling: 'files/other-file.json',
+                smartling: '/files/other-file.json',
                 locales: {
                     'de-DE': { smartlingContent: 'file content' },
                     'nl-NL': { smartlingContent: 'file content' }
@@ -117,7 +117,7 @@ module.exports = {
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
-                smartling: 'files/file.json',
+                smartling: '/files/file.json',
                 report: 'Test repo report',
                 totalStringCount: 10,
                 locales: {
@@ -134,7 +134,7 @@ module.exports = {
             {
                 github: 'src/locales/en-us/other-file.json',
                 report: 'Test repo report',
-                smartling: 'files/other-file.json',
+                smartling: '/files/other-file.json',
                 totalStringCount: 30,
                 locales: {
                     'de-DE': { 
@@ -161,7 +161,7 @@ module.exports = {
         translationFiles: [ 
             {
                 github: 'src/locales/Strings.resx',
-                smartling: 'files/Strings.resx',
+                smartling: '/files/Strings.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
                 locales: {
@@ -189,7 +189,7 @@ module.exports = {
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
-                smartling: 'files/file.json',
+                smartling: '/files/file.json',
                 report: 'Test repo report',
                 totalStringCount: 10,
                 locales: {
@@ -209,7 +209,7 @@ module.exports = {
             },
             {
                 github: 'src/locales/en-us/other-file.json',
-                smartling: 'files/other-file.json',
+                smartling: '/files/other-file.json',
                 report: 'Test repo report',
                 totalStringCount: 30,
                 locales: {
@@ -241,7 +241,7 @@ module.exports = {
         translationFiles: [ 
             {
                 github: 'src/locales/Strings.resx',
-                smartling: 'files/Strings.resx',
+                smartling: '/files/Strings.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
                 locales: {
@@ -273,7 +273,7 @@ module.exports = {
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
-                smartling: 'files/file.json',
+                smartling: '/files/file.json',
                 report: 'Test repo report',
                 totalStringCount: 10,
                 locales: {
@@ -293,7 +293,7 @@ module.exports = {
             },
             {
                 github: 'src/locales/en-us/other-file.json',
-                smartling: 'files/other-file.json',
+                smartling: '/files/other-file.json',
                 report: 'Test repo report',
                 totalStringCount: 30,
                 locales: {
@@ -349,27 +349,27 @@ module.exports = {
     translationFiles: [ 
         {
             github: 'src/locales/en-us/file.json',
-            smartling: 'files/file.json'
+            smartling: '/files/file.json'
         },
         {
             github: 'src/locales/en-us/other-file.json',
-            smartling: 'files/other-file.json'
+            smartling: '/files/other-file.json'
         }
     ],
     translationFilesGlob: [
         {
             github: 'src/locales/en-us/file.json',
-            smartling: 'files/file.json'
+            smartling: '/files/file.json'
         }
     ],
     translationFilesGlobComplex: [
         {
             github: 'components/header/header.json',
-            smartling: 'files/header.json'
+            smartling: '/files/header.json'
         },
         {
             github: 'components/footer/footer.json',
-            smartling: 'files/footer.json'
+            smartling: '/files/footer.json'
         }
     ]
 }
