@@ -94,7 +94,7 @@ module.exports = {
             if(err) {
                 return next(err);
             }
-                                    
+                                                
             const smartlingFormData = {
                 file: {
                     value: content,
@@ -104,7 +104,7 @@ module.exports = {
                     }
                 },
                 fileUri: options.path,
-                fileType: 'json',
+                fileType: path.extname(options.path).replace('.', ''),
                 authorize: 'true'
             };
 
