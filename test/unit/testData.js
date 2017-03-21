@@ -5,7 +5,15 @@ module.exports = {
         'src/locales/en-us/file.json',
         'src/locales/en-us/other-file.json'
     ],
-    githubMockComplex: [ 
+    githubMockResx: [ 
+        'src/locales/folder/Strings.resx',
+        'src/locales/otherfolder/Strings.resx'
+    ],
+    githubMockResxComplex: [ 
+        'src/locales/folder/Strings.resx',
+        'src/otherlocales/folder/Strings.resx'
+    ],
+    githubMockComplex: [
         'components/header/header.json',
         'components/footer/footer.json'
     ],
@@ -52,6 +60,48 @@ module.exports = {
         repo: 'hobknob',
         manifestContent: {
             translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+        },
+        manifestUpdated: '2017-02-15T15:29:05Z'
+    },
+    preTranslationRepositoryResx: {
+        owner: 'opentable',
+        repo: 'hobknob',
+        manifestContent: {
+            translations: [ 
+                { 
+                    input: { 
+                        src: ['src/locales/folder/*.resx'] 
+                    },
+                    output: { dest: 'src/locales/folder/Strings.${locale}.resx' } 
+                },
+                { 
+                    input: { 
+                        src: ['src/locales/otherfolder/*.resx'] 
+                    },
+                    output: { dest: 'src/locales/otherfolder/Strings.${locale}.resx' } 
+                }
+            ]
+        },
+        manifestUpdated: '2017-02-15T15:29:05Z'
+    },
+    preTranslationRepositoryResxComplex: {
+        owner: 'opentable',
+        repo: 'hobknob',
+        manifestContent: {
+            translations: [ 
+                { 
+                    input: { 
+                        src: ['src/locales/folder/Strings.resx'] 
+                    },
+                    output: { dest: 'src/locales/folder/Strings.${locale}.resx' } 
+                },
+                { 
+                    input: { 
+                        src: ['src/otherlocales/folder/Strings.resx'] 
+                    },
+                    output: { dest: 'src/otherlocales/folder/Strings.${locale}.resx' } 
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z'
     },
@@ -370,6 +420,26 @@ module.exports = {
         {
             github: 'components/footer/footer.json',
             smartling: '/files/footer.json'
+        }
+    ],
+    translationFilesResx: [
+        {
+            github: 'src/locales/folder/Strings.resx',
+            smartling: '/folder/Strings.resx'
+        },
+        {
+            github: 'src/locales/otherfolder/Strings.resx',
+            smartling: '/otherfolder/Strings.resx'
+        }
+    ],
+    translationFilesResxComplex: [
+        {
+            github: 'src/locales/folder/Strings.resx',
+            smartling: '/locales/folder/Strings.resx'
+        },
+        {
+            github: 'src/otherlocales/folder/Strings.resx',
+            smartling: '/otherlocales/folder/Strings.resx'
         }
     ]
 }
