@@ -14,15 +14,17 @@ describe('resources.commitFiles()', () => {
             createFile: githubCreateFileStub,
             updateFile: githubUpdateFileStub
         }
-    });
+    }, { setTimeout });
     
     const repository = testData.postGithubFetchRepository;
     let githubGetFileStub,
         githubCreateFileStub,
         githubUpdateFileStub;
     
-    describe('happy path with file creation', () => {
-    
+    describe('happy path with file creation', function() {
+        
+        this.timeout(500);
+        
         let err;
             
         beforeEach((done) => {
@@ -63,8 +65,10 @@ describe('resources.commitFiles()', () => {
         });
     });
     
-    describe('happy path with file update', () => {
-    
+    describe('happy path with file update', function() {
+        
+        this.timeout(500);
+        
         let err;
         
         beforeEach((done) => {
@@ -105,8 +109,10 @@ describe('resources.commitFiles()', () => {
         });
     });
     
-    describe('happy path with no action', () => {
-    
+    describe('happy path with no action', function()  {
+        
+        this.timeout(500);
+        
         let err;
         
         beforeEach((done) => {
@@ -151,8 +157,10 @@ describe('resources.commitFiles()', () => {
         });
     });
     
-    describe('error when getting file sha', () => {
-    
+    describe('error when getting file sha', function() {
+        
+        this.timeout(500);
+        
         let err;
         
         beforeEach((done) => {
@@ -189,8 +197,10 @@ describe('resources.commitFiles()', () => {
         });
     });
     
-    describe('error when creating file', () => {
-    
+    describe('error when creating file', function() {
+        
+        this.timeout(500);
+        
         let err;
         
         beforeEach((done) => {
