@@ -25,27 +25,31 @@ module.exports = (repository, callback) => {
                 message: `Mercury commit for ${localeId} to file ${locale.githubPath}`
             };
 
-            if(locale.isDifferent) {                
-                github.getFile(options, (err, file) => {
-                    if(err && err.code !== 404){
-                        return callback(new Error(err.message));    
-                    }
-                    
-                    const content = file.content;
-                    const sha = file.sha;
-                    
-                    _.set(options, 'branch', options.ref);
-                    _.unset(options, 'ref');
-                    
-                    if(!content) {
-                        github.createFile(options, callback);
-                    } else if(content && content !== locale.smartlingContent) {
-                        options.sha = sha;
-                        github.updateFile(options, callback);
-                    } else {
-                        return callback();
-                    }
-                });
+            if(locale.isDifferent) {
+                setTimeout(() => {
+                    github.getFile(options, (err, file) => {
+                        if(err && err.code !== 404){
+                            return callback(new Error(err.message));    
+                        }
+                        
+                        const content = file.content;
+                        const sha = file.sha;
+                        
+                        _.set(options, 'branch', options.ref);
+                        _.unset(options, 'ref');
+                        
+                        if(!content) {
+                            loggerService.info(`Creating new ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
+                            github.createFile(options, callback);
+                        } else if(content && content !== locale.smartlingContent) {
+                            loggerService.info(`Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
+                            options.sha = sha;
+                            github.updateFile(options, callback);
+                        } else {
+                            return callback();
+                        }
+                    });
+                }, 700);                
             } else {
                 callback();
             }
