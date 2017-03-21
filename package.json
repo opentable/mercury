@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint ./",
     "mocha": "mocha test/unit",
-    "start": "node src/app.js",
+    "start": "export NODE_ENV=development && node src/app.js",
     "test": "export NODE_ENV=TEST && npm run lint && npm run mocha"
   },
   "repository": {
