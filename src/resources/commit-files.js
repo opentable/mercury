@@ -49,7 +49,7 @@ module.exports = (repository, callback) => {
                             return callback();
                         }
                     });
-                }, 400);                
+                }, 700);                
             } else {
                 callback();
             }
