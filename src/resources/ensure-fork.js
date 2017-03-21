@@ -16,7 +16,7 @@ module.exports = (repository, callback) => {
     };
         
     github.ensureFork(options, (err, result) => {
-        
+                
         if(err){
             loggerService.error(err, errorTypes.failedGithubFork, repository);
             repository.skip = true;
@@ -47,17 +47,19 @@ module.exports = (repository, callback) => {
                 reference: masterSha,
                 repo: repository.repo
             };
+            
+            setTimeout(() => {
+                github.updateReference(forkOptions, (err) => {
+                    
+                    if(err){
+                        err = new Error('Could not rebase fork from upstream/master - forks are created asynchronously so will retry in the next round.');
+                        loggerService.error(err, errorTypes.failedGithubForkRebase, repository);
+                        repository.skip = true;
+                    }
 
-            github.updateReference(forkOptions, (err) => {
-
-                if(err){
-                    err = new Error('Could not rebase fork from upstream/master');
-                    loggerService.error(err, errorTypes.failedGithubForkRebase, repository);
-                    repository.skip = true;
-                }
-
-                callback(err, repository);
-            });
+                    callback(err, repository);
+                });
+            }, 2000);
         });
     });
 };

@@ -27,9 +27,10 @@ const processRepo = (repository, next) => {
 	);
 
 	mercury(repository, (err, repository) => {
-		console.log(`\ngot following result for ${repository.owner}/${repository.repo}:`);
-		console.log(JSON.stringify(err, null, 2));
-        console.log(JSON.stringify(repository, null, 2));
+		if(err) {
+            console.log(`\ngot an error while processing ${repository.owner}/${repository.repo}:`);
+            console.log(JSON.stringify(err, null, 2));
+        }
 		next();
 	});
 };
