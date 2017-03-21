@@ -23,7 +23,7 @@ describe('resources.commitFiles()', () => {
     
     describe('happy path with file creation', function() {
         
-        this.timeout(500);
+        this.timeout(750);
         
         let err;
             
@@ -67,7 +67,7 @@ describe('resources.commitFiles()', () => {
     
     describe('happy path with file update', function() {
         
-        this.timeout(500);
+        this.timeout(750);
         
         let err;
         
@@ -111,7 +111,7 @@ describe('resources.commitFiles()', () => {
     
     describe('happy path with no action', function()  {
         
-        this.timeout(500);
+        this.timeout(750);
         
         let err;
         
@@ -159,7 +159,7 @@ describe('resources.commitFiles()', () => {
     
     describe('error when getting file sha', function() {
         
-        this.timeout(500);
+        this.timeout(750);
         
         let err;
         
@@ -199,7 +199,7 @@ describe('resources.commitFiles()', () => {
     
     describe('error when creating file', function() {
         
-        this.timeout(500);
+        this.timeout(750);
         
         let err;
         
