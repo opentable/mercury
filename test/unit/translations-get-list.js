@@ -127,6 +127,50 @@ describe('translations.getList()', () => {
                 expect(res.translationFiles).to.be.eql(testData.translationFilesGlobComplex);
             });
         });
+        
+        describe('when using duplicate file names as translations', () => {
+        
+            let err, res;          
+            
+            beforeEach((done) => {
+                const githubStub = sinon.stub().yields(null, testData.githubMockResx);
+                const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
+                const repo = _.cloneDeep(testData.preTranslationRepositoryResx); 
+                
+                mockedGetList(githubStub, smartlingStub)(repo, (error, result) => {
+                    err = error;
+                    res = result;
+                    done();
+                });
+            });
+            
+            it('should map them all', () => {
+                expect(err).to.be.null;
+                expect(res.translationFiles).to.be.eql(testData.translationFilesResx);
+            });
+        });
+        
+        describe('when using duplicate file names and folder names as translations', () => {
+        
+            let err, res;          
+            
+            beforeEach((done) => {
+                const githubStub = sinon.stub().yields(null, testData.githubMockResxComplex);
+                const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
+                const repo = _.cloneDeep(testData.preTranslationRepositoryResxComplex); 
+                
+                mockedGetList(githubStub, smartlingStub)(repo, (error, result) => {
+                    err = error;
+                    res = result;
+                    done();
+                });
+            });
+            
+            it('should map them all', () => {
+                expect(err).to.be.null;
+                expect(res.translationFiles).to.be.eql(testData.translationFilesResxComplex);
+            });
+        });
     });
 
     describe('when getList returns no results', () => {
