@@ -29,10 +29,28 @@ const getMatchingFiles = (list, srcGlobsCollection) => {
 };
 
 const mapFileObjects = (files) => {
-	return _.map(files, file => ({
-		github: file,
-		smartling: `/files/${path.basename(file)}`
-	}));
+            
+    return _.map(files, file => {
+        
+        let i = 0;
+        const pathComponents = _.reverse(file.split(path.sep));
+        let currentPath = '';
+
+        while(i < pathComponents.length) {
+            currentPath = '/' + pathComponents[i] + currentPath;
+            const fileNames = _.map(files, singleFile => _.reverse(singleFile.split(path.sep))[i]);
+            const areFilePathsUnique = _.uniq(fileNames).length === files.length;
+            
+            if(areFilePathsUnique) {
+                return {
+                    github: file,
+                    smartling: i === 0 ? `/files${currentPath}` : currentPath
+                };
+            } else {
+                i++;
+            }
+        }        
+    });
 };
 
 module.exports = (repository, callback) => {
