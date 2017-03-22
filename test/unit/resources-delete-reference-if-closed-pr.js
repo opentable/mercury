@@ -118,7 +118,6 @@ describe('resources.deleteReferenceIfClosedPr()', () => {
         });
 
         it('should not return an error', () => {
-            console.log(err);
             expect(err).to.be.null;
         });
 

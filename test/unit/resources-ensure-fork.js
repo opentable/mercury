@@ -10,14 +10,12 @@ describe('resources.ensureFork()', () => {
     
     const mockedEnsureFork = (stubs) => injectr('../../src/resources/ensure-fork.js', {
         '../services/github': stubs
-    }, { setTimeout });
+    }, { setTimeout: (cb) => cb() });
     
     const repository = testData.postGithubFetchRepository;
     
     describe('happy path', function() {
-        
-        this.timeout(2500);
-        
+                
         let err, res, stubs;
         
         beforeEach((done) => {
@@ -103,9 +101,7 @@ describe('resources.ensureFork()', () => {
 
     describe('when rebasing mercuryUser/master from upstream/master fails with an error', function() {
         let err, res, stubs;
-        
-        this.timeout(2500);
-        
+                
         beforeEach((done) => {
             stubs = {
                 ensureFork: sinon.stub().yields(null, { full_name: 'testOwner/testRepo', owner: { login: 'testOwner' } }),
