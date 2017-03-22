@@ -39,9 +39,9 @@ const mapFileObjects = (files) => {
         while(i < pathComponents.length) {
             currentPath = '/' + pathComponents[i] + currentPath;
             const fileNames = _.map(files, singleFile => _.reverse(singleFile.split(path.sep))[i]);
-            const areFileNamesUnique = _.uniq(fileNames).length === files.length;
+            const areFilePathsUnique = _.uniq(fileNames).length === files.length;
             
-            if(areFileNamesUnique) {
+            if(areFilePathsUnique) {
                 return {
                     github: file,
                     smartling: i === 0 ? `/files${currentPath}` : currentPath
