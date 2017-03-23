@@ -8,6 +8,12 @@ const github = require('../services/github');
 const Logger = require('../services/logger-service');
 
 const loggerService = Logger();
+const retryPolicy = {
+    times: 5,
+    interval: function(retryCount) {
+        return 200 * retryCount;
+    }
+};
 
 module.exports = (repository, callback) => {
 
@@ -40,17 +46,12 @@ module.exports = (repository, callback) => {
                     if(!content) {
                         loggerService.info(`Creating new ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
 
-                        async.retry({
-                            times: 5,
-                            interval: function(retryCount) {
-                                return 200 * retryCount;
-                            }
-                        }, github.createFile.bind(null, options), callback);
+                        async.retry(retryPolicy, github.createFile.bind(null, options), callback);
 
                     } else if(content && content !== locale.smartlingContent) {
                         loggerService.info(`Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
                         options.sha = sha;
-                        github.updateFile(options, callback);
+                        async.retry(retryPolicy, github.updateFile.bind(null, options), callback);
                     } else {
                         return callback();
                     }
