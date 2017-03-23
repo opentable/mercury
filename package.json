@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "lint": "eslint ./",
-    "mocha": "mocha test/unit",
+    "mocha": "mocha test/unit --timeout 10000",
     "start": "export NODE_ENV=development && node src/app.js",
     "test": "export NODE_ENV=TEST && npm run lint && npm run mocha"
   },
