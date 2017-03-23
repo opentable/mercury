@@ -1,10 +1,11 @@
 'use strict';
 
 const _         = require('lodash');
+const async     = require('async');
 const expect 	= require('chai').expect;
 const injectr	= require('injectr');
 const sinon		= require('sinon');
-const testData = require('./testData');
+const testData  = require('./testData');
 
 describe('resources.commitFiles()', () => {
 
@@ -13,6 +14,11 @@ describe('resources.commitFiles()', () => {
             getFile: githubGetFileStub,
             createFile: githubCreateFileStub,
             updateFile: githubUpdateFileStub
+        },
+        async: {
+            eachOfSeries: async.eachOfSeries,
+            eachSeries: async.eachSeries,
+            retry: (policy, fn, cb) => async.retry({ times: 5, interval: 0 }, fn, cb)
         }
     });
 
