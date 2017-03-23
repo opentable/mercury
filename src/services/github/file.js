@@ -46,6 +46,11 @@ module.exports = (github) => ({
     update: (options, next) => {
         const encodedContent = encodeContent(options.content);
         _.set(options, 'content', encodedContent);
-        github.repos.updateFile(options, next);
+        github.repos.updateFile(options, (err, result) => {
+            if(err) {
+                return next(err);
+            }
+            next(null, result);
+        });
     }
 });

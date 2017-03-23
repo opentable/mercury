@@ -50,7 +50,12 @@ module.exports = (repository, callback) => {
                     } else if(content && content !== locale.smartlingContent) {
                         loggerService.info(`Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
                         options.sha = sha;
-                        github.updateFile(options, callback);
+                        async.retry({
+                            times: 5,
+                            interval: function(retryCount) {
+                                return 200 * retryCount;
+                            }
+                        }, github.updateFile.bind(null, options), callback);
                     } else {
                         return callback();
                     }
