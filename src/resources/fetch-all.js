@@ -17,11 +17,10 @@ const mapFileName = (file, locale, destGlob) => stringToTemplate(destGlob, {
 
 const getAllGithubFilenames = (repository) => {
     const list = [];
-    const destGlob = _.first(repository.manifestContent.translations).output.dest;
     
     _.each(repository.translationFiles, (file) => {
         _.each(repository.targetLocales, (localeId) => {
-            const fileName = mapFileName(file.github, localeId, destGlob);
+            const fileName = mapFileName(file.github, localeId, file.dest);
             list.push({ localeId, fileName, source: file.github });
         });
     });
