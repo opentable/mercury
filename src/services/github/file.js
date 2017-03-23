@@ -8,7 +8,12 @@ module.exports = (github) => ({
     create: (options, next) => {
         const encodedContent = encodeContent(options.content);
         _.set(options, 'content', encodedContent);
-        github.repos.createFile(options, next);
+        github.repos.createFile(options, (err, result) => {
+            if(err) {
+                return next(err);
+            }
+            next(null, result);
+        });
     },
 
     get: (options, next) => {
