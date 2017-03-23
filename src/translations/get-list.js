@@ -17,47 +17,54 @@ const getMatchingFiles = (list, srcGlobsCollection) => {
 	_.each(srcGlobsCollection, srcGlobs => {
 
 		let result = list;
-		
-		_.each(srcGlobs, glob => {
+
+		_.each(srcGlobs.src, glob => {
 			result = mm.match(result, glob);
 		});
 
-		collection = _.union(collection, result);
+		if(!_.isEmpty(result)){
+			const srcToDestMap = _.map(result, file => ({ src: file, dest: srcGlobs.dest }));
+			collection = _.union(collection, _.uniq(srcToDestMap));
+		}
 	});
 
 	return mapFileObjects(_.uniq(collection));
 };
 
 const mapFileObjects = (files) => {
-            
-    return _.map(files, file => {
-        
-        let i = 0;
-        const pathComponents = _.reverse(file.split(path.sep));
-        let currentPath = '';
 
-        while(i < pathComponents.length) {
-            currentPath = '/' + pathComponents[i] + currentPath;
-            const fileNames = _.map(files, singleFile => _.reverse(singleFile.split(path.sep))[i]);
-            const areFilePathsUnique = _.uniq(fileNames).length === files.length;
-            
-            if(areFilePathsUnique) {
-                return {
-                    github: file,
-                    smartling: i === 0 ? `/files${currentPath}` : currentPath
-                };
-            } else {
-                i++;
-            }
-        }        
-    });
+	return _.map(files, file => {
+
+		let i = 0;
+		const pathComponents = _.reverse(file.src.split(path.sep));
+		let currentPath = '';
+
+		while(i < pathComponents.length) {
+			currentPath = '/' + pathComponents[i] + currentPath;
+			const fileNames = _.map(files, singleFile => _.reverse(singleFile.src.split(path.sep))[i]);
+			const areFilePathsUnique = _.uniq(fileNames).length === files.length;
+
+			if(areFilePathsUnique) {
+				return {
+					dest: file.dest,
+					github: file.src,
+					smartling: i === 0 ? `/files${currentPath}` : currentPath
+				};
+			} else {
+				i++;
+			}
+		}
+	});
 };
 
 module.exports = (repository, callback) => {
 
 	loggerService.info(`Getting translations' list from github for ${repository.owner}/${repository.repo}`);
 
-	const srcGlobs = _.map(repository.manifestContent.translations, item => item.input.src);
+	const srcGlobs = _.map(repository.manifestContent.translations, (item) => ({
+		src: item.input.src,
+		dest: item.output.dest
+	}));
 
 	const githubOptions = {
 		repo: repository.repo,
@@ -74,7 +81,6 @@ module.exports = (repository, callback) => {
 
 		if(!err && list){
 			repository.translationFiles = getMatchingFiles(list, srcGlobs);
-			
 			if(_.isEmpty(repository.translationFiles)){
 				err = true;
 			}
