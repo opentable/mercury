@@ -28,7 +28,7 @@ const getMatchingFiles = (list, srcGlobsCollection) => {
 		}
 	});
 
-	return mapFileObjects(collection);
+	return mapFileObjects(_.uniq(collection));
 };
 
 const mapFileObjects = (files) => {
