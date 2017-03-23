@@ -109,18 +109,23 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+            translations: [{
+                input: { src: ['src/locales/en-us/*.json'] },
+                output: { dest: 'src/locales/${locale}/${filename}' }
+            }]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
                 smartling: '/files/file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report'
             },
             {
                 github: 'src/locales/en-us/other-file.json',
                 smartling: '/files/other-file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report'
             }
         ],
@@ -131,13 +136,17 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+            translations: [{
+                input: { src: ['src/locales/en-us/*.json'] },
+                output: { dest: 'src/locales/${locale}/${filename}' }
+            }]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
                 smartling: '/files/file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 locales: {
                     'de-DE': { smartlingContent: 'file content' },
@@ -146,8 +155,9 @@ module.exports = {
             },
             {
                 github: 'src/locales/en-us/other-file.json',
-                report: 'Test repo report',
                 smartling: '/files/other-file.json',
+                dest: 'src/locales/${locale}/${filename}',
+                report: 'Test repo report',
                 locales: {
                     'de-DE': { smartlingContent: 'file content' },
                     'nl-NL': { smartlingContent: 'file content' }
@@ -161,13 +171,17 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+            translations: [{
+                input: { src: ['src/locales/en-us/*.json'] },
+                output: { dest: 'src/locales/${locale}/${filename}' }
+            }]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
                 smartling: '/files/file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 10,
                 locales: {
@@ -184,6 +198,7 @@ module.exports = {
             {
                 github: 'src/locales/en-us/other-file.json',
                 report: 'Test repo report',
+                dest: 'src/locales/${locale}/${filename}',
                 smartling: '/files/other-file.json',
                 totalStringCount: 30,
                 locales: {
@@ -205,13 +220,37 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [{ input: { src: ['src/locales/Strings.resx'] }, output: { dest: 'src/locales/${filename.split(".")[0]}.${locale.toLowerCase()}.resx' } } ]
+            translations: [{
+                input: { src: ['src/locales/folder/Strings.resx'] },
+                output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
+            },{
+                input: { src: ['src/locales/another-folder/Strings.resx'] },
+                output: { dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx' }
+            }]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
-        translationFiles: [ 
+        translationFiles: [
             {
-                github: 'src/locales/Strings.resx',
-                smartling: '/files/Strings.resx',
+                github: 'src/locales/folder/Strings.resx',
+                smartling: '/folder/Strings.resx',
+                dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx',
+                report: 'Test repo report',
+                totalStringCount: 1,
+                locales: {
+                    'de-DE': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { completedStringCount: 1, percentCompleted: 10 } 
+                    },
+                    'nl-NL': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { completedStringCount: 10, percentCompleted: 100 }  
+                    }
+                }
+            },
+            {
+                github: 'src/locales/another-folder/Strings.resx',
+                smartling: '/another-folder/Strings.resx',
+                dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
                 locales: {
@@ -233,13 +272,17 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+            translations: [{
+                input: { src: ['src/locales/en-us/*.json'] },
+                output: { dest: 'src/locales/${locale}/${filename}' }
+            }]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
                 smartling: '/files/file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 10,
                 locales: {
@@ -260,6 +303,7 @@ module.exports = {
             {
                 github: 'src/locales/en-us/other-file.json',
                 smartling: '/files/other-file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 30,
                 locales: {
@@ -285,26 +329,54 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['src/locales/Strings.resx'] }, output: { dest: 'src/locales/${filename.split(".")[0]}.${locale.toLowerCase()}.resx' } } ]
+            translations: [{
+                input: { src: ['src/locales/folder/Strings.resx'] },
+                output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
+            },{
+                input: { src: ['src/locales/another-folder/Strings.resx'] },
+                output: { dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx' }
+            }]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/Strings.resx',
-                smartling: '/files/Strings.resx',
+                github: 'src/locales/folder/Strings.resx',
+                smartling: '/folder/Strings.resx',
+                dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
                 locales: {
                     'de-DE': { 
                         smartlingContent: 'file content',
                         smartlingStatus: { completedStringCount: 1, percentCompleted: 10 },
-                        githubPath: 'src/locales/Strings.de-de.resx', 
+                        githubPath: 'src/locales/folder/Strings.de-de.resx', 
                         githubContent: 'file content' 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
                         smartlingStatus: { completedStringCount: 10, percentCompleted: 100 },
-                        githubPath: 'src/locales/Strings.nl-nl.resx', 
+                        githubPath: 'src/locales/folder/Strings.nl-nl.resx', 
+                        githubContent: 'file content' 
+                    }
+                }
+            },
+            {
+                github: 'src/locales/another-folder/Strings.resx',
+                smartling: '/another-folder/Strings.resx',
+                dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx',
+                report: 'Test repo report',
+                totalStringCount: 1,
+                locales: {
+                    'de-DE': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { completedStringCount: 1, percentCompleted: 10 },
+                        githubPath: 'src/locales/another-folder/Strings.de-de.resx', 
+                        githubContent: 'file content' 
+                    },
+                    'nl-NL': { 
+                        smartlingContent: 'file content',
+                        smartlingStatus: { completedStringCount: 10, percentCompleted: 100 },
+                        githubPath: 'src/locales/another-folder/Strings.nl-nl.resx', 
                         githubContent: 'file content' 
                     }
                 }
@@ -317,13 +389,17 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
-            translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
+            translations: [{
+                input: { src: ['src/locales/en-us/*.json'] },
+                output: { dest: 'src/locales/${locale}/${filename}' }
+            }]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
                 github: 'src/locales/en-us/file.json',
                 smartling: '/files/file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 10,
                 locales: {
@@ -344,6 +420,7 @@ module.exports = {
             {
                 github: 'src/locales/en-us/other-file.json',
                 smartling: '/files/other-file.json',
+                dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 30,
                 locales: {
@@ -398,46 +475,55 @@ module.exports = {
     },
     translationFiles: [ 
         {
+            dest: 'src/locales/${locale}/${filename}',
             github: 'src/locales/en-us/file.json',
             smartling: '/files/file.json'
         },
         {
+            dest: 'src/locales/${locale}/${filename}',
             github: 'src/locales/en-us/other-file.json',
             smartling: '/files/other-file.json'
         }
     ],
     translationFilesGlob: [
         {
+            dest: 'src/locales/${locale}/${filename}',            
             github: 'src/locales/en-us/file.json',
             smartling: '/files/file.json'
         }
     ],
     translationFilesGlobComplex: [
         {
+            dest: 'components/header/locales.${locale}.json',
             github: 'components/header/header.json',
             smartling: '/files/header.json'
         },
         {
+            dest: 'components/footer/locales.${locale}.json',
             github: 'components/footer/footer.json',
             smartling: '/files/footer.json'
         }
     ],
     translationFilesResx: [
         {
+            dest: 'src/locales/folder/Strings.${locale}.resx',
             github: 'src/locales/folder/Strings.resx',
             smartling: '/folder/Strings.resx'
         },
         {
+            dest: 'src/locales/otherfolder/Strings.${locale}.resx',
             github: 'src/locales/otherfolder/Strings.resx',
             smartling: '/otherfolder/Strings.resx'
         }
     ],
     translationFilesResxComplex: [
         {
+            dest: 'src/locales/folder/Strings.${locale}.resx',
             github: 'src/locales/folder/Strings.resx',
             smartling: '/locales/folder/Strings.resx'
         },
         {
+            dest: 'src/otherlocales/folder/Strings.${locale}.resx',
             github: 'src/otherlocales/folder/Strings.resx',
             smartling: '/otherlocales/folder/Strings.resx'
         }
