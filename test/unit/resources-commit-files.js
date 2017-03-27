@@ -113,7 +113,7 @@ describe('resources.commitFiles()', () => {
 
     describe('happy path with no action', () => {
 
-        let err;
+        let err, res;
 
         beforeEach((done) => {
             githubGetFileStub = sinon.stub().yields(null, { content: 'translated file content', sha: 'test_sha' });
@@ -134,8 +134,9 @@ describe('resources.commitFiles()', () => {
                 }
             ];
 
-            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error, result) => {
                 err = error;
+                res = result;
                 done();
             });
         });
@@ -154,6 +155,10 @@ describe('resources.commitFiles()', () => {
 
         it('should never call getFile', () => {
             expect(githubGetFileStub.called).to.be.false;
+        });
+        
+        it('should add a skipPullRequest boolean value to the repository', () => {
+            expect(res.skipPullRequest).to.be.true;
         });
     });
 

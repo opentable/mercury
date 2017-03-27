@@ -9,6 +9,10 @@ const metadataFormatter = require('../utils/format-pr-metadata');
 const loggerService = Logger();
 
 module.exports = (repository, callback) => {
+    
+    if(repository.skipPullRequest) {
+        return callback(null, repository);
+    }
 
     const prAlreadyExists = repository.prInfo.found && !repository.prInfo.outdated;
     const action = prAlreadyExists ? 'Updating' : 'Creating';
@@ -36,7 +40,8 @@ module.exports = (repository, callback) => {
     }
 
     handlePr(prOptions, (err) => {
-        if(err){
+        
+        if(err){ 
             err = new Error(`Failed while ${action.toLowerCase()} pull request`);
             loggerService.error(err, errorTypes[`failed${action}PullRequest`], repository);
         }
