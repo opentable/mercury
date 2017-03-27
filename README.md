@@ -5,3 +5,7 @@ Static content translation platform - [What is it? Watch a presentation.](https:
 #### PP Dashboards
 
 * Kibana: http://kibana-qa.otenv.com/kibana/#/dashboard/elasticsearch/mercury
+
+#### PROD Dashboards
+
+* Kibana: http://kibana.otenv.com/#/dashboard/elasticsearch/mercury

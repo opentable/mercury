@@ -166,4 +166,32 @@ describe('resources.handlePullRequest()', () => {
             expect(err.toString()).to.contain('Failed while updating pull request');
         });
     });
+    
+    describe('when the skipPullRequest flag is true', () => {
+   
+        let err, createStub, updateStub;
+
+        beforeEach((done) => {
+
+            const repo = _.cloneDeep(repository);
+            repo.skipPullRequest = true;
+
+            createStub = sinon.stub().yields(null, 'ok');
+            updateStub = sinon.stub().yields(null, 'ok');
+
+            mockedHandlePr(createStub, updateStub)(repo, (error) => {
+                err = error;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+
+        it('should not create or update any pr', () => {
+            expect(createStub.called).to.be.false;
+            expect(updateStub.called).to.be.false;
+        });
+    });
 });
