@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 module.exports = (github) => {
     
     const deleteReference = (options, next) => {
@@ -16,11 +18,7 @@ module.exports = (github) => {
 
 	const getReference = (options, next) => {
         options.ref = `heads/${options.branch}`;
-
-        github.gitdata.getReference(options, (err, reference) => {
-            
-            next(err, reference ? reference.object.sha : undefined);
-        });
+        github.gitdata.getReference(options, (err, reference) => next(err, _.get(reference, ['object', 'sha'])));
     };
 
 	const getOrCreate = (options, sourceSha, next) => {
@@ -34,10 +32,7 @@ module.exports = (github) => {
             options.ref = `refs/heads/${options.branch}`;
             options.sha = sourceSha;
 
-            github.gitdata.createReference(options, (err, branchReference) => {
-                if(err) { return next(err); }
-                next(null, branchReference.object.sha);
-            });
+            github.gitdata.createReference(options, (err, reference) => next(err, _.get(reference, ['object', 'sha'])));
         });
     };
 
