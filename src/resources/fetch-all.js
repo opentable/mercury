@@ -39,11 +39,13 @@ module.exports = (repository, callback) => {
     
     const filesToDownload = getAllGithubFilenames(repository);
         
-    async.eachSeries(filesToDownload, (file, next) => {
+    async.eachLimit(filesToDownload, github.MAX_CONCURRENT_OPERATIONS, (file, next) => {
         
-        githubOptions.path = file.fileName;
-                
-        github.getFile(githubOptions, (err, githubFile) => {
+        const options = _.extend(_.cloneDeep(githubOptions), {
+            path: file.fileName
+        });
+
+        github.getFile(options, (err, githubFile) => {
                         
             if(err && err.code !== 404){
                 return next(new Error(err.message));    

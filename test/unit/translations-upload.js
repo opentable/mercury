@@ -13,7 +13,8 @@ describe('translations.upload()', () => {
             getFile: githubStub
         },
         '../services/smartling': {
-            uploadFileContent: smartlingStub
+            uploadFileContent: smartlingStub,
+            MAX_CONCURRENT_OPERATIONS: 20
         }
     });
     
