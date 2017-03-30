@@ -7,6 +7,8 @@ const Github        = require('github');
 const PullRequest   = require('./github/pull-request');
 const Reference     = require('./github/reference');
 
+const MAX_CONCURRENT_OPERATIONS = 20;
+
 const github = new Github({
     protocol: 'https',
     host: 'api.github.com',
@@ -57,6 +59,7 @@ module.exports = {
     getFileChangedInfo: file.lastUpdated,
     getFilesList,
     getPullRequestInfo: pullRequest.get,
+    MAX_CONCURRENT_OPERATIONS,
     updateFile: file.update,
     updatePullRequest: pullRequest.update,
     updateReference: reference.update

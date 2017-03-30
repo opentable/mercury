@@ -1,9 +1,10 @@
 'use strict';
 
-const async = require('async');
-const config = require('config');
-const github = require('../services/github');
-const Logger        = require('../services/logger-service');
+const _         = require('lodash');
+const async     = require('async');
+const config    = require('config');
+const github    = require('../services/github');
+const Logger    = require('../services/logger-service');
 const smartling = require('../services/smartling');
 
 const loggerService = Logger();
@@ -23,16 +24,19 @@ module.exports = (repository, callback) => {
         projectId: repository.manifestContent.smartlingProjectId 
     };
     
-    async.eachOfSeries(repository.translationFiles, (translation, index, callback) => {
+    async.eachOfLimit(repository.translationFiles, smartling.MAX_CONCURRENT_OPERATIONS, (translation, index, callback) => {
+
+        const options = _.extend(_.cloneDeep(githubOptions), {
+            path: translation.github
+        });
         
-        githubOptions.path = translation.github;
-        smartlingOptions.path = translation.smartling;
-        
-        github.getFile(githubOptions, (err, file) => {
+        github.getFile(options, (err, file) => {
             
-            const githubFileContent = file.content;
+            const options = _.extend(_.cloneDeep(smartlingOptions), {
+                path: translation.smartling
+            });
             
-            smartling.uploadFileContent(githubFileContent, smartlingOptions, (err, smartlingUploadResult) => {
+            smartling.uploadFileContent(file.content, options, (err, smartlingUploadResult) => {
                 
                 if(err) {
                     repository.translationFiles[index].report = err.message;

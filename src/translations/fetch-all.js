@@ -32,9 +32,12 @@ module.exports = (repository, callback) => {
     };
     
     const filesToDownload = getAllSmartlingFilenames(repository);
-    
-    async.eachSeries(filesToDownload, (file, next) => {
-        smartling.fetchFile(_.extend(smartlingOptions, file), (err, content) => {
+
+    async.eachLimit(filesToDownload, smartling.MAX_CONCURRENT_OPERATIONS, (file, next) => {
+
+        const options = _.extend(_.cloneDeep(smartlingOptions), file);
+        
+        smartling.fetchFile(options, (err, content) => {
             
             if(!err && content){
                 let current = _.find(repository.translationFiles, { smartling: file.fileName });

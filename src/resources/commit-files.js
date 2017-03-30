@@ -8,11 +8,10 @@ const github = require('../services/github');
 const Logger = require('../services/logger-service');
 
 const loggerService = Logger();
+
 const retryPolicy = {
     times: 5,
-    interval: function(retryCount) {
-        return 200 * retryCount;
-    }
+    interval: retryCount => 200 * retryCount
 };
 
 module.exports = (repository, callback) => {

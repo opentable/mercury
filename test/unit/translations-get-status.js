@@ -10,7 +10,8 @@ describe('translations.getStatus()', () => {
     
     const mockedGetStatus = (smartlingStub) => injectr('../../src/translations/get-status.js', {
         '../services/smartling': {
-            getStatus: smartlingStub
+            getStatus: smartlingStub,
+            MAX_CONCURRENT_OPERATIONS: 20
         }
     });
     
