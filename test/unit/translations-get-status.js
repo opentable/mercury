@@ -40,6 +40,31 @@ describe('translations.getStatus()', () => {
             expect(res).to.eql(repository);
         });
     });
+ 
+    describe('when smartling get-status has excluded strings', () => {
+    
+        let err, res;
+        
+        beforeEach((done) => {
+            const repo = testData.postSmartlingFetchRepository;
+            const smartlingStub = sinon.stub().yields(null, testData.smartlingStatusFirst);
+            smartlingStub.onSecondCall().yields(null, testData.smartlingStatusWithExcludedStrings);
+            
+            mockedGetStatus(smartlingStub)(_.cloneDeep(repo), (error, result) => {
+                err = error;
+                res = result;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+
+        it('should append the smartling status values to the repo', () => {
+            expect(res).to.eql(repository);
+        });
+    });
     
     describe('when smartling get-status lacks a locale', () => {
     
