@@ -10,7 +10,8 @@ describe('resources.fetchAll()', () => {
     
     const mockedFetchAll = (githubStub) => injectr('../../src/resources/fetch-all.js', {
         '../services/github': {
-            getFile: githubStub
+            getFile: githubStub,
+            MAX_CONCURRENT_OPERATIONS: 20
         }
     });
     

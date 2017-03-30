@@ -4,6 +4,7 @@ const path      = require('path');
 const request   = require('request');
 
 const BASE_URL = 'https://api.smartling.com/';
+const MAX_CONCURRENT_OPERATIONS = 20;
 
 const authenticate = (options, next) => {
     const authenticateOptions = {
@@ -87,6 +88,8 @@ module.exports = {
             });
         });
     },
+
+    MAX_CONCURRENT_OPERATIONS,
 
     uploadFileContent: (content, options, next) => {
         authenticate(options, (err, accessToken) => {
