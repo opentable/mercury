@@ -451,10 +451,12 @@ module.exports = {
         items: [
             {
                 localeId: 'de-DE',
+                excludedStringCount: 0,
                 completedStringCount: 1
             },
             {
                 localeId: 'nl-NL',
+                excludedStringCount: 0,
                 completedStringCount: 10
             }
         ]
@@ -465,10 +467,28 @@ module.exports = {
         items: [
             {
                 localeId: 'de-DE',
+                excludedStringCount: 0,
                 completedStringCount: 22
             },
             {
                 localeId: 'nl-NL',
+                excludedStringCount: 0,
+                completedStringCount: 0
+            }
+        ]
+    },
+    smartlingStatusWithExcludedStrings: {
+        fileUri: 'files/other-file.json',
+        totalStringCount: 30,
+        items: [
+            {
+                localeId: 'de-DE',
+                excludedStringCount: 2,
+                completedStringCount: 20
+            },
+            {
+                localeId: 'nl-NL',
+                excludedStringCount: 0,
                 completedStringCount: 0
             }
         ]
