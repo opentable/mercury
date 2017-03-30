@@ -10,7 +10,8 @@ describe('translations.fetchAll()', () => {
     
     const mockedFetchAll = (smartlingStub) => injectr('../../src/translations/fetch-all.js', {
         '../services/smartling': {
-            fetchFile: smartlingStub
+            fetchFile: smartlingStub,
+            MAX_CONCURRENT_OPERATIONS: 20
         }
     });
     

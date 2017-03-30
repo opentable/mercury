@@ -40,8 +40,13 @@ module.exports = (repository, callback) => {
         projectId: repository.manifestContent.smartlingProjectId
     };
         
-    async.eachSeries(repository.translationFiles, (file, next) => {
-        smartling.getStatus(_.extend(smartlingOptions, { fileUri: file.smartling }), (err, status) => {
+    async.eachLimit(repository.translationFiles, smartling.MAX_CONCURRENT_OPERATIONS, (file, next) => {
+
+        const options = _.extend(_.cloneDeep(smartlingOptions), {
+            fileUri: file.smartling
+        });
+
+        smartling.getStatus(options, (err, status) => {
                         
             if(err || !status){
                 return next(err);
