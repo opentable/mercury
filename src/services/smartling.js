@@ -1,5 +1,6 @@
 'use strict';
 
+const _         = require('lodash');
 const path      = require('path');
 const request   = require('request');
 
@@ -18,7 +19,13 @@ const authenticate = (options, next) => {
     }
     
     request(authenticateOptions, (err, response, body) => {
-        next(err, body.response.data.accessToken);
+        const accessToken = _.get(body, 'response.data.accessToken');
+        
+        if(!accessToken) {
+            return next(new Error(`Error when retrieving Smartling access token`))
+        }
+        
+        next(err, accessToken);
     });
 };
 
