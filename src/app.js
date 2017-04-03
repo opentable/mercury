@@ -29,7 +29,7 @@ const processRepo = (repository, next) => {
 	mercury(repository, (err, repository) => {
 		if(err) {
             console.log(`\ngot an error while processing ${repository.owner}/${repository.repo}:`);
-            console.log(JSON.stringify(err, null, 2));
+            console.log(err);
         }
 		next();
 	});
