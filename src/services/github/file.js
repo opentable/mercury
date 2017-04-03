@@ -6,9 +6,10 @@ const encodeContent = require('./utils').encodeContent;
 module.exports = (github) => ({
 
     create: (options, next) => {
-        const encodedContent = encodeContent(options.content);
-        _.set(options, 'content', encodedContent);
-        github.repos.createFile(options, (err, result) => {
+        const createOptions = _.cloneDeep(options);
+        const encodedContent = encodeContent(createOptions.content);
+        _.set(createOptions, 'content', encodedContent);
+        github.repos.createFile(createOptions, (err, result) => {
             if(err) {
                 return next(err);
             }
@@ -44,9 +45,10 @@ module.exports = (github) => ({
     },
 
     update: (options, next) => {
-        const encodedContent = encodeContent(options.content);
-        _.set(options, 'content', encodedContent);
-        github.repos.updateFile(options, (err, result) => {
+        const updateOptions = _.cloneDeep(options);
+        const encodedContent = encodeContent(updateOptions.content);
+        _.set(updateOptions, 'content', encodedContent);
+        github.repos.updateFile(updateOptions, (err, result) => {
             if(err) {
                 return next(err);
             }
