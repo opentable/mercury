@@ -1,6 +1,9 @@
 # mercury
 Static content translation platform - [What is it? Watch a presentation.](https://www.youtube.com/watch?v=ByLO5SJXZ6Y)
 
+#### Want to integrate Mercury with your project today?
+
+Please refer to the Mercury integration runbook and FAQ.
 
 #### PP Dashboards
 
