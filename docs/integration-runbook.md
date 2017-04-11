@@ -1,12 +1,12 @@
 # Mercury integration runbook
 
-The goal of Mercury is to keep your project's static resource files and their translations in sync at all times, and instantaneously support the addition of new languages to the existing ones, by means of GitHub Pull Requests.
+The goal of Mercury is to keep your project's static resource files and their translations in sync with Smartling at all times, and instantaneously support the addition of new languages to the existing ones, by means of GitHub Pull Requests.
 
 If you want to integrate your repository with Mercury, please follow these steps:
 
 ### Step 1: create and push one or more en-US source file(s)
 
-*N.B. If you already have and do not need to update source files, you can jump to Step 2.*
+*N.B. If you already have and do not need to update source files, you can jump to [Step 2](#step-2:-create-a-smartling-project).*
 
 If you don't, you can create a source file with the strings you need to translate. One best practice is to put these files into a `locales/en-US` folder. As an example, you can take a look at [this project's source files](https://github.com/opentable/restaurant-messages-generator-api/tree/master/src/locales/en-us).  
 
@@ -14,7 +14,7 @@ JSON is the standard we'd recommend, even if Mercury supports many file types an
 
 ### Step 2: create a Smartling project
 
-*N.B. If you already have one, take note of the project ID, and then jump to Step 3.*
+*N.B. If you already have one, take note of the project ID, and then jump to [Step 3](step-3:-create-a-mercury.json-file-in-/).*
 
 If you want to setup a new one, please get in touch with the [MLP team](multi-language@opentable.com), we'll be happy to provide guidance.
 
