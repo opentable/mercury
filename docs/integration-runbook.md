@@ -2,15 +2,15 @@
 
 The goal of Mercury is to keep your project's static resource files and their translations in sync at all times, and instantaneously support the addition of new languages to the existing ones, by means of GitHub Pull Requests.
 
-If you want to integrate your repository with Mercury, the following steps are recommended:
+If you want to integrate your repository with Mercury, please follow these steps:
 
 ### Step 1: create and push one or more en-US source file(s)
 
 *N.B. If you already have and do not need to update source files, you can jump to Step 2.*
 
-If you don't, you can create a source file with the strings you need to translate. A recommended good practice is to put these files into an `en-US` folder somewhere into the codebase. As an example, you can take a look at [this project's source files](https://github.com/opentable/restaurant-messages-generator-api/tree/master/src/locales/en-us).  
+If you don't, you can create a source file with the strings you need to translate. One best practice is to put these files into a `locales/en-US` folder. As an example, you can take a look at [this project's source files](https://github.com/opentable/restaurant-messages-generator-api/tree/master/src/locales/en-us).  
 
-JSON is the recommended standard, even if Mercury supports many file types.
+JSON is the standard we'd recommend, even if Mercury supports many file types and it's likely you won't have to convert your existing resources.
 
 ### Step 2: create a Smartling project
 
@@ -20,7 +20,7 @@ If you want to setup a new one, please get in touch with the [MLP team](multi-la
 
 ### Step 3: create a mercury.json file in /
 
-The `mercury.json` file is the one required addition to your project. Let's take a look at this example:
+The `mercury.json` file is the one addition you'll need to make to your project. Let's take a look at this example:
 
 ``` json
 {
@@ -44,11 +44,11 @@ The `mercury.json` file is the one required addition to your project. Let's take
 
     * `input` contains a `src` property that represents a list of file paths. It is important to observe how the path can be built by use of regex mapping (the `*` character will match all the files that end in `.json`) and how the skipping of certain files can be achieved by inserting `!` at the beginning of the path. In this case the file `src/locales/en-us/config.json` will be ignored.
     
-    * `output` contains a `dest` property that represents the single path where Mercury will save the translations. Two string interpolations are used to build this path: `${locale}` will represent each of the supported languages that are returned by Smartling in form of translations. `${filename}` will replicate the original filename that has been uploaded from the en-us folder. It is mandatory to at least use the `${locale}`, since it will differentiate the translated languages of the resource. For example, if we have a file called `src/locales/en-us/example.json` in the input path, and Smartling is setup to translate content in `es-MX` and `de-DE`, Mercury will create: `src/locales/es-MX/example.json`, `src/locales/de-DE/example.json`. Some examples will shortly be included in the FAQ section.
+    * `output` contains a `dest` property that represents the single path where Mercury will save the translations. Two string interpolations are used to build this path: `${locale}` will represent each of the supported languages that are returned by Smartling in form of translations, and `${filename}` will replicate the original filename that has been uploaded from the en-us folder. It is mandatory to at least use the `${locale}`, since it will differentiate the translated languages of the resource. For example, if we have a file called `src/locales/en-us/example.json` in the input path, and Smartling is setup to translate content in `es-MX` and `de-DE`, Mercury will create: `src/locales/es-MX/example.json`, `src/locales/de-DE/example.json`. Some examples will shortly be included in a FAQ section.
     
 ### Step 4: Mercury, a kind of magic!
 
-At this point, you'll need to get in touch with the [MLP team](multi-language@opentable.com) and ask for your project to be included into the Mercury whitelist. This will be automated at some point, to achieve automatic detection of mercury.json files in any org repo.
+At this point, you'll need to get in touch with the [MLP team](multi-language@opentable.com) and ask for your project to be included into the Mercury whitelist. This will be automated at some point, to achieve automatic detection of mercury.json files in any organization repo.
 
 ### Step 5: The Pull Request
 
