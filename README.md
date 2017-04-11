@@ -1,9 +1,9 @@
 # mercury
 Static content translation platform - [What is it? Watch a presentation.](https://www.youtube.com/watch?v=ByLO5SJXZ6Y)
 
-#### Want to integrate Mercury with your project today?
+#### Ready to integrate Mercury with your repository?
 
-Please refer to the Mercury integration runbook and FAQ.
+Please refer to the [Mercury integration runbook](https://github.com/opentable/mercury/blob/master/docs/integration-runbook.md).
 
 #### PP Dashboards
 
