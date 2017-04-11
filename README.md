@@ -1,9 +1,11 @@
-# mercury
-Static content translation platform - [What is it? Watch a presentation.](https://www.youtube.com/watch?v=ByLO5SJXZ6Y)
+# Mercury User Guide
+Mercury is a static content translation platform - [Interested? Watch a presentation.](https://www.youtube.com/watch?v=ByLO5SJXZ6Y)
 
-#### Ready to integrate Mercury with your repository?
+#### Ready to integrate your repository with Mercury?
 
 Please refer to the [Mercury integration runbook](https://github.com/opentable/mercury/blob/master/docs/integration-runbook.md).
+
+# Mercury Maintainer Guide
 
 #### PP Dashboards
 
