@@ -16,7 +16,7 @@ JSON is the standard we'd recommend, even if Mercury supports many file types an
 
 *N.B. If you already have one, take note of the project ID, and then jump to [Step 3](#step-3-create-a-mercuryjson-file-in-).*
 
-If you want to setup a new one, please get in touch with the [MLP team](multi-language@opentable.com), we'll be happy to provide guidance.
+If you want to setup a new one, please get in touch with the MLP Team (multi-language@opentable.com), we'll be happy to provide guidance.
 
 ### Step 3: create a mercury.json file in /
 
@@ -48,7 +48,7 @@ The `mercury.json` file is the one addition you'll need to make to your project.
     
 ### Step 4: Mercury, a kind of magic!
 
-At this point, you'll need to get in touch with the [MLP team](multi-language@opentable.com) and ask for your project to be included into the Mercury whitelist. This will be automated at some point, to achieve automatic detection of mercury.json files in any organization repo.
+At this point, you'll need to get in touch with the MLP Team (multi-language@opentable.com) and ask for your project to be included into the Mercury whitelist. This will be automated at some point, to achieve automatic detection of mercury.json files in any organization repo.
 
 ### Step 5: The Pull Request
 
