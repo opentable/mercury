@@ -18,6 +18,7 @@ const mapLocaleStatus = (current, status, next) => {
         
         if(smartlingStatusLocale) {
             smartlingRepoLocale.smartlingStatus = {
+                excludedStringCount: smartlingStatusLocale.excludedStringCount,
                 completedStringCount: smartlingStatusLocale.completedStringCount,
                 percentCompleted: metadataFormatter.calculatePercent(smartlingStatusLocale.completedStringCount, current.totalStringCount)
             };
