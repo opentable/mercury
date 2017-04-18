@@ -12,7 +12,7 @@ module.exports = (repository, callback) => {
     loggerService.info(`Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
     
     const options = {
-        branch: 'master',
+        branch: repository.manifestContent.workingBranch,
         owner: repository.mercuryForkOwner,
         repo: repository.repo
     };

@@ -59,6 +59,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [ { input: { src: ['src/locales/en-us/*.json'] }, output: { dest: 'src/locales/${locale}/${filename}' } } ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z'
@@ -67,6 +69,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [ 
                 { 
                     input: { 
@@ -88,6 +92,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [ 
                 { 
                     input: { 
@@ -109,6 +115,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [{
                 input: { src: ['src/locales/en-us/*.json'] },
                 output: { dest: 'src/locales/${locale}/${filename}' }
@@ -136,6 +144,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [{
                 input: { src: ['src/locales/en-us/*.json'] },
                 output: { dest: 'src/locales/${locale}/${filename}' }
@@ -171,6 +181,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [{
                 input: { src: ['src/locales/en-us/*.json'] },
                 output: { dest: 'src/locales/${locale}/${filename}' }
@@ -220,6 +232,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [{
                 input: { src: ['src/locales/folder/Strings.resx'] },
                 output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
@@ -272,6 +286,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [{
                 input: { src: ['src/locales/en-us/*.json'] },
                 output: { dest: 'src/locales/${locale}/${filename}' }
@@ -329,6 +345,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [{
                 input: { src: ['src/locales/folder/Strings.resx'] },
                 output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
@@ -389,6 +407,8 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
             translations: [{
                 input: { src: ['src/locales/en-us/*.json'] },
                 output: { dest: 'src/locales/${locale}/${filename}' }
@@ -449,6 +469,7 @@ module.exports = {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {
+            workingBranch: 'master',
             smartlingProjectId: 'ABCDEF',
             translations: [{
                 input: { src: ['src/locales/en-us/*.json'] },
