@@ -9,6 +9,7 @@ const notEmptyArray = joi.array().min(1);
 const loggerService = LoggerService();
 
 const schema = joi.object().keys({
+	workingBranch: joi.string().min(1).default('master'),
 	smartlingProjectId: joi.string().length(9).required(),
 	translations: notEmptyArray.items(joi.object().keys({
 		input: joi.object().keys({

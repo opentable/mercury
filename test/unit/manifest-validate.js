@@ -18,6 +18,7 @@ describe('manifest.validate()', () => {
 
 	const repository = {
 		manifestContent: {
+			workingBranch: 'master',
 			smartlingProjectId: 'testid001',
 			translations: [{
 				input: {
@@ -39,6 +40,33 @@ describe('manifest.validate()', () => {
 			it('should be valid', () => {
 				expect(error).to.be.null;
 				expect(result).to.be.eql(repository);
+			});
+		});
+
+		describe('when missing workingBranch', () => {
+			const manifest = {
+				manifestContent: _.omit(repository.manifestContent, 'workingBranch')
+			};
+
+			beforeEach(done => validate(manifest, next(done)));
+
+			it('should be valid', () => {
+				expect(error).to.be.null;
+			});
+
+			it('should default to master', () => {
+				expect(result.manifestContent.workingBranch).to.equal('master');
+			});
+		});
+
+		describe('when workingBranch is empty', () => {
+			const invalid = _.cloneDeep(repository);
+			invalid.manifestContent.workingBranch = '';
+
+			beforeEach(done => validate(invalid, next(done)));
+
+			it('should not be valid', () => {
+				expect(error.toString()).to.contain('"workingBranch" is not allowed to be empty');
 			});
 		});
 
