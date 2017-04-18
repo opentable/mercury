@@ -68,7 +68,8 @@ module.exports = (repository, callback) => {
 
 	const githubOptions = {
 		repo: repository.repo,
-		owner: repository.owner
+		owner: repository.owner,
+		branch: repository.manifestContent.workingBranch
 	};
 
 	const smartlingOptions = {
