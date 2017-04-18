@@ -11,7 +11,7 @@ module.exports = {
     failedSmartlingGetStatus: 'failed-smartling-get-status',
     failedToClosePullRequest: 'failed-to-close-pull-request',
     failedToFetchManifestInfo: 'failed-to-fetch-manifest-info',
-    failedToFetchMasterReference: 'failed-to-fetch-upstream-master-reference',
+    failedToFetchBranchReference: 'failed-to-fetch-upstream-branch-reference',
     failedToFetchPrInfo: 'failed-to-fetch-pr-info',
     failedToLocateTranslationFilesInGithub: 'failed-to-location-translation-files-in-github',
 	failedToLocateManifest: 'failed-to-locate-manifest',
