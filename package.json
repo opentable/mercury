@@ -1,6 +1,7 @@
 {
   "name": "mercury",
-  "version": "1.0.0",
+  "version": "0.0.0",
+  "sha": "SHA",
   "description": "static content translation platform",
   "main": "src/app.js",
   "scripts": {
