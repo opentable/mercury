@@ -467,13 +467,13 @@ module.exports = {
                     'de-DE': { 
                         smartlingContent: 'file content',
                         smartlingStatus: { excludedStringCount: 0, completedStringCount: 1, percentCompleted: 10 },
-                        githubPath: 'src/locales/de-DE/file.json', 
+                        githubPath: 'src/locales/de-de/file.json', 
                         githubContent: 'file content' 
                     },
                     'nl-NL': { 
                         smartlingContent: 'file content',
                         smartlingStatus: { excludedStringCount: 1, completedStringCount: 10, percentCompleted: 100 },
-                        githubPath: 'src/locales/nl-NL/file.json', 
+                        githubPath: 'src/locales/nl-nl/file.json', 
                         githubContent: 'file content' 
                     }
                 }
