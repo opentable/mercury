@@ -141,7 +141,7 @@ describe('metadataFormatter.format()', () => {
         });
         
         it('should insert N/A everywhere for that locale', () => {
-            expect(res.body).to.include('| **de-DE** | undefined | undefined | 10 | N/A |');
+            expect(res.body).to.include('| **de-DE** | 0 | 0 | 10 | N/A |');
         });
     });
 });

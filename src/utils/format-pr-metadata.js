@@ -59,15 +59,18 @@ const format = (repository) => {
         
         for (let locale in file.locales) {
             const localeStatus = file.locales[locale].smartlingStatus;
-            const excludedStringCount = localeStatus.excludedStringCount;
-            const completedStringCount = localeStatus.completedStringCount;
+            const excludedStringCount = localeStatus.excludedStringCount || 0;
+            const completedStringCount = localeStatus.completedStringCount || 0;
             const percentage = localeStatus.percentCompleted;
             percentageCount = percentageCount + percentage;
             localesCount++;
 
-            const excludedStringStatus = `${excludedStringCount}${excludedStringCount > 0 ? ' ([view in Smartling](https://dashboard.smartling.com/projects/' + repository.manifestContent.smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + locale + '))' : ''}`;
+            let linkToExcludedStringView = '';
+            if(excludedStringCount > 0) {
+                linkToExcludedStringView = ' ([view in Smartling](https://dashboard.smartling.com/projects/' + repository.manifestContent.smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + locale + '))';
+            }
             
-            body = body.concat(`| **${locale}** | ${excludedStringStatus} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`)
+            body = body.concat(`| **${locale}** | ${excludedStringCount}${linkToExcludedStringView} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`)
         }
     });
     
