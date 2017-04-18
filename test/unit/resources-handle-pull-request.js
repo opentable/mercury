@@ -42,6 +42,35 @@ describe('resources.handlePullRequest()', () => {
         });
     });
 
+    describe('when pr not found and workingBranch=develop', () => {
+    
+        let err, createStub, updateStub;
+
+        beforeEach((done) => {
+
+            createStub = sinon.stub().yields(null, 'ok');
+            updateStub = sinon.stub().yields(null, 'ok');
+
+            const repo = _.cloneDeep(repository);
+            repo.manifestContent.workingBranch = 'develop';
+
+            mockedHandlePr(createStub, updateStub)(repo, (error) => {
+                err = error;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+
+        it('should create pr to develop branch', () => {
+            expect(createStub.args[0][0].base).to.equal('develop');
+            expect(createStub.called).to.be.true;
+            expect(updateStub.called).to.be.false;
+        });
+    });
+
     describe('when pr found but outdated and closed', () => {
     
         let err, createStub, updateStub;
@@ -106,6 +135,43 @@ describe('resources.handlePullRequest()', () => {
         it('should update pr', () => {
             expect(createStub.called).to.be.false;
             expect(updateStub.called).to.be.true;
+            expect(updateStub.args[0][0].number).to.equal(13);
+        });
+    });
+
+    describe('when pr found and valid and workingBranch=develop', () => {
+    
+        let err, createStub, updateStub;
+
+        beforeEach((done) => {
+
+            const repo = _.cloneDeep(repository);
+            repo.prInfo = {
+                found: true,
+                number: 13,
+                createdAt: '2017-02-15T15:29:05Z',
+                outdated: false
+            }
+
+            repo.manifestContent.workingBranch = 'develop'
+
+            createStub = sinon.stub().yields(null, 'ok');
+            updateStub = sinon.stub().yields(null, 'ok');
+
+            mockedHandlePr(createStub, updateStub)(repo, (error) => {
+                err = error;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+
+        it('should update pr to develop branch', () => {
+            expect(createStub.called).to.be.false;
+            expect(updateStub.called).to.be.true;
+            expect(updateStub.args[0][0].base).to.equal('develop');
             expect(updateStub.args[0][0].number).to.equal(13);
         });
     });
