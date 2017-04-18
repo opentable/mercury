@@ -40,6 +40,37 @@ describe('resources.ensureBranch()', () => {
             expect(res.mercuryBranchReference).to.eql('test_branch_sha');
         });
     });
+
+    describe('when workingBranch=develop', () => {
+
+        let err, res, githubgetBranchReferenceStub;
+        
+        beforeEach((done) => {
+            githubgetBranchReferenceStub = sinon.stub().yields(null, 'test_develop_sha');
+            const githubEnsureBranchStub = sinon.stub().yields(null, 'test_branch_sha');
+
+            const repo = _.cloneDeep(repository);
+            repo.manifestContent.workingBranch = 'develop';
+            
+            mockedEnsureBranch(githubgetBranchReferenceStub, githubEnsureBranchStub)(repo, (error, result) => {
+                err = error;
+                res = result;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+
+        it('should get develop branch reference sha', () => {
+            expect(githubgetBranchReferenceStub.args[0][0].branch).to.equal('develop');
+        });
+
+        it('should append mercuryBranchReference to repository', () => {
+            expect(res.mercuryBranchReference).to.eql('test_branch_sha');
+        });
+    });
     
     describe('when getting master branch fails with an error', () => {
         
