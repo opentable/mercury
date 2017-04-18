@@ -40,6 +40,7 @@ The `mercury.json` file is the one addition you'll need to make to your project.
 
 |name|description|
 |----|-----------|
+|`workingBranch` (string, optional)|Default `master`, is the working github branch.|
 |`smartlingProjectId` (string, mandatory)|It is the ID of your smartling project that Mercury will look at. If unsure of what that is, just browse your Smartling project. The ID will be found in the URL: *https://dashboard.smartling.com/projects/{{ID}}/translations/dashboard.htm*|
 |`translations` (array of objects, mandatory)|It is a list of configurations that have two common properties: an input and an output. Mercury will read every file in each input path, and place its translations in the output path. In most cases this will be populated by just one object, but there might be cases in which you need more than one input-output mapping|
 |`translations[index].input` (object, mandatory)|The input details|
