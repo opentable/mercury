@@ -42,6 +42,14 @@ const buildPullRequestStatus = (averageCompletion) => {
     return `[${status} - ${buildPercentageStat(averageCompletion)} Overall Completion]`;
 };
 
+const sortLocales = (locales) => {
+    return  _
+        .chain(Object.keys(locales))
+        .map((key) => { return {  key, value: locales[key] } })
+        .sortBy((o) => { return o.key } )
+        .value();
+};
+
 const format = (repository) => {
     let body = '';
     let title = '';
@@ -56,9 +64,12 @@ const format = (repository) => {
         body = buildHeader(body, file);
         
         const totalStringCount = file.totalStringCount;
-        
-        for (let locale in file.locales) {
-            const localeStatus = file.locales[locale].smartlingStatus;
+
+        const sortedLocales = sortLocales(file.locales);
+
+        _.forEach(sortedLocales, function(locale){
+            const localeStatus = locale.value.smartlingStatus;
+
             const excludedStringCount = localeStatus.excludedStringCount || 0;
             const completedStringCount = localeStatus.completedStringCount || 0;
             const percentage = localeStatus.percentCompleted;
@@ -67,11 +78,11 @@ const format = (repository) => {
 
             let linkToExcludedStringView = '';
             if(excludedStringCount > 0) {
-                linkToExcludedStringView = ' ([view in Smartling](https://dashboard.smartling.com/projects/' + repository.manifestContent.smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + locale + '))';
+                linkToExcludedStringView = ' ([view in Smartling](https://dashboard.smartling.com/projects/' + repository.manifestContent.smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + locale.key + '))';
             }
             
-            body = body.concat(`| **${locale}** | ${excludedStringCount}${linkToExcludedStringView} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`)
-        }
+            body = body.concat(`| **${locale.key}** | ${excludedStringCount}${linkToExcludedStringView} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`)
+        });
     });
     
     const averageCompletion = calculateAverage(percentageCount, localesCount);
@@ -85,5 +96,6 @@ const format = (repository) => {
 
 module.exports = {
     calculatePercent,
+    sortLocales,
     format
 }
