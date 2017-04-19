@@ -52,6 +52,31 @@ describe('translations.getList()', () => {
         });
     });
 
+    describe('when workingBranch=develop', () => {
+    
+        let err, githubStub;
+        
+        beforeEach((done) => {
+            const repo = _.cloneDeep(repository);
+            repo.manifestContent.workingBranch = 'develop';
+            githubStub = sinon.stub().yields(null, testData.githubMock);
+            const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
+            
+            mockedGetList(githubStub, smartlingStub)(repo, (error) => {
+                err = error;
+                done();
+            });
+        });
+
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
+        
+        it('should use develop branch', () => {
+            expect(githubStub.args[0][0].branch).to.be.eql('develop');
+        });
+    });
+
     describe('when using glob in filename', () => {
         
         describe('happy path', () => {

@@ -14,6 +14,8 @@ module.exports = (repository, callback) => {
         owner: repository.owner,
         repo: repository.repo
     };
+
+    const branch = repository.manifestContent.workingBranch;
         
     github.ensureFork(options, (err, result) => {
                 
@@ -26,25 +28,25 @@ module.exports = (repository, callback) => {
         repository.mercuryForkName = result && result.full_name ? result.full_name : null;
         repository.mercuryForkOwner = result && result.owner ? result.owner.login: null;
 
-        const masterUpstreamOptions = {
-            branch: 'master',
+        const branchUpstreamOptions = {
+            branch,
             owner: repository.owner,
             repo: repository.repo
         };
 
-        github.getBranchReference(masterUpstreamOptions, (err, masterSha) => {
+        github.getBranchReference(branchUpstreamOptions, (err, branchSha) => {
 
             if(err){
-                err = new Error('Could not fetch the upstream/master reference');
-                loggerService.error(err, errorTypes.failedToFetchMasterReference, repository);
+                err = new Error(`Could not fetch the upstream/${branch} reference`);
+                loggerService.error(err, errorTypes.failedToFetchBranchReference, repository);
                 repository.skip = true;
                 return callback(err, repository);
             }
 
             const forkOptions = {
-                branch: 'master',
+                branch,
                 owner: repository.mercuryForkOwner,
-                reference: masterSha,
+                reference: branchSha,
                 repo: repository.repo
             };
             
@@ -52,7 +54,7 @@ module.exports = (repository, callback) => {
                 github.updateReference(forkOptions, (err) => {
                     
                     if(err){
-                        err = new Error('Could not rebase fork from upstream/master - forks are created asynchronously so will retry in the next round.');
+                        err = new Error(`Could not rebase fork from upstream/${branch} - forks are created asynchronously so will retry in the next round.`);
                         loggerService.error(err, errorTypes.failedGithubForkRebase, repository);
                         repository.skip = true;
                     }

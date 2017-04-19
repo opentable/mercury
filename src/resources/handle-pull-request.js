@@ -26,7 +26,7 @@ module.exports = (repository, callback) => {
         repo: repository.repo,
         head: `${config.github.owner}:${config.github.branch}`,
         title: pullRequestMetadata.title,
-        base: 'master',
+        base: repository.manifestContent.workingBranch,
         body: pullRequestMetadata.body
     };
 

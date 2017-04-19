@@ -30,8 +30,6 @@ const reference = Reference(github);
 
 const getFilesList = (options, next) => {
 
-    options.branch = 'master';
-
     reference.get(options, (err, sha) => {
 
         if(err){ return next(err); }
