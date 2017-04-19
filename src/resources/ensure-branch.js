@@ -12,12 +12,12 @@ module.exports = (repository, callback) => {
     loggerService.info(`Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
     
     const options = {
-        branch: 'master',
+        branch: repository.manifestContent.workingBranch,
         owner: repository.mercuryForkOwner,
         repo: repository.repo
     };
     
-    github.getBranchReference(options, (err, masterReferenceSha) => {
+    github.getBranchReference(options, (err, branchReferenceSha) => {
         if(err){
             loggerService.error(err, errorTypes.failedGithubBranch, repository);
             repository.skip = true;
@@ -30,7 +30,7 @@ module.exports = (repository, callback) => {
             repo: repository.repo
         };
         
-        github.ensureBranchReference(branchOptions, masterReferenceSha, (err, mercuryReferenceSha) => {
+        github.ensureBranchReference(branchOptions, branchReferenceSha, (err, mercuryReferenceSha) => {
             if(err){
                 loggerService.error(err, errorTypes.failedGithubBranch, repository);
                 repository.skip = true;
