@@ -53,13 +53,17 @@ const sortLocales = (locales) => {
 const format = (repository) => {
     let body = '';
     let title = '';
-    let localesCount = 0;
+
     let percentageCount = 0;
 
     if(countExcludedStrings(repository) > 0) {
         body += buildUnauthorisedStringWarning();
     }
-    
+
+    let localesCount = repository.translationFiles.reduce(function (acc, current) {
+        return acc + Object.keys(current.locales).length;
+    }, 0);
+
     repository.translationFiles.forEach(file => {
         body = buildHeader(body, file);
         
@@ -74,8 +78,7 @@ const format = (repository) => {
             const completedStringCount = localeStatus.completedStringCount || 0;
             const percentage = localeStatus.percentCompleted;
             percentageCount = percentageCount + percentage;
-            localesCount++;
-
+            
             let linkToExcludedStringView = '';
             if(excludedStringCount > 0) {
                 linkToExcludedStringView = ' ([view in Smartling](https://dashboard.smartling.com/projects/' + repository.manifestContent.smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + locale.key + '))';
