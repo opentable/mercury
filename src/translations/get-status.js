@@ -6,7 +6,7 @@ const config		  = require('config');
 const errorTypes	  = require('../constants/error-types');
 const Logger 		  = require('../services/logger-service');
 const smartling 	  = require('../services/smartling');
-const metadataFormatter = require('../utils/format-pr-metadata');
+const metadataCalculator = require('../utils/calculate-pr-metadata');
 
 const loggerService = Logger();
 
@@ -20,7 +20,7 @@ const mapLocaleStatus = (current, status, next) => {
             smartlingRepoLocale.smartlingStatus = {
                 excludedStringCount: smartlingStatusLocale.excludedStringCount,
                 completedStringCount: smartlingStatusLocale.completedStringCount,
-                percentCompleted: metadataFormatter.calculatePercent(smartlingStatusLocale.completedStringCount, current.totalStringCount)
+                percentCompleted: metadataCalculator.calculatePercent(smartlingStatusLocale.completedStringCount, current.totalStringCount)
             };
         } else {
             smartlingRepoLocale.smartlingStatus = {};

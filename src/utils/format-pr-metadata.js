@@ -1,50 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-
-function roundToOne(num) {    
-    return +(Math.round(num + 'e+1') + 'e-1');
-}
-
-const calculateAverage = (percentageCount, localesCount) => {
-    return roundToOne(percentageCount / localesCount);
-};
-
-const calculatePercent = (completedStringCount, totalStringCount) => {
-    return roundToOne((completedStringCount / totalStringCount) * 100);
-};
-
-const countLocales = (repository) => {
-    return repository.translationFiles.reduce(function (acc, current) {
-        return acc + Object.keys(current.locales).length;
-    }, 0);
-};
-
-const countExcludedStrings = (repository) => {
-    return _.chain(repository.translationFiles)
-            .map(translationFile => _.values(translationFile.locales))
-            .flatten()
-            .map(locale => locale.smartlingStatus.excludedStringCount)
-            .reduce((sum, n) => sum + n, 0)
-            .value();
-};
-
-const sumPercentageCompletedOfLocales = (repo) => {
-    return _.chain(repo.translationFiles)
-        .map(translationFile => _.values(translationFile.locales))
-        .flatten()
-        .map(locale => locale.smartlingStatus.percentCompleted)
-        .reduce((sum, n) => sum + n, 0)
-        .value();
-};
-
-const sortLocales = (locales) => {
-    return  _
-        .chain(Object.keys(locales))
-        .map((key) => { return {  key, value: locales[key] } })
-        .sortBy((o) => { return o.key } )
-        .value();
-};
+const prMetaDataCalculator = require('./calculate-pr-metadata');
 
 const buildUnauthorisedStringWarning = () => {
     return '> :warning: WARNING\n> Your project contains excluded strings.\n> This typically indicates strings that are being managed outside of Smartling workflow.\n';
@@ -65,44 +22,19 @@ const buildPullRequestStatus = (averageCompletion) => {
     return `[${status} - ${buildPercentageStat(averageCompletion)} Overall Completion]`;
 };
 
-
 const format = (repository) => {
     let body = '';
-    let title = '';
 
-
-    if(countExcludedStrings(repository) > 0) {
+    if(prMetaDataCalculator.countExcludedStrings(repository) > 0) {
         body += buildUnauthorisedStringWarning();
     }
 
-    //const sortedFiles = repository.translationFiles.map(function(file) {
-        //var rObj = {};
-        //rObj[obj.key] = obj.value;
-      //  file.locales = sortLocales(file.locales);
-      //  return file;
-    //});
-
-    //const localesCount = repository.translationFiles.reduce(function (acc, current) {
-    //    return acc + Object.keys(current.locales).length;
-    //}, 0);
-
-    //const percentageCount = repository.translationFiles.reduce(function (acc, currentFile) {
-    //    return acc + currentFile.locales.reduce(function (acc, currentLocale) {
-    //            return acc + currentLocale.percentCompleted;
-    //        }, 0);
-    //}, 0);
-
-    //const percentageCount = countPercentages(repository.translationFiles);
-   // let percentageCount = sumPercentageCompletedOfLocales(repo);
-
-
     repository.translationFiles.forEach(file => {
-    //sortedFiles.forEach(file => {
         body = buildHeader(body, file);
         
         const totalStringCount = file.totalStringCount;
 
-        const sortedLocales = sortLocales(file.locales);
+        const sortedLocales = prMetaDataCalculator.sortLocales(file.locales);
 
         _.forEach(sortedLocales, function(locale){
             const localeStatus = locale.value.smartlingStatus;
@@ -124,8 +56,8 @@ const format = (repository) => {
         });
     });
     
-    const averageCompletion = calculateAverage(sumPercentageCompletedOfLocales(repository), countLocales(repository));
-    title = `Mercury Pull Request ${buildPullRequestStatus(averageCompletion)}`
+    const averageCompletion = prMetaDataCalculator.calculateAverage(prMetaDataCalculator.sumPercentageCompletedOfLocales(repository), prMetaDataCalculator.countLocales(repository));
+    const title = `Mercury Pull Request ${buildPullRequestStatus(averageCompletion)}`
     
     return {
         body,
@@ -134,9 +66,5 @@ const format = (repository) => {
 };
 
 module.exports = {
-    calculatePercent,
-    sumPercentageCompletedOfLocales,
-    sortLocales,
-    countLocales,
     format
 }
