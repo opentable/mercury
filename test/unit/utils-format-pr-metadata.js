@@ -102,7 +102,7 @@ describe('metadataFormatter.format()', () => {
         let res;
                 
         beforeEach((done) => {
-            const repo = testData.postPullRequestFetchInfoRepositoryWtihExcludedStrings;
+            const repo = testData.postPullRequestFetchInfoRepositoryWithExcludedStrings;
             res = metadataFormatter.format(_.cloneDeep(repo));
             done();
         });
