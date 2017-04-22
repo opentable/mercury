@@ -51,7 +51,9 @@ const sortLocales = (locales) => {
 
 
 module.exports = {
+    calculateAverage,
     calculatePercent,
+    countExcludedStrings,
     sumPercentageCompletedOfLocales,
     countLocales,
     sortLocales
