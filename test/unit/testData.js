@@ -465,7 +465,7 @@ module.exports = {
             found: false
         }
     },
-    postPullRequestFetchInfoRepositoryWtihExcludedStrings: {
+    postPullRequestFetchInfoRepositoryWithExcludedStrings: {
         owner: 'opentable',
         repo: 'hobknob',
         manifestContent: {

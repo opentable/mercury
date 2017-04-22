@@ -62,3 +62,16 @@ describe('Count locales', () => {
     });
 });
 
+describe('Count excluded strings', () => {
+    let res;
+
+    beforeEach((done) => {
+        const repo = testData.postPullRequestFetchInfoRepositoryWithExcludedStrings;
+        res = metadataFormatter.countExcludedStrings(_.cloneDeep(repo));
+        done();
+    });
+
+    it('should return the total excluded strings in the test data', () => {
+        expect(res).to.equal(3);
+    });
+});

@@ -39,7 +39,6 @@ const sumPercentageCompletedOfLocales = (repo) => {
         .value();
 };
 
-//TODO - Add tests and usages to here
 const sortLocales = (locales) => {
     return  _
         .chain(Object.keys(locales))
@@ -47,8 +46,6 @@ const sortLocales = (locales) => {
         .sortBy((o) => { return o.key } )
         .value();
 };
-
-
 
 module.exports = {
     calculateAverage,
