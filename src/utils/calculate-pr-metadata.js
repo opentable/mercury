@@ -20,7 +20,6 @@ const countLocales = (repository) => {
     }, 0);
 };
 
-//TODO - Add tests and usages to here
 const countExcludedStrings = (repository) => {
     return _.chain(repository.translationFiles)
             .map(translationFile => _.values(translationFile.locales))

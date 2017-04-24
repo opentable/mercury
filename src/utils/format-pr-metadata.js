@@ -7,7 +7,7 @@ const buildUnauthorisedStringWarning = () => {
     return '> :warning: WARNING\n> Your project contains excluded strings.\n> This typically indicates strings that are being managed outside of Smartling workflow.\n';
 };
 
-const buildHeader = (body, file) => {
+const buildHeaderForFile = (body, file) => {
     const header = `\n**Translation status of ${file.github}:**\n\n| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
     body = body.concat(header);
     return body;
@@ -22,6 +22,14 @@ const buildPullRequestStatus = (averageCompletion) => {
     return `[${status} - ${buildPercentageStat(averageCompletion)} Overall Completion]`;
 };
 
+const buildTitle = (repository) => {
+    const averageCompletion = prMetaDataCalculator.calculateAverage(
+        prMetaDataCalculator.sumPercentageCompletedOfLocales(repository),
+        prMetaDataCalculator.countLocales(repository));
+
+    return `Mercury Pull Request ${buildPullRequestStatus(averageCompletion)}`;
+}
+
 const format = (repository) => {
     let body = '';
 
@@ -30,8 +38,8 @@ const format = (repository) => {
     }
 
     repository.translationFiles.forEach(file => {
-        body = buildHeader(body, file);
-        
+        body = buildHeaderForFile(body, file);
+
         const totalStringCount = file.totalStringCount;
 
         const sortedLocales = prMetaDataCalculator.sortLocales(file.locales);
@@ -51,14 +59,13 @@ const format = (repository) => {
                     '/content/content.htm#excluded/list/filter/locale:' +
                     locale.key + '))';
             }
-            
+
             body = body.concat(`| **${locale.key}** | ${excludedStringCount}${linkToExcludedStringView} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`)
         });
     });
-    
-    const averageCompletion = prMetaDataCalculator.calculateAverage(prMetaDataCalculator.sumPercentageCompletedOfLocales(repository), prMetaDataCalculator.countLocales(repository));
-    const title = `Mercury Pull Request ${buildPullRequestStatus(averageCompletion)}`
-    
+
+    const title = buildTitle(repository);
+
     return {
         body,
         title
