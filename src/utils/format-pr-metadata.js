@@ -1,6 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
 const prMetaDataCalculator = require('./calculate-pr-metadata');
 
 const buildUnauthorisedStringWarning = () => {
@@ -35,36 +34,32 @@ const buildExcludedStringLink = (smartlingProjectId, localeKey) => {
 }
 
 const format = (repository) => {
+
+    const title = buildTitle(repository);
+
     let body = '';
 
-    if(prMetaDataCalculator.countExcludedStrings(repository) > 0) {
+    if (prMetaDataCalculator.countExcludedStrings(repository) > 0) {
         body += buildUnauthorisedStringWarning();
     }
 
-    repository.translationFiles.forEach(file => {
-        body = buildHeaderForFile(body, file);
+    body += repository.translationFiles.reduce((accumulatorForTranslationFiles, file) => {
 
         const totalStringCount = file.totalStringCount;
 
         const sortedLocales = prMetaDataCalculator.sortLocales(file.locales);
 
-        _.forEach(sortedLocales, function(locale){
-            const localeStatus = locale.value.smartlingStatus;
+        return accumulatorForTranslationFiles.concat(
+            buildHeaderForFile(body, file),
+            sortedLocales.reduce((accumulatorForLocales, locale) => {
+                const localeStatus = locale.value.smartlingStatus;
+                const excludedStringCount = localeStatus.excludedStringCount || 0;
+                const completedStringCount = localeStatus.completedStringCount || 0;
+                const percentage = localeStatus.percentCompleted;
 
-            const excludedStringCount = localeStatus.excludedStringCount || 0;
-            const completedStringCount = localeStatus.completedStringCount || 0;
-            const percentage = localeStatus.percentCompleted;
-
-            let linkToExcludedStringView = '';
-            if(excludedStringCount > 0) {
-                linkToExcludedStringView = buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key);
-            }
-
-            body = body.concat(`| **${locale.key}** | ${excludedStringCount}${linkToExcludedStringView} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`)
-        });
-    });
-
-    const title = buildTitle(repository);
+                return accumulatorForLocales.concat(`| **${locale.key}** | ${excludedStringCount}${excludedStringCount > 0 ? buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key) : '' } | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`);
+            }, ''));
+    },'');
 
     return {
         body,
