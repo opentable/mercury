@@ -30,6 +30,10 @@ const buildTitle = (repository) => {
     return `Mercury Pull Request ${buildPullRequestStatus(averageCompletion)}`;
 }
 
+const buildExcludedStringLink = (smartlingProjectId, localeKey) => {
+    return ' ([view in Smartling](https://dashboard.smartling.com/projects/' + smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + localeKey + '))';
+}
+
 const format = (repository) => {
     let body = '';
 
@@ -53,11 +57,7 @@ const format = (repository) => {
 
             let linkToExcludedStringView = '';
             if(excludedStringCount > 0) {
-                linkToExcludedStringView =
-                    ' ([view in Smartling](https://dashboard.smartling.com/projects/' +
-                    repository.manifestContent.smartlingProjectId +
-                    '/content/content.htm#excluded/list/filter/locale:' +
-                    locale.key + '))';
+                linkToExcludedStringView = buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key);
             }
 
             body = body.concat(`| **${locale.key}** | ${excludedStringCount}${linkToExcludedStringView} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`)
