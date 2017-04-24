@@ -20,7 +20,7 @@ describe('metadataFormatter.format()', () => {
                 expect(res.title).to.include('Mercury Pull Request [WIP - 45.8% Overall Completion]');
             });
         });
-        
+
        describe('READY TO MERGE', () => {
             beforeEach((done) => {
                 const repo = {
@@ -102,7 +102,7 @@ describe('metadataFormatter.format()', () => {
         let res;
                 
         beforeEach((done) => {
-            const repo = testData.postPullRequestFetchInfoRepositoryWtihExcludedStrings;
+            const repo = testData.postPullRequestFetchInfoRepositoryWithExcludedStrings;
             res = metadataFormatter.format(_.cloneDeep(repo));
             done();
         });
@@ -145,33 +145,3 @@ describe('metadataFormatter.format()', () => {
         });
     });
 });
-
-describe('metadataFormatter.localeSort()', () => {
-    describe('unsorted array to sorted', () => {
-        let res;
-        const locales = testData.unsortedLocales;
-
-        beforeEach((done) => {
-            res = metadataFormatter.sortLocales(_.cloneDeep(locales));
-            done();
-        });
-
-        it('should be sorted by locale', () => {
-            expect(res[0].key).to.equal('de-DE');
-            expect(res[0].value).to.deep.equal(locales['de-DE']);
-            expect(res[1].key).to.equal('en-GB');
-            expect(res[1].value).to.deep.equal(locales['en-GB']);
-            expect(res[2].key).to.equal('en-US');
-            expect(res[2].value).to.deep.equal(locales['en-US']);
-            expect(res[3].key).to.equal('es-MX');
-            expect(res[3].value).to.deep.equal(locales['es-MX']);
-            expect(res[4].key).to.equal('fr-CA');
-            expect(res[4].value).to.deep.equal(locales['fr-CA']);
-            expect(res[5].key).to.equal('ja-JP');
-            expect(res[5].value).to.deep.equal(locales['ja-JP']);
-            expect(res[6].key).to.equal('nl-NL');
-            expect(res[6].value).to.deep.equal(locales['nl-NL']);
-        });
-    });
-});
-
