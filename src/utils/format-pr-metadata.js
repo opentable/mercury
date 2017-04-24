@@ -6,10 +6,8 @@ const buildUnauthorisedStringWarning = () => {
     return '> :warning: WARNING\n> Your project contains excluded strings.\n> This typically indicates strings that are being managed outside of Smartling workflow.\n';
 };
 
-const buildHeaderForFile = (body, file) => {
-    const header = `\n**Translation status of ${file.github}:**\n\n| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
-    body = body.concat(header);
-    return body;
+const buildHeaderForFile = (file) => {
+    return `\n**Translation status of ${file.github}:**\n\n| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
 };
 
 const buildPercentageStat = (percentage) => {
@@ -50,7 +48,7 @@ const format = (repository) => {
         const sortedLocales = prMetaDataCalculator.sortLocales(file.locales);
 
         return accumulatorForTranslationFiles.concat(
-            buildHeaderForFile(body, file),
+            buildHeaderForFile(file),
             sortedLocales.reduce((accumulatorForLocales, locale) => {
                 const localeStatus = locale.value.smartlingStatus;
                 const excludedStringCount = localeStatus.excludedStringCount || 0;
