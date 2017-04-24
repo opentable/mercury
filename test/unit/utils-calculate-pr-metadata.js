@@ -2,16 +2,16 @@
 
 const _ = require('lodash');
 const expect = require('chai').expect;
-const metadataFormatter = require('../../src/utils/calculate-pr-metadata');
+const metadataCalculator = require('../../src/utils/calculate-pr-metadata');
 const testData = require('./testData');
 
-describe('metadataFormatter.localeSort()', () => {
+describe('metadataCalculator.localeSort()', () => {
     describe('unsorted array to sorted', () => {
         let res;
         const locales = testData.unsortedLocales;
 
         beforeEach((done) => {
-            res = metadataFormatter.sortLocales(_.cloneDeep(locales));
+            res = metadataCalculator.sortLocales(_.cloneDeep(locales));
             done();
         });
 
@@ -34,26 +34,26 @@ describe('metadataFormatter.localeSort()', () => {
     });
 });
 
-describe('Sum percentage completion', () => {
+describe('metadataCalculator.sumPercentageCompletedOfLocales()', () => {
     let res;
 
     beforeEach((done) => {
         const repo = testData.postPullRequestFetchInfoRepository;
-        res = metadataFormatter.sumPercentageCompletedOfLocales(_.cloneDeep(repo));
+        res = metadataCalculator.sumPercentageCompletedOfLocales(_.cloneDeep(repo));
         done();
     });
 
-    it('should has a percentage complete', () => {
+    it('should have a percentage complete', () => {
         expect(res).to.equal(183.3);
     });
 });
 
-describe('Count locales', () => {
+describe('metadataCalculator.countLocales()', () => {
     let res;
 
     beforeEach((done) => {
         const repo = testData.postPullRequestFetchInfoRepository;
-        res = metadataFormatter.countLocales(_.cloneDeep(repo));
+        res = metadataCalculator.countLocales(_.cloneDeep(repo));
         done();
     });
 
@@ -62,12 +62,12 @@ describe('Count locales', () => {
     });
 });
 
-describe('Count excluded strings', () => {
+describe('metadataCalculator.countExcludedStrings()', () => {
     let res;
 
     beforeEach((done) => {
         const repo = testData.postPullRequestFetchInfoRepositoryWithExcludedStrings;
-        res = metadataFormatter.countExcludedStrings(_.cloneDeep(repo));
+        res = metadataCalculator.countExcludedStrings(_.cloneDeep(repo));
         done();
     });
 
