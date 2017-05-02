@@ -6,12 +6,11 @@ const errorTypes 	= require('../constants/error-types');
 const github 		= require('../services/github');
 const Logger 		= require('../services/logger-service');
 const mm 			= require('micromatch');
-const path      	= require('path');
 const smartling 	= require('../services/smartling');
 
 const loggerService = Logger();
 
-const getMatchingFiles = (list, srcGlobsCollection) => {
+const getMatchingFiles = (list, srcGlobsCollection, callback) => {
 	let collection = [];
 
 	_.each(srcGlobsCollection, srcGlobs => {
@@ -27,34 +26,14 @@ const getMatchingFiles = (list, srcGlobsCollection) => {
 			collection = _.union(collection, _.uniq(srcToDestMap));
 		}
 	});
+    
+    const mappedFileObjects = mapFileObjects(collection);
 
-	return mapFileObjects(_.uniq(collection));
+	return callback(mappedFileObjects);
 };
 
 const mapFileObjects = (files) => {
-
-	return _.map(files, file => {
-
-		let i = 0;
-		const pathComponents = _.reverse(file.src.split(path.sep));
-		let currentPath = '';
-
-		while(i < pathComponents.length) {
-			currentPath = '/' + pathComponents[i] + currentPath;
-			const fileNames = _.map(files, singleFile => _.reverse(singleFile.src.split(path.sep))[i]);
-			const areFilePathsUnique = _.uniq(fileNames).length === files.length;
-
-			if(areFilePathsUnique) {
-				return {
-					dest: file.dest,
-					github: file.src,
-					smartling: i === 0 ? `/files${currentPath}` : currentPath
-				};
-			} else {
-				i++;
-			}
-		}
-	});
+	return _.map(files, file => ({ dest: file.dest, src: file.src }));
 };
 
 module.exports = (repository, callback) => {
@@ -79,21 +58,34 @@ module.exports = (repository, callback) => {
 	};
 
 	github.getFilesList(githubOptions, (err, list) => {
-
-		if(!err && list){
-			repository.translationFiles = getMatchingFiles(list, srcGlobs);
-			if(_.isEmpty(repository.translationFiles)){
-				err = true;
-			}
-		}
-
-		if(err){
-			err = new Error('No translation files found. Skipping.');
+        
+        if(err){
+			err = new Error('No github files found. Skipping.');
 			loggerService.error(err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
 			repository.skip = true;
 			return callback(err, repository);
-		} else {
-			smartling.getProjectInfo(smartlingOptions, (err, info) => {
+        }
+        
+        getMatchingFiles(list, srcGlobs, (translationFiles) => {
+            
+            let matchingError;
+            
+            if(_.isEmpty(translationFiles)){
+                matchingError = 'No source files found. Skipping.';
+            } else if (_.uniqBy(translationFiles, 'src').length !== translationFiles.length) {
+                matchingError = 'Duplicate source paths found, check mercury file. Skipping';
+            }
+            
+            if(matchingError){
+                err = new Error(matchingError);
+                loggerService.error(err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
+                repository.skip = true;
+                return callback(err, repository);
+            }
+            
+            repository.translationFiles = translationFiles;
+            
+            smartling.getProjectInfo(smartlingOptions, (err, info) => {
 
 				loggerService.info(`Getting project info from smartling for ${repository.owner}/${repository.repo}`);
 
@@ -110,6 +102,6 @@ module.exports = (repository, callback) => {
 		
 				callback(err, repository);
 			});
-		}
+        });
 	});
 };

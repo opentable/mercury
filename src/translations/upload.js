@@ -25,15 +25,17 @@ module.exports = (repository, callback) => {
     };
     
     async.eachOfLimit(repository.translationFiles, smartling.MAX_CONCURRENT_OPERATIONS, (translation, index, callback) => {
+        
+        const path = translation.src;
 
         const options = _.extend(_.cloneDeep(githubOptions), {
-            path: translation.github
+            path
         });
         
         github.getFile(options, (err, file) => {
             
             const options = _.extend(_.cloneDeep(smartlingOptions), {
-                path: translation.smartling
+                path
             });
             
             smartling.uploadFileContent(file.content, options, (err, smartlingUploadResult) => {

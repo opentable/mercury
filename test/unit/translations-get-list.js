@@ -175,7 +175,7 @@ describe('translations.getList()', () => {
             });
         });
         
-        describe('when using duplicate file names and folder names as translations', () => {
+        describe('when using duplicate file names but different paths as translations', () => {
         
             let err, res;          
             
@@ -194,6 +194,31 @@ describe('translations.getList()', () => {
             it('should map them all', () => {
                 expect(err).to.be.null;
                 expect(res.translationFiles).to.be.eql(testData.translationFilesResxComplex);
+            });
+        });
+        
+        describe('when using duplicate file names and duplicate paths as translations', () => {
+        
+            let err, res;          
+            
+            beforeEach((done) => {
+                const githubStub = sinon.stub().yields(null, testData.githubMockDuplicate);
+                const smartlingStub = sinon.stub().yields(null, testData.smartlingInfoMock);
+                const repo = _.cloneDeep(testData.preTranslationRepositoryDuplicate); 
+                
+                mockedGetList(githubStub, smartlingStub)(repo, (error, result) => {
+                    err = error;
+                    res = result;
+                    done();
+                });
+            });
+            
+            it('should show an error', () => {
+                expect(err.toString()).to.contain('Error: Duplicate source paths found, check mercury file. Skipping');
+            });
+
+            it('should mark the repo for being skipped', () => {
+                expect(res.skip).to.be.true;
             });
         });
     });
@@ -215,7 +240,7 @@ describe('translations.getList()', () => {
         });
 
         it('should show an error', () => {
-            expect(err.toString()).to.contain('Error: No translation files found. Skipping.');
+            expect(err.toString()).to.contain('Error: No github files found. Skipping.');
         });
 
         it('should mark the repo for being skipped', () => {

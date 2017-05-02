@@ -14,7 +14,7 @@ const getAllSmartlingFilenames = (repository) => {
     
     _.each(repository.translationFiles, (file) => {
         _.each(repository.targetLocales, (localeId) => {
-            list.push({ localeId, fileName: file.smartling });
+            list.push({ localeId, fileName: file.src });
         });
     });
     
@@ -40,7 +40,7 @@ module.exports = (repository, callback) => {
         smartling.fetchFile(options, (err, content) => {
             
             if(!err && content){
-                let current = _.find(repository.translationFiles, { smartling: file.fileName });
+                let current = _.find(repository.translationFiles, { src: file.fileName });
                 
                 current.locales = current.locales || {};
                 current.locales[file.localeId] = { smartlingContent: content };
