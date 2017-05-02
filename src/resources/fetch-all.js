@@ -20,8 +20,8 @@ const getAllGithubFilenames = (repository) => {
     
     _.each(repository.translationFiles, (file) => {
         _.each(repository.targetLocales, (localeId) => {
-            const fileName = mapFileName(file.github, localeId, file.dest);
-            list.push({ localeId, fileName, source: file.github });
+            const fileName = mapFileName(file.src, localeId, file.dest);
+            list.push({ localeId, fileName, source: file.src });
         });
     });
     
@@ -52,7 +52,7 @@ module.exports = (repository, callback) => {
             }
 
             let current = _.find(repository.translationFiles, translationFile => {
-                return translationFile.github === file.source
+                return translationFile.src === file.source
             });
             
             current.locales = current.locales || {};
