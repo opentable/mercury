@@ -2,8 +2,8 @@
 
 const prMetaDataCalculator = require('./calculate-pr-metadata');
 
-const buildUnauthorisedStringWarning = () => {
-    return '> :warning: WARNING\n> Your project contains excluded strings.\n> This typically indicates strings that are being managed outside of Smartling workflow.\n';
+const buildExcludedStringWarning = () => {
+    return '> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.\n';
 };
 
 const buildHeaderForFile = (file) => {
@@ -38,7 +38,7 @@ const format = (repository) => {
     let body = '';
 
     if (prMetaDataCalculator.countExcludedStrings(repository) > 0) {
-        body += buildUnauthorisedStringWarning();
+        body += buildExcludedStringWarning();
     }
 
     body += repository.translationFiles.reduce((accumulatorForTranslationFiles, file) => {
