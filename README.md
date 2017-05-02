@@ -3,7 +3,7 @@ Mercury is a static content translation platform - [Interested? Watch a presenta
 
 #### Ready to integrate your repository with Mercury?
 
-Please refer to the [Mercury integration runbook](https://github.com/opentable/mercury/blob/master/docs/integration-runbook.md).
+Please refer to the [Mercury integration runbook](https://github.com/opentable/mercury/blob/master/docs/integration-runbook.md) and [FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md).
 
 # Mercury Maintainer Guide
 
