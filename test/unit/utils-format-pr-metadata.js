@@ -72,7 +72,7 @@ describe('metadataFormatter.format()', () => {
         });
 
         it('should not include an excluded string warning', () => {
-            expect(res.body).to.not.include('> :warning: WARNING\n> Your project contains excluded strings.\n> This typically indicates strings that are being managed outside of Smartling workflow.');
+            expect(res.body).to.not.include('> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.');
         });
         
         it('should include a headline for src/locales/en-us/file.json', () => {
@@ -108,7 +108,7 @@ describe('metadataFormatter.format()', () => {
         });
 
         it('should include an excluded string warning', () => {
-            expect(res.body).to.include('> :warning: WARNING\n> Your project contains excluded strings.\n> This typically indicates strings that are being managed outside of Smartling workflow.');
+            expect(res.body).to.include('> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.');
         });
         
         it('should include a headline for src/locales/en-us/file.json', () => {
