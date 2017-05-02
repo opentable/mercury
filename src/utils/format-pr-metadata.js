@@ -7,7 +7,7 @@ const buildExcludedStringWarning = () => {
 };
 
 const buildHeaderForFile = (file) => {
-    return `\n**Translation status of ${file.github}:**\n\n| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
+    return `\n**Translation status of ${file.src}:**\n\n| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
 };
 
 const buildPercentageStat = (percentage) => {
