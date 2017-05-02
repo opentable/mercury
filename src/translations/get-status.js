@@ -43,7 +43,7 @@ module.exports = (repository, callback) => {
     async.eachLimit(repository.translationFiles, smartling.MAX_CONCURRENT_OPERATIONS, (file, next) => {
 
         const options = _.extend(_.cloneDeep(smartlingOptions), {
-            fileUri: file.smartling
+            fileUri: file.src
         });
 
         smartling.getStatus(options, (err, status) => {
@@ -52,7 +52,7 @@ module.exports = (repository, callback) => {
                 return next(err);
             }
             
-            let current = _.find(repository.translationFiles, { smartling: file.smartling });
+            let current = _.find(repository.translationFiles, { src: file.src });
             
             current.totalStringCount = status.totalStringCount;
             return mapLocaleStatus(current, status, next);

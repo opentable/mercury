@@ -17,6 +17,10 @@ module.exports = {
         'components/header/header.json',
         'components/footer/footer.json'
     ],
+    githubMockDuplicate: [
+        'components/duplicate/name.json',
+        'components/duplicate/name.json'
+    ],
     githubMockYml: [ 
         'src/locales/en-us/file.json',
         'src/locales/en-us/other-file.yml'
@@ -111,6 +115,29 @@ module.exports = {
         },
         manifestUpdated: '2017-02-15T15:29:05Z'
     },
+    preTranslationRepositoryDuplicate: {
+        owner: 'opentable',
+        repo: 'hobknob',
+        manifestContent: {
+            workingBranch: 'master',
+            smartlingProjectId: '2249fadc3',
+            translations: [ 
+                { 
+                    input: { 
+                        src: ['components/duplicate/name.json'] 
+                    },
+                    output: { dest: 'components/duplicate/name.${locale}.json' } 
+                },
+                { 
+                    input: { 
+                        src: ['components/duplicate/name.json'] 
+                    },
+                    output: { dest: 'components/duplicate/name.${locale}.json' } 
+                }
+            ]
+        },
+        manifestUpdated: '2017-02-15T15:29:05Z'
+    },
     postSourceFetchRepository: {
         owner: 'opentable',
         repo: 'hobknob',
@@ -125,14 +152,12 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/en-us/file.json',
-                smartling: '/files/file.json',
+                src: 'src/locales/en-us/file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report'
             },
             {
-                github: 'src/locales/en-us/other-file.json',
-                smartling: '/files/other-file.json',
+                src: 'src/locales/en-us/other-file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report'
             }
@@ -154,8 +179,7 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/en-us/file.json',
-                smartling: '/files/file.json',
+                src: 'src/locales/en-us/file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 locales: {
@@ -164,8 +188,7 @@ module.exports = {
                 }
             },
             {
-                github: 'src/locales/en-us/other-file.json',
-                smartling: '/files/other-file.json',
+                src: 'src/locales/en-us/other-file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 locales: {
@@ -191,8 +214,7 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/en-us/file.json',
-                smartling: '/files/file.json',
+                src: 'src/locales/en-us/file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 10,
@@ -208,10 +230,9 @@ module.exports = {
                 }
             },
             {
-                github: 'src/locales/en-us/other-file.json',
+                src: 'src/locales/en-us/other-file.json',
                 report: 'Test repo report',
                 dest: 'src/locales/${locale}/${filename}',
-                smartling: '/files/other-file.json',
                 totalStringCount: 30,
                 locales: {
                     'de-DE': { 
@@ -245,8 +266,7 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
             {
-                github: 'src/locales/folder/Strings.resx',
-                smartling: '/folder/Strings.resx',
+                src: 'src/locales/folder/Strings.resx',
                 dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
@@ -262,8 +282,7 @@ module.exports = {
                 }
             },
             {
-                github: 'src/locales/another-folder/Strings.resx',
-                smartling: '/another-folder/Strings.resx',
+                src: 'src/locales/another-folder/Strings.resx',
                 dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
@@ -296,8 +315,7 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/en-us/file.json',
-                smartling: '/files/file.json',
+                src: 'src/locales/en-us/file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 10,
@@ -317,8 +335,7 @@ module.exports = {
                 }
             },
             {
-                github: 'src/locales/en-us/other-file.json',
-                smartling: '/files/other-file.json',
+                src: 'src/locales/en-us/other-file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 30,
@@ -358,8 +375,7 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/folder/Strings.resx',
-                smartling: '/folder/Strings.resx',
+                src: 'src/locales/folder/Strings.resx',
                 dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
@@ -379,8 +395,7 @@ module.exports = {
                 }
             },
             {
-                github: 'src/locales/another-folder/Strings.resx',
-                smartling: '/another-folder/Strings.resx',
+                src: 'src/locales/another-folder/Strings.resx',
                 dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx',
                 report: 'Test repo report',
                 totalStringCount: 1,
@@ -417,8 +432,7 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/en-us/file.json',
-                smartling: '/files/file.json',
+                src: 'src/locales/en-us/file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 10,
@@ -438,8 +452,7 @@ module.exports = {
                 }
             },
             {
-                github: 'src/locales/en-us/other-file.json',
-                smartling: '/files/other-file.json',
+                src: 'src/locales/en-us/other-file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 30,
@@ -479,8 +492,7 @@ module.exports = {
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [ 
             {
-                github: 'src/locales/en-us/file.json',
-                smartling: '/files/file.json',
+                src: 'src/locales/en-us/file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 10,
@@ -500,8 +512,7 @@ module.exports = {
                 }
             },
             {
-                github: 'src/locales/en-us/other-file.json',
-                smartling: '/files/other-file.json',
+                src: 'src/locales/en-us/other-file.json',
                 dest: 'src/locales/${locale}/${filename}',
                 report: 'Test repo report',
                 totalStringCount: 30,
@@ -562,56 +573,47 @@ module.exports = {
     translationFiles: [ 
         {
             dest: 'src/locales/${locale}/${filename}',
-            github: 'src/locales/en-us/file.json',
-            smartling: '/files/file.json'
+            src: 'src/locales/en-us/file.json'
         },
         {
             dest: 'src/locales/${locale}/${filename}',
-            github: 'src/locales/en-us/other-file.json',
-            smartling: '/files/other-file.json'
+            src: 'src/locales/en-us/other-file.json'
         }
     ],
     translationFilesGlob: [
         {
             dest: 'src/locales/${locale}/${filename}',            
-            github: 'src/locales/en-us/file.json',
-            smartling: '/files/file.json'
+            src: 'src/locales/en-us/file.json'
         }
     ],
     translationFilesGlobComplex: [
         {
             dest: 'components/header/locales.${locale}.json',
-            github: 'components/header/header.json',
-            smartling: '/files/header.json'
+            src: 'components/header/header.json'
         },
         {
             dest: 'components/footer/locales.${locale}.json',
-            github: 'components/footer/footer.json',
-            smartling: '/files/footer.json'
+            src: 'components/footer/footer.json'
         }
     ],
     translationFilesResx: [
         {
             dest: 'src/locales/folder/Strings.${locale}.resx',
-            github: 'src/locales/folder/Strings.resx',
-            smartling: '/folder/Strings.resx'
+            src: 'src/locales/folder/Strings.resx'
         },
         {
             dest: 'src/locales/otherfolder/Strings.${locale}.resx',
-            github: 'src/locales/otherfolder/Strings.resx',
-            smartling: '/otherfolder/Strings.resx'
+            src: 'src/locales/otherfolder/Strings.resx'
         }
     ],
     translationFilesResxComplex: [
         {
             dest: 'src/locales/folder/Strings.${locale}.resx',
-            github: 'src/locales/folder/Strings.resx',
-            smartling: '/locales/folder/Strings.resx'
+            src: 'src/locales/folder/Strings.resx'
         },
         {
             dest: 'src/otherlocales/folder/Strings.${locale}.resx',
-            github: 'src/otherlocales/folder/Strings.resx',
-            smartling: '/otherlocales/folder/Strings.resx'
+            src: 'src/otherlocales/folder/Strings.resx'
         }
     ],
     unsortedLocales: {
