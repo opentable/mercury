@@ -43,8 +43,7 @@ describe('resources.commitFiles()', () => {
                         'de-DE': {
                             smartlingContent: 'file content',
                             githubPath: 'src/locales/de-DE/file.json',
-                            githubContent: null,
-                            isDifferent: true
+                            githubContent: null
                         }
                     }
                 }
@@ -85,8 +84,7 @@ describe('resources.commitFiles()', () => {
                         'de-DE': {
                             smartlingContent: 'translated file content',
                             githubPath: 'src/locales/de-DE/file.json',
-                            githubContent: 'file content',
-                            isDifferent: true
+                            githubContent: 'file content'
                         }
                     }
                 }
@@ -111,57 +109,6 @@ describe('resources.commitFiles()', () => {
         });
     });
 
-    describe('happy path with no action', () => {
-
-        let err, res;
-
-        beforeEach((done) => {
-            githubGetFileStub = sinon.stub().yields(null, { content: 'translated file content', sha: 'test_sha' });
-            githubCreateFileStub = sinon.stub().yields();
-            githubUpdateFileStub = sinon.stub().yields();
-
-            const testRepo = _.cloneDeep(repository);
-            testRepo.translationFiles = [
-                {
-                    locales: {
-                        'de-DE': {
-                            smartlingContent: 'translated file content',
-                            githubPath: 'src/locales/de-DE/file.json',
-                            githubContent: 'translated file content',
-                            isDifferent: false
-                        }
-                    }
-                }
-            ];
-
-            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error, result) => {
-                err = error;
-                res = result;
-                done();
-            });
-        });
-
-        it('should not error', () => {
-            expect(err).to.be.null;
-        });
-
-        it('should never call createFile', () => {
-            expect(githubCreateFileStub.called).to.be.false;
-        });
-
-        it('should never call updateFile', () => {
-            expect(githubUpdateFileStub.called).to.be.false;
-        });
-
-        it('should never call getFile', () => {
-            expect(githubGetFileStub.called).to.be.false;
-        });
-        
-        it('should add a skipPullRequest boolean value to the repository', () => {
-            expect(res.skipPullRequest).to.be.true;
-        });
-    });
-
     describe('error when getting file sha', () => {
 
         let err;
@@ -178,8 +125,7 @@ describe('resources.commitFiles()', () => {
                         'de-DE': {
                             smartlingContent: 'translated file content',
                             githubPath: 'src/locales/de-DE/file.json',
-                            githubContent: 'file content',
-                            isDifferent: true
+                            githubContent: 'file content'
                         }
                     }
                 }
@@ -216,8 +162,7 @@ describe('resources.commitFiles()', () => {
                         'de-DE': {
                             smartlingContent: 'file content',
                             githubPath: 'src/locales/de-DE/file.json',
-                            githubContent: null,
-                            isDifferent: true
+                            githubContent: null
                         }
                     }
                 }
@@ -250,8 +195,7 @@ describe('resources.commitFiles()', () => {
                         'de-DE': {
                             smartlingContent: 'file content',
                             githubPath: 'src/locales/de-DE/file.json',
-                            githubContent: null,
-                            isDifferent: true
+                            githubContent: null
                         }
                     }
                 }
