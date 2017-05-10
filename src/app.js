@@ -16,7 +16,6 @@ const processRepo = (repository, next) => {
 		translations.fetchAll,
 		translations.getStatus,
 		resources.fetchAll,
-		resources.diff,
         resources.ensureFork,
         resources.fetchPullRequestInfo,
         resources.closePullRequestIfOutdated,
