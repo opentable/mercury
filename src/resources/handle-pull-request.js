@@ -1,9 +1,9 @@
 'use strict';
 
-const config          = require('config');
-const errorTypes      = require('../constants/error-types');
-const github          = require('../services/github');
-const Logger          = require('../services/logger-service');
+const config            = require('config');
+const errorTypes        = require('../constants/error-types');
+const github            = require('../services/github');
+const Logger            = require('../services/logger-service');
 const metadataFormatter = require('../utils/format-pr-metadata');
 
 const loggerService = Logger();

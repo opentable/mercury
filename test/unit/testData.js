@@ -617,47 +617,47 @@ module.exports = {
         }
     ],
     unsortedLocales: {
-            'ja-JP': {
-                smartlingContent: 'file content',
-                smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
-                githubPath: 'src/locales/another-folder/Strings.ja-JP.resx',
-                githubContent: 'file content'
-            },
-            'de-DE': {
-                smartlingContent: 'file content',
-                smartlingStatus: { excludedStringCount: 0, completedStringCount: 1, percentCompleted: 10 },
-                githubPath: 'src/locales/another-folder/Strings.de-de.resx',
-                githubContent: 'file content'
-            },
-            'nl-NL': {
-                smartlingContent: 'file content',
-                smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
-                githubPath: 'src/locales/another-folder/Strings.nl-nl.resx',
-                githubContent: 'file content'
-            },
-            'es-MX': {
-                smartlingContent: 'file content',
-                smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
-                githubPath: 'src/locales/another-folder/Strings.es-MX.resx',
-                githubContent: 'file content'
-            },
-            'en-GB': {
-                smartlingContent: 'file content',
-                smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
-                githubPath: 'src/locales/another-folder/Strings.en-GB.resx',
-                githubContent: 'file content'
-            },
-            'fr-CA': {
-                smartlingContent: 'file content',
-                smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
-                githubPath: 'src/locales/another-folder/Strings.fr-CA.resx',
-                githubContent: 'file content'
-            },
-            'en-US': {
-                smartlingContent: 'file content',
-                smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
-                githubPath: 'src/locales/another-folder/Strings.en-US.resx',
-                githubContent: 'file content'
-            }
+        'ja-JP': {
+            smartlingContent: 'file content',
+            smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
+            githubPath: 'src/locales/another-folder/Strings.ja-JP.resx',
+            githubContent: 'file content'
+        },
+        'de-DE': {
+            smartlingContent: 'file content',
+            smartlingStatus: { excludedStringCount: 0, completedStringCount: 1, percentCompleted: 10 },
+            githubPath: 'src/locales/another-folder/Strings.de-de.resx',
+            githubContent: 'file content'
+        },
+        'nl-NL': {
+            smartlingContent: 'file content',
+            smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
+            githubPath: 'src/locales/another-folder/Strings.nl-nl.resx',
+            githubContent: 'file content'
+        },
+        'es-MX': {
+            smartlingContent: 'file content',
+            smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
+            githubPath: 'src/locales/another-folder/Strings.es-MX.resx',
+            githubContent: 'file content'
+        },
+        'en-GB': {
+            smartlingContent: 'file content',
+            smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
+            githubPath: 'src/locales/another-folder/Strings.en-GB.resx',
+            githubContent: 'file content'
+        },
+        'fr-CA': {
+            smartlingContent: 'file content',
+            smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
+            githubPath: 'src/locales/another-folder/Strings.fr-CA.resx',
+            githubContent: 'file content'
+        },
+        'en-US': {
+            smartlingContent: 'file content',
+            smartlingStatus: { excludedStringCount: 0, completedStringCount: 10, percentCompleted: 100 },
+            githubPath: 'src/locales/another-folder/Strings.en-US.resx',
+            githubContent: 'file content'
+        }
     }
 }

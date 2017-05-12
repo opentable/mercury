@@ -21,7 +21,7 @@ describe('metadataFormatter.format()', () => {
             });
         });
 
-       describe('READY TO MERGE', () => {
+        describe('READY TO MERGE', () => {
             beforeEach((done) => {
                 const repo = {
                     translationFiles: [ 
