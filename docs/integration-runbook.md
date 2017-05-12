@@ -24,15 +24,15 @@ The `mercury.json` file is the one addition you'll need to make to your project.
 
 ``` json
 {
-	"smartlingProjectId": "cf3dd4fb5",
-	"translations": [{
-		"input": {
-			"src": ["src/locales/en-us/*.json", "!src/locales/en-us/config.json"]
-		},
-		"output": {
-			"dest": "src/locales/${locale}/${filename}"
-		}
-	}]
+    "smartlingProjectId": "cf3dd4fb5",
+    "translations": [{
+        "input": {
+            "src": ["src/locales/en-us/*.json", "!src/locales/en-us/config.json"]
+        },
+        "output": {
+            "dest": "src/locales/${locale}/${filename}"
+        }
+    }]
 }
 ```
 

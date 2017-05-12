@@ -1,69 +1,69 @@
 'use strict';
 
-const _ 			= require('lodash');
-const config 		= require('config');
-const errorTypes 	= require('../constants/error-types');
-const github 		= require('../services/github');
-const Logger 		= require('../services/logger-service');
-const mm 			= require('micromatch');
-const smartling 	= require('../services/smartling');
+const _          = require('lodash');
+const config     = require('config');
+const errorTypes = require('../constants/error-types');
+const github     = require('../services/github');
+const Logger     = require('../services/logger-service');
+const mm         = require('micromatch');
+const smartling  = require('../services/smartling');
 
 const loggerService = Logger();
 
 const getMatchingFiles = (list, srcGlobsCollection, callback) => {
-	let collection = [];
+    let collection = [];
 
-	_.each(srcGlobsCollection, srcGlobs => {
+    _.each(srcGlobsCollection, srcGlobs => {
 
-		let result = list;
+        let result = list;
 
-		_.each(srcGlobs.src, glob => {
-			result = mm.match(result, glob);
-		});
+        _.each(srcGlobs.src, glob => {
+            result = mm.match(result, glob);
+        });
 
-		if(!_.isEmpty(result)){
-			const srcToDestMap = _.map(result, file => ({ src: file, dest: srcGlobs.dest }));
-			collection = _.union(collection, _.uniq(srcToDestMap));
-		}
-	});
+        if(!_.isEmpty(result)){
+            const srcToDestMap = _.map(result, file => ({ src: file, dest: srcGlobs.dest }));
+            collection = _.union(collection, _.uniq(srcToDestMap));
+        }
+    });
     
     const mappedFileObjects = mapFileObjects(collection);
 
-	return callback(mappedFileObjects);
+    return callback(mappedFileObjects);
 };
 
 const mapFileObjects = (files) => {
-	return _.map(files, file => ({ dest: file.dest, src: file.src }));
+    return _.map(files, file => ({ dest: file.dest, src: file.src }));
 };
 
 module.exports = (repository, callback) => {
 
-	loggerService.info(`Getting translations' list from github for ${repository.owner}/${repository.repo}`);
+    loggerService.info(`Getting translations' list from github for ${repository.owner}/${repository.repo}`);
 
-	const srcGlobs = _.map(repository.manifestContent.translations, (item) => ({
-		src: item.input.src,
-		dest: item.output.dest
-	}));
+    const srcGlobs = _.map(repository.manifestContent.translations, (item) => ({
+        src: item.input.src,
+        dest: item.output.dest
+    }));
 
-	const githubOptions = {
-		repo: repository.repo,
-		owner: repository.owner,
-		branch: repository.manifestContent.workingBranch
-	};
+    const githubOptions = {
+        repo: repository.repo,
+        owner: repository.owner,
+        branch: repository.manifestContent.workingBranch
+    };
 
-	const smartlingOptions = {
-		userIdentifier: config.smartling.userIdentifier,
-		userSecret: config.smartling.userSecret,
-		projectId: repository.manifestContent.smartlingProjectId 
-	};
+    const smartlingOptions = {
+        userIdentifier: config.smartling.userIdentifier,
+        userSecret: config.smartling.userSecret,
+        projectId: repository.manifestContent.smartlingProjectId 
+    };
 
-	github.getFilesList(githubOptions, (err, list) => {
+    github.getFilesList(githubOptions, (err, list) => {
         
         if(err){
-			err = new Error('No github files found. Skipping.');
-			loggerService.error(err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
-			repository.skip = true;
-			return callback(err, repository);
+            err = new Error('No github files found. Skipping.');
+            loggerService.error(err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
+            repository.skip = true;
+            return callback(err, repository);
         }
         
         getMatchingFiles(list, srcGlobs, (translationFiles) => {
@@ -87,21 +87,21 @@ module.exports = (repository, callback) => {
             
             smartling.getProjectInfo(smartlingOptions, (err, info) => {
 
-				loggerService.info(`Getting project info from smartling for ${repository.owner}/${repository.repo}`);
+                loggerService.info(`Getting project info from smartling for ${repository.owner}/${repository.repo}`);
 
-				if(err){
-					loggerService.error(err, errorTypes.failedSmartlingFetchInfo, repository);
-					repository.skip = true;
-				} else {
-					repository.sourceLocaleId = info.sourceLocaleId;
-					repository.targetLocales = _.filter(info.targetLocales, { enabled: true }).map(x => x.localeId);
-					if(_.isEmpty(repository.targetLocales)){
-						repository.skip = true;
-					}
-				}
-		
-				callback(err, repository);
-			});
+                if(err){
+                    loggerService.error(err, errorTypes.failedSmartlingFetchInfo, repository);
+                    repository.skip = true;
+                } else {
+                    repository.sourceLocaleId = info.sourceLocaleId;
+                    repository.targetLocales = _.filter(info.targetLocales, { enabled: true }).map(x => x.localeId);
+                    if(_.isEmpty(repository.targetLocales)){
+                        repository.skip = true;
+                    }
+                }
+        
+                callback(err, repository);
+            });
         });
-	});
+    });
 };
