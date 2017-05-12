@@ -5,6 +5,7 @@ const config        = require('config');
 const File          = require('./github/file');
 const Github        = require('github');
 const PullRequest   = require('./github/pull-request');
+const RateLimit     = require('./github/rate-limit');
 const Reference     = require('./github/reference');
 
 const MAX_CONCURRENT_OPERATIONS = 20;
@@ -26,6 +27,7 @@ github.authenticate({
 
 const file = File(github);
 const pullRequest = PullRequest(github);
+const rateLimit = RateLimit(github);
 const reference = Reference(github);
 
 const getFilesList = (options, next) => {
@@ -57,6 +59,7 @@ module.exports = {
     getFileChangedInfo: file.lastUpdated,
     getFilesList,
     getPullRequestInfo: pullRequest.get,
+    getRequestRateStats: rateLimit.get,
     MAX_CONCURRENT_OPERATIONS,
     updateFile: file.update,
     updatePullRequest: pullRequest.update,
