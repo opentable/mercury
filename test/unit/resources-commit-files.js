@@ -1,11 +1,11 @@
 'use strict';
 
-const _         = require('lodash');
-const async     = require('async');
-const expect 	= require('chai').expect;
-const injectr	= require('injectr');
-const sinon		= require('sinon');
-const testData  = require('./testData');
+const _        = require('lodash');
+const async    = require('async');
+const expect   = require('chai').expect;
+const injectr  = require('injectr');
+const sinon    = require('sinon');
+const testData = require('./testData');
 
 describe('resources.commitFiles()', () => {
 

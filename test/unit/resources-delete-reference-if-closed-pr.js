@@ -1,102 +1,102 @@
 'use strict';
 
-const _			= require('lodash');
-const expect	= require('chai').expect;
-const injectr	= require('injectr');
-const sinon		= require('sinon');
-const testData	= require('./testData');
+const _        = require('lodash');
+const expect   = require('chai').expect;
+const injectr  = require('injectr');
+const sinon    = require('sinon');
+const testData = require('./testData');
 
 describe('resources.deleteReferenceIfClosedPr()', () => {
-	
-	const mockedDeleteReference = (githubStub) => injectr('../../src/resources/delete-reference-if-closed-pr.js', {
-		'../services/github': {
-			deleteReference: githubStub
-		}
-	});
-	
-	describe('when there is no open Mercury pr', () => {
-	
-		const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
-		let err, githubStub;
-		
-		beforeEach((done) => {
-			githubStub = sinon.stub().yields(null, 'ok');
-			
-			mockedDeleteReference(githubStub)(repository, (error) => {
-				err = error;
-				done();
-			});
-		});
+    
+    const mockedDeleteReference = (githubStub) => injectr('../../src/resources/delete-reference-if-closed-pr.js', {
+        '../services/github': {
+            deleteReference: githubStub
+        }
+    });
+    
+    describe('when there is no open Mercury pr', () => {
+    
+        const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
+        let err, githubStub;
+        
+        beforeEach((done) => {
+            githubStub = sinon.stub().yields(null, 'ok');
+            
+            mockedDeleteReference(githubStub)(repository, (error) => {
+                err = error;
+                done();
+            });
+        });
 
-		it('should not error', () => {
-			expect(err).to.be.null;
-		});
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
 
-		it('should call the deleteReference function', () => {
-			expect(githubStub.called).to.be.true;
-		});
-	});
+        it('should call the deleteReference function', () => {
+            expect(githubStub.called).to.be.true;
+        });
+    });
     
     describe('when pr exists and valid', () => {
-	
-		const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
-		let err, githubStub;
-		
-		beforeEach((done) => {
-			repository.prInfo = {
-				found: true,
-				createdAt: '2017-02-14T15:29:05Z',
-				number: 123,
-				outdated: false
-			}
+    
+        const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
+        let err, githubStub;
+        
+        beforeEach((done) => {
+            repository.prInfo = {
+                found: true,
+                createdAt: '2017-02-14T15:29:05Z',
+                number: 123,
+                outdated: false
+            }
 
-			githubStub = sinon.stub().yields(null, 'ok');
-			
-			mockedDeleteReference(githubStub)(repository, (error) => {
-				err = error;
-				done();
-			});
-		});
+            githubStub = sinon.stub().yields(null, 'ok');
+            
+            mockedDeleteReference(githubStub)(repository, (error) => {
+                err = error;
+                done();
+            });
+        });
 
-		it('should not error', () => {
-			expect(err).to.be.null;
-		});
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
 
-		it('should not call the deleteReference function', () => {
-			expect(githubStub.called).to.be.false;
-		});
-	});
+        it('should not call the deleteReference function', () => {
+            expect(githubStub.called).to.be.false;
+        });
+    });
     
     describe('when pr found and already closed', () => {
-	
-		const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
-		let err, githubStub;
-		
-		beforeEach((done) => {
-			repository.prInfo = {
-				found: true,
-				createdAt: '2017-02-14T15:29:05Z',
-				number: 123,
-				outdated: true,
-				closed: true
-			}
+    
+        const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
+        let err, githubStub;
+        
+        beforeEach((done) => {
+            repository.prInfo = {
+                found: true,
+                createdAt: '2017-02-14T15:29:05Z',
+                number: 123,
+                outdated: true,
+                closed: true
+            }
 
-			githubStub = sinon.stub().yields(null, 'ok');
-			
-			mockedDeleteReference(githubStub)(repository, (error) => {
-				err = error;
-				done();
-			});
-		});
+            githubStub = sinon.stub().yields(null, 'ok');
+            
+            mockedDeleteReference(githubStub)(repository, (error) => {
+                err = error;
+                done();
+            });
+        });
 
-		it('should not error', () => {
-			expect(err).to.be.null;
-		});
+        it('should not error', () => {
+            expect(err).to.be.null;
+        });
 
-		it('should call the deleteReference function', () => {
-			expect(githubStub.called).to.be.true;
-		});
-	});
+        it('should call the deleteReference function', () => {
+            expect(githubStub.called).to.be.true;
+        });
+    });
     
     describe('when the reference has been manually deleted by the repo owner', () => {
 

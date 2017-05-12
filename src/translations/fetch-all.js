@@ -1,11 +1,11 @@
 'use strict';
 
-const _				= require('lodash');
-const async			= require('async');
-const config		= require('config');
-const errorTypes	= require('../constants/error-types');
-const Logger 		= require('../services/logger-service');
-const smartling 	= require('../services/smartling');
+const _          = require('lodash');
+const async      = require('async');
+const config     = require('config');
+const errorTypes = require('../constants/error-types');
+const Logger     = require('../services/logger-service');
+const smartling  = require('../services/smartling');
 
 const loggerService = Logger();
 
