@@ -6,8 +6,8 @@ module.exports = {
     deleteReferenceIfClosedPr: require('./delete-reference-if-closed-pr'),
     ensureBranch: require('./ensure-branch'),
     ensureFork: require('./ensure-fork'),
-	fetchAll: require('./fetch-all'),
-	fetchPullRequestInfo: require('./fetch-pull-request-info'),
+    fetchAll: require('./fetch-all'),
+    fetchPullRequestInfo: require('./fetch-pull-request-info'),
     fetchRequestRateStats: require('./fetch-request-rate-stats'),
     handlePullRequest: require('./handle-pull-request')
 };
