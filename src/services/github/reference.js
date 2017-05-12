@@ -16,12 +16,12 @@ module.exports = (github) => {
         });
     };
 
-	const getReference = (options, next) => {
+    const getReference = (options, next) => {
         options.ref = `heads/${options.branch}`;
         github.gitdata.getReference(options, (err, reference) => next(err, _.get(reference, ['object', 'sha'])));
     };
 
-	const getOrCreate = (options, sourceSha, next) => {
+    const getOrCreate = (options, sourceSha, next) => {
 
         getReference(options, (err, branchReferenceSha) => {
 
@@ -43,10 +43,10 @@ module.exports = (github) => {
         github.gitdata.updateReference(options, next);
     };
 
-	return {
+    return {
         delete: deleteReference,
-		get: getReference,
-		getOrCreate,
+        get: getReference,
+        getOrCreate,
         update
-	};
+    };
 };

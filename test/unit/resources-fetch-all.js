@@ -1,9 +1,9 @@
 'use strict';
 
-const _         = require('lodash');
-const expect 	= require('chai').expect;
-const injectr	= require('injectr');
-const sinon		= require('sinon');
+const _        = require('lodash');
+const expect   = require('chai').expect;
+const injectr  = require('injectr');
+const sinon    = require('sinon');
 const testData = require('./testData');
 
 describe('resources.fetchAll()', () => {

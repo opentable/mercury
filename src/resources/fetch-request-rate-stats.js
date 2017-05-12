@@ -2,7 +2,7 @@
 
 const github         = require('../services/github');
 const Logger         = require('../services/logger-service');
-const loggerService = Logger();
+const loggerService  = Logger();
 
 module.exports = (callback) => {
 

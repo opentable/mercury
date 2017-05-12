@@ -1,6 +1,6 @@
 'use strict';
 
-const _				= require('lodash');
+const _             = require('lodash');
 const encodeContent = require('./utils').encodeContent;
 
 module.exports = (github) => ({
