@@ -8,5 +8,6 @@ module.exports = {
     ensureFork: require('./ensure-fork'),
 	fetchAll: require('./fetch-all'),
 	fetchPullRequestInfo: require('./fetch-pull-request-info'),
+    fetchRequestRateStats: require('./fetch-request-rate-stats'),
     handlePullRequest: require('./handle-pull-request')
 };
