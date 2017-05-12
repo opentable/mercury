@@ -1,9 +1,7 @@
 'use strict';
 
-const errorTypes     = require('../constants/error-types');
 const github         = require('../services/github');
 const Logger         = require('../services/logger-service');
-
 const loggerService = Logger();
 
 module.exports = (callback) => {
