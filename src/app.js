@@ -42,6 +42,8 @@ async.eachOfSeries(config.repositories, (repositories, owner, next) => {
 	}, next);
 }, () => {
     const date = new Date();
-    console.log(`\n\nMercury just ran - ${date}`);
-    process.exit(0);
+    resources.fetchRequestRateStats(() => {
+        console.log(`\n\nMercury just ran - ${date}`);
+        process.exit(0);
+    });
 });
