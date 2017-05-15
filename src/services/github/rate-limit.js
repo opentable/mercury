@@ -1,8 +1,13 @@
 'use strict';
 
+const utils  = require('./utils');
+
 module.exports = (github) => ({
 
     get: (next) => {
-        github.misc.getRateLimit({}, next);
+        
+        const authenticatedGithub = utils.authenticateGithubOperation('write', github);
+        
+        authenticatedGithub.misc.getRateLimit({}, next);
     }
 });
