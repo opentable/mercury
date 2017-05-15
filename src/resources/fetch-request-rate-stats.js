@@ -18,8 +18,8 @@ module.exports = (callback) => {
             const requestsRemaining = stats.resources.core.remaining;
             const requestsSent = requestsLimit - requestsRemaining;
             
-            loggerService.info(`Requests sent in this hour: ${requestsSent}`);
-            loggerService.info(`Remaining requests for the hour: ${requestsRemaining}`);
+            loggerService.info(`GitHub Write Requests sent in this hour: ${requestsSent}`);
+            loggerService.info(`GitHub Write Remaining requests for the hour: ${requestsRemaining}`);
         }
 
         callback();

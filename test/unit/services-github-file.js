@@ -20,10 +20,13 @@ describe('services.github.file.create()', () => {
         updateFileStub.onCall(0).yields('error');
         updateFileStub.onCall(1).yields(null, 'success');
 
-        return githubFile({ repos: {
-            createFile: createFileStub,
-            updateFile: updateFileStub
-        }});
+        return githubFile({ 
+            authenticate: () => {},
+            repos: {
+                createFile: createFileStub,
+                updateFile: updateFileStub
+            }
+        });
     };
 
     describe('on file creation with error and retry', () => {
