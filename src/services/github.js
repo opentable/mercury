@@ -26,7 +26,7 @@ const rateLimit = RateLimit(github);
 const reference = Reference(github);
 
 const getFilesList = (options, next) => {
-    
+
     const authenticatedGithub = utils.authenticateGithubOperation('read', github);
 
     reference.get(options, (err, sha) => {
@@ -43,9 +43,9 @@ const getFilesList = (options, next) => {
 };
 
 const ensureFork = (options, next) => {
-    
+
     const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-    
+
     authenticatedGithub.repos.fork(options, next);
 };
 
