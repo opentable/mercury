@@ -21,7 +21,7 @@ module.exports = (github) => {
     };
 
     const getReference = (options, next) => {
-        const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+        const authenticatedGithub = utils.authenticateGithubOperation('write', github);
         options.ref = `heads/${options.branch}`;
         
         authenticatedGithub.gitdata.getReference(options, (err, reference) => next(err, _.get(reference, ['object', 'sha'])));
@@ -46,7 +46,7 @@ module.exports = (github) => {
 
     const update = (options, next) => {
         
-        const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+        const authenticatedGithub = utils.authenticateGithubOperation('write', github);
         
         options.ref = `heads/${options.branch}`;
         options.sha = options.reference;
