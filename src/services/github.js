@@ -1,12 +1,12 @@
 'use strict';
 
-const _             = require('lodash');
-const config        = require('config');
-const File          = require('./github/file');
-const Github        = require('github');
-const PullRequest   = require('./github/pull-request');
-const RateLimit     = require('./github/rate-limit');
-const Reference     = require('./github/reference');
+const _           = require('lodash');
+const File        = require('./github/file');
+const Github      = require('github');
+const PullRequest = require('./github/pull-request');
+const RateLimit   = require('./github/rate-limit');
+const Reference   = require('./github/reference');
+const utils       = require('./github/utils');
 
 const MAX_CONCURRENT_OPERATIONS = 20;
 
@@ -20,17 +20,14 @@ const github = new Github({
     timeout: 20000
 });
 
-github.authenticate({
-    type: 'oauth',
-    token: config.github.apiToken
-});
-
 const file = File(github);
 const pullRequest = PullRequest(github);
 const rateLimit = RateLimit(github);
 const reference = Reference(github);
 
 const getFilesList = (options, next) => {
+
+    const authenticatedGithub = utils.authenticateGithubOperation('read', github);
 
     reference.get(options, (err, sha) => {
 
@@ -39,13 +36,18 @@ const getFilesList = (options, next) => {
         options.recursive = true;
         options.sha = sha;
 
-        github.gitdata.getTree(options, (err, list) => {
+        authenticatedGithub.gitdata.getTree(options, (err, list) => {
             next(err, list ? _.map(list.tree, x => x.path) : undefined);
         });
     });
 };
 
-const ensureFork = github.repos.fork;
+const ensureFork = (options, next) => {
+
+    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
+
+    authenticatedGithub.repos.fork(options, next);
+};
 
 module.exports = {
     closePullRequest: pullRequest.close,

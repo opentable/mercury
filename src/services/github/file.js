@@ -1,15 +1,18 @@
 'use strict';
 
-const _             = require('lodash');
-const encodeContent = require('./utils').encodeContent;
+const _      = require('lodash');
+const utils  = require('./utils');
 
 module.exports = (github) => ({
 
     create: (options, next) => {
+        
+        const authenticatedGithub = utils.authenticateGithubOperation('write', github);
         const createOptions = _.cloneDeep(options);
-        const encodedContent = encodeContent(createOptions.content);
+        const encodedContent = utils.encodeContent(createOptions.content);
         _.set(createOptions, 'content', encodedContent);
-        github.repos.createFile(createOptions, (err, result) => {
+        
+        authenticatedGithub.repos.createFile(createOptions, (err, result) => {
             if(err) {
                 return next(err);
             }
@@ -18,8 +21,10 @@ module.exports = (github) => ({
     },
 
     get: (options, next) => {
-    
-        github.repos.getContent(options, (err, file) => {
+        
+        const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+        
+        authenticatedGithub.repos.getContent(options, (err, file) => {
             const getContent = f => new Buffer(f.content, f.encoding).toString();
             const content = !err && file ? getContent(file) : null;
             const sha = !err && file ? file.sha : null;
@@ -32,10 +37,11 @@ module.exports = (github) => ({
     },
 
     lastUpdated: (options, next) => {
-
+        
         options['per_page'] = 1;
-
-        github.repos.getCommits(options, (err, commits) => {
+        const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+        
+        authenticatedGithub.repos.getCommits(options, (err, commits) => {
             if(err || _.isEmpty(commits)){
                 return next(err);
             }
@@ -45,10 +51,13 @@ module.exports = (github) => ({
     },
 
     update: (options, next) => {
+        
+        const authenticatedGithub = utils.authenticateGithubOperation('write', github);
         const updateOptions = _.cloneDeep(options);
-        const encodedContent = encodeContent(updateOptions.content);
+        const encodedContent = utils.encodeContent(updateOptions.content);
         _.set(updateOptions, 'content', encodedContent);
-        github.repos.updateFile(updateOptions, (err, result) => {
+        
+        authenticatedGithub.repos.updateFile(updateOptions, (err, result) => {
             if(err) {
                 return next(err);
             }
