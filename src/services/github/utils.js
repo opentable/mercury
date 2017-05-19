@@ -8,7 +8,9 @@ const utf8   = require('utf8');
 module.exports = {
     authenticateGithubOperation: (operationType, github) => {
         
-        const token = operationType === 'read' ? _.sample(config.github.readApiTokens) : config.github.writeApiToken;
+        const tokens = _.filter(config.github.apiTokens, ['operation', operationType]);
+
+        const token = _.sample(tokens).value;
         
         github.authenticate({
             type: 'oauth',
