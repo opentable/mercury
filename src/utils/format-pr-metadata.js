@@ -14,16 +14,17 @@ const buildPercentageStat = (percentage) => {
     return percentage || percentage === 0 ? `${percentage.toString()}%` : 'N/A';
 };
 
-const buildPullRequestStatus = (averageCompletion) => {
-    const status = averageCompletion !== 100 ? 'WIP' : 'READY TO MERGE';
-    return `[${status} - ${buildPercentageStat(averageCompletion)} Overall Completion]`;
+const buildPullRequestInstructions = (averageCompletion) => {
+    const status = averageCompletion !== 100 ? '> :white_check_mark: This is safe to merge (even if marked as WIP).\n>\n> If conflicts appear, the likely cause is that translation files were manually changed while Mercury was running.\nIn that case, you can close this PR: a new one will be opened with no conflicts.\n\n' : '';
+    return status;
 };
 
-const buildTitle = (repository) => {
-    const averageCompletion = prMetaDataCalculator.calculateAverage(
-        prMetaDataCalculator.sumPercentageCompletedOfLocales(repository),
-        prMetaDataCalculator.countLocales(repository));
+const buildPullRequestStatus = (averageCompletion) => {
+    const status = averageCompletion !== 100 ? '[WIP]' : '[COMPLETE]';
+    return `${status} - ${buildPercentageStat(averageCompletion)} Overall Completion`;
+};
 
+const buildTitle = (averageCompletion) => {
     return `Mercury Pull Request ${buildPullRequestStatus(averageCompletion)}`;
 }
 
@@ -33,9 +34,15 @@ const buildExcludedStringLink = (smartlingProjectId, localeKey) => {
 
 const format = (repository) => {
 
-    const title = buildTitle(repository);
+    const averageCompletion = prMetaDataCalculator.calculateAverage(
+        prMetaDataCalculator.sumPercentageCompletedOfLocales(repository),
+        prMetaDataCalculator.countLocales(repository));
+
+    const title = buildTitle(averageCompletion);
 
     let body = '';
+
+    body += buildPullRequestInstructions(averageCompletion);
 
     if (prMetaDataCalculator.countExcludedStrings(repository) > 0) {
         body += buildExcludedStringWarning();
