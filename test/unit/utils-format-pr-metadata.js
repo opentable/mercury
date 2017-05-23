@@ -6,35 +6,21 @@ const metadataFormatter = require('../../src/utils/format-pr-metadata');
 const testData = require('./testData');
 
 describe('metadataFormatter.format()', () => {
-    describe('PR title - happy path', () => {
+    describe('PR title', () => {
         let res;
 
-        describe('WIP', () => {
-            beforeEach((done) => {
-                const repo = testData.postPullRequestFetchInfoRepository;
-                res = metadataFormatter.format(_.cloneDeep(repo));
-                done();
-            });
-
-            it('should include a title for the Pull Request', () => {
-                expect(res.title).to.include('Mercury Pull Request [WIP] - 45.8% Overall Completion');
-            });
+        beforeEach((done) => {
+            const repo = testData.postPullRequestFetchInfoRepository;
+            res = metadataFormatter.format(_.cloneDeep(repo));
+            done();
         });
 
-        describe('COMPLETE', () => {
-            beforeEach((done) => {
-                const repo = testData.postPullRequestFetchInfoRepositoryComplete;
-                res = metadataFormatter.format(_.cloneDeep(repo));
-                done();
-            });
-
-            it('should include a title for the Pull Request', () => {
-                expect(res.title).to.include('Mercury Pull Request [COMPLETE] - 100% Overall Completion');
-            });
+        it('should include a title for the Pull Request', () => {
+            expect(res.title).to.include('Mercury Pull Request (45.8% Overall Completion)');
         });
     });
 
-    describe('PR status - happy path - WIP', () => {
+    describe('PR status - happy path - not complete', () => {
         let res;
 
         beforeEach((done) => {
@@ -74,7 +60,7 @@ describe('metadataFormatter.format()', () => {
         });
     });
 
-    describe('PR status - happy path - COMPLETE', () => {
+    describe('PR status - happy path - complete', () => {
         let res;
 
         beforeEach((done) => {
