@@ -20,8 +20,7 @@ const buildPullRequestInstructions = (averageCompletion) => {
 };
 
 const buildPullRequestStatus = (averageCompletion) => {
-    const status = averageCompletion !== 100 ? '[WIP]' : '[COMPLETE]';
-    return `${status} - ${buildPercentageStat(averageCompletion)} Overall Completion`;
+    return `(${buildPercentageStat(averageCompletion)} Overall Completion)`;
 };
 
 const buildTitle = (averageCompletion) => {
@@ -64,7 +63,7 @@ const format = (repository) => {
 
                 return accumulatorForLocales.concat(`| **${locale.key}** | ${excludedStringCount}${excludedStringCount > 0 ? buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key) : '' } | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`);
             }, ''));
-    },'');
+    }, '');
 
     return {
         body,
