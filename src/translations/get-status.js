@@ -32,7 +32,7 @@ const mapLocaleStatus = (current, status, next) => {
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Getting translations' status from smartling for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`Getting translations' status from smartling for ${repository.owner}/${repository.repo}`);
     
     const smartlingOptions = {
         userIdentifier: config.smartling.userIdentifier,

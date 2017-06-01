@@ -38,7 +38,7 @@ const mapFileObjects = (files) => {
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Getting translations' list from github for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`Getting translations' list from github for ${repository.owner}/${repository.repo}`);
 
     const srcGlobs = _.map(repository.manifestContent.translations, (item) => ({
         src: item.input.src,
@@ -87,7 +87,7 @@ module.exports = (repository, callback) => {
             
             smartling.getProjectInfo(smartlingOptions, (err, info) => {
 
-                loggerService.info(`Getting project info from smartling for ${repository.owner}/${repository.repo}`);
+                loggerService.console(`Getting project info from smartling for ${repository.owner}/${repository.repo}`);
 
                 if(err){
                     loggerService.error(err, errorTypes.failedSmartlingFetchInfo, repository);

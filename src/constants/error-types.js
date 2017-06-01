@@ -6,6 +6,7 @@ module.exports = {
     failedGithubCommit: 'failed-to-commit-file-to-github',
     failedGithubFork: 'failed-to-fork-github-repo',
     failedGithubForkRebase: 'failed-to-rebase-fork-from-upstream',
+    failedRepositoryProcess: 'failed-repository-process',
     failedSmartlingFetchFiles: 'failed-smartling-fetch-files',
     failedSmartlingInfo: 'failed-smartling-fetch-info',
     failedSmartlingGetStatus: 'failed-smartling-get-status',
