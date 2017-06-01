@@ -1,10 +1,13 @@
 'use strict';
 
-const async        = require('async');
-const config       = require('config');
-const manifest     = require('./manifest');
-const resources    = require('./resources');
-const translations = require('./translations');
+const async         = require('async');
+const config        = require('config');
+const errorTypes    = require('./constants/error-types');
+const Logger        = require('./services/logger-service');
+const loggerService = Logger();
+const manifest      = require('./manifest');
+const resources     = require('./resources');
+const translations  = require('./translations');
 
 const processRepo = (repository, next) => {
 
@@ -27,9 +30,12 @@ const processRepo = (repository, next) => {
 
     mercury(repository, (err, repository) => {
         if(err) {
-            console.log(`\ngot an error while processing ${repository.owner}/${repository.repo}:`);
-            console.log(err);
+            loggerService.error(err, errorTypes.failedRepositoryProcess, repository);
         }
+        else {
+            loggerService.info(`Completed processing ${repository.owner}/${repository.repo}`, 'repo-completed');
+        }
+
         next();
     });
 };
@@ -41,9 +47,8 @@ async.eachOfSeries(config.repositories, (repositories, owner, next) => {
         
     }, next);
 }, () => {
-    const date = new Date();
     resources.fetchRequestRateStats(() => {
-        console.log(`\n\nMercury just ran - ${date}`);
+        loggerService.info(`Completed running`, 'run-completed');
         process.exit(0);
     });
 });

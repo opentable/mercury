@@ -8,7 +8,7 @@ const loggerService = Logger();
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Ensuring existence and validity of a Mercury fork for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`Ensuring existence and validity of a Mercury fork for ${repository.owner}/${repository.repo}`);
     
     const options = {
         owner: repository.owner,

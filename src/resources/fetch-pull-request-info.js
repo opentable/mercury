@@ -8,7 +8,7 @@ const loggerService = Logger();
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Verifying existence of pending pull request for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`Verifying existence of pending pull request for ${repository.owner}/${repository.repo}`);
 
     const prOptions = {
         owner: repository.owner,

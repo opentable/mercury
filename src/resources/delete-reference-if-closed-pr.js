@@ -13,7 +13,7 @@ module.exports = (repository, callback) => {
         return callback(null, repository);
     }
 
-    loggerService.info(`Deleting outdated reference for ${repository.mercuryForkOwner}/${repository.repo}`);
+    loggerService.console(`Deleting outdated reference for ${repository.mercuryForkOwner}/${repository.repo}`);
 
     const options = {
         owner: repository.mercuryForkOwner,

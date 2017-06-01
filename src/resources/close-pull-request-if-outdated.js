@@ -12,7 +12,7 @@ module.exports = (repository, callback) => {
         return callback(null, repository);
     }
 
-    loggerService.info(`Closing outdated pull request for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`Closing outdated pull request for ${repository.owner}/${repository.repo}`);
 
     const prOptions = {
         number: repository.prInfo.number,

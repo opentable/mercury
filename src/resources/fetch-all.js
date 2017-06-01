@@ -30,7 +30,7 @@ const getAllGithubFilenames = (repository) => {
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Fetching secondary language files from github for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`Fetching secondary language files from github for ${repository.owner}/${repository.repo}`);
     
     const githubOptions = {
         repo: repository.repo,

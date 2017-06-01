@@ -17,7 +17,7 @@ module.exports = (repository, callback) => {
     const prAlreadyExists = repository.prInfo.found && !repository.prInfo.outdated;
     const action = prAlreadyExists ? 'Updating' : 'Creating';
 
-    loggerService.info(`${action} github pull request for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`${action} github pull request for ${repository.owner}/${repository.repo}`);
     
     const pullRequestMetadata = metadataFormatter.format(repository);
 
