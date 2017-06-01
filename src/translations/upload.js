@@ -11,7 +11,7 @@ const loggerService = Logger();
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Uploading source files to smartling for ${repository.owner}/${repository.repo}`);
+    loggerService.console(`Uploading source files to smartling for ${repository.owner}/${repository.repo}`);
     
     const githubOptions = {
         repo: repository.repo,

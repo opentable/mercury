@@ -9,7 +9,7 @@ const loggerService = Logger();
 
 module.exports = (repository, callback) => {
 
-    loggerService.info(`Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
+    loggerService.console(`Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
     
     const options = {
         branch: repository.manifestContent.workingBranch,
