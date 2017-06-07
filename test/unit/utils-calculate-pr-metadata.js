@@ -5,7 +5,7 @@ const expect = require('chai').expect;
 const metadataCalculator = require('../../src/utils/calculate-pr-metadata');
 const testData = require('./testData');
 
-describe('metadataCalculator.localeSort()', () => {
+describe('metadataCalculator.sortLocales()', () => {
     describe('unsorted array to sorted', () => {
         let res;
         const locales = testData.unsortedLocales;
@@ -34,12 +34,29 @@ describe('metadataCalculator.localeSort()', () => {
     });
 });
 
-describe('metadataCalculator.sumPercentageCompletedOfLocales()', () => {
+describe('metadataCalculator.sumPercentageCompletedByFile()', () => {
+    describe('unsorted array to sorted', () => {
+        let res, sortedLocales;
+        const locales = testData.unsortedLocales;
+
+        beforeEach((done) => {
+            sortedLocales = metadataCalculator.sortLocales(_.cloneDeep(locales));
+            res = metadataCalculator.sumPercentageCompletedByFile(sortedLocales);
+            done();
+        });
+
+        it('should return the percentage completed by file', () => {
+            expect(res).to.equal(87.1);
+        });
+    });
+});
+
+describe('metadataCalculator.sumPercentageCompletedOverall()', () => {
     let res;
 
     beforeEach((done) => {
         const repo = testData.postPullRequestFetchInfoRepository;
-        res = metadataCalculator.sumPercentageCompletedOfLocales(_.cloneDeep(repo));
+        res = metadataCalculator.sumPercentageCompletedOverall(_.cloneDeep(repo));
         done();
     });
 
