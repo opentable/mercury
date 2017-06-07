@@ -6,8 +6,9 @@ const buildExcludedStringWarning = () => {
     return '> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.\n';
 };
 
-const buildHeaderForFile = (file) => {
-    return `\n**Translation status of ${file.src}:**\n\n| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
+const buildHeaderForFile = (file, percentCompletedByFile) => {
+    const stringBreakDownHeader = `| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
+    return `\n**Translation status of \`${file.src}\`: ${percentCompletedByFile}%**\n\n${percentCompletedByFile !== 100 ? stringBreakDownHeader : ''}`;
 };
 
 const buildPercentageStat = (percentage) => {
@@ -15,7 +16,7 @@ const buildPercentageStat = (percentage) => {
 };
 
 const buildPullRequestInstructions = (averageCompletion) => {
-    const status = averageCompletion !== 100 ? '> :white_check_mark: This is safe to merge (even if marked as WIP).\n>\n> If conflicts appear, the likely cause is that translation files were manually changed while Mercury was running.\nIn that case, you can close this PR: a new one will be opened with no conflicts.\n\n' : '';
+    const status = averageCompletion !== 100 ? '> :white_check_mark: This is safe to merge.\n>\n> If conflicts appear, the likely cause is that translation files were manually changed while Mercury was running.\nIn that case, you can close this PR: a new one will be opened with no conflicts.\n\n' : '';
     return status;
 };
 
@@ -34,7 +35,7 @@ const buildExcludedStringLink = (smartlingProjectId, localeKey) => {
 const format = (repository) => {
 
     const averageCompletion = prMetaDataCalculator.calculateAverage(
-        prMetaDataCalculator.sumPercentageCompletedOfLocales(repository),
+        prMetaDataCalculator.sumPercentageCompletedOverall(repository),
         prMetaDataCalculator.countLocales(repository));
 
     const title = buildTitle(averageCompletion);
@@ -52,9 +53,14 @@ const format = (repository) => {
         const totalStringCount = file.totalStringCount;
 
         const sortedLocales = prMetaDataCalculator.sortLocales(file.locales);
+        const percentCompletedByFile = prMetaDataCalculator.sumPercentageCompletedByFile(sortedLocales);
+
+        if(percentCompletedByFile === 100) {
+            return accumulatorForTranslationFiles.concat(buildHeaderForFile(file, percentCompletedByFile));
+        }
 
         return accumulatorForTranslationFiles.concat(
-            buildHeaderForFile(file),
+            buildHeaderForFile(file, percentCompletedByFile),
             sortedLocales.reduce((accumulatorForLocales, locale) => {
                 const localeStatus = locale.value.smartlingStatus;
                 const excludedStringCount = localeStatus.excludedStringCount || 0;
