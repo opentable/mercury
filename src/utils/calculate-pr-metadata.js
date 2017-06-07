@@ -29,28 +29,38 @@ const countExcludedStrings = (repository) => {
             .value();
 };
 
-const sumPercentageCompletedOfLocales = (repo) => {
+const sumPercentageCompletedByFile = (locales) => {
+    let totalLocales = 0
+    const totalCompleted = _.reduce(locales, (sum, locale) => {
+        totalLocales++;
+        return sum + locale.value.smartlingStatus.percentCompleted;
+    }, 0);
+
+    return calculateAverage(totalCompleted, totalLocales); 
+};
+
+const sumPercentageCompletedOverall = (repo) => {
     return _.chain(repo.translationFiles)
-        .map(translationFile => _.values(translationFile.locales))
-        .flatten()
-        .map(locale => locale.smartlingStatus.percentCompleted)
-        .reduce((sum, n) => sum + n, 0)
-        .value();
+            .map(translationFile => _.values(translationFile.locales))
+            .flatten()
+            .map(locale => locale.smartlingStatus.percentCompleted)
+            .reduce((sum, n) => sum + n, 0)
+            .value();
 };
 
 const sortLocales = (locales) => {
-    return  _
-        .chain(Object.keys(locales))
-        .map((key) => { return {  key, value: locales[key] } })
-        .sortBy((o) => { return o.key } )
-        .value();
+    return _.chain(Object.keys(locales))
+            .map((key) => { return {  key, value: locales[key] } })
+            .sortBy((o) => { return o.key } )
+            .value();
 };
 
 module.exports = {
     calculateAverage,
     calculatePercent,
     countExcludedStrings,
-    sumPercentageCompletedOfLocales,
+    sumPercentageCompletedByFile,
+    sumPercentageCompletedOverall,
     countLocales,
     sortLocales
 }
