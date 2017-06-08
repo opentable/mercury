@@ -34,7 +34,7 @@ describe('metadataFormatter.format()', () => {
         });
 
         it('should include instructions on how to manage the PR', () => {
-            expect(res.body).to.include('> :white_check_mark: This is safe to merge.\n>\n> If conflicts appear, the likely cause is that translation files were manually changed while Mercury was running.\nIn that case, you can close this PR: a new one will be opened with no conflicts.\n\n');
+            expect(res.body).to.include('> :white_check_mark: This is safe to merge. If merge conflicts appear, you can close this PR and Mercury will open a new, rebased PR for you.\n\n');
         });
 
         it('should include a headline for src/locales/en-us/file.json', () => {
@@ -114,7 +114,7 @@ describe('metadataFormatter.format()', () => {
         });
 
         it('should include instructions on how to manage the PR', () => {
-            expect(res.body).to.include('> :white_check_mark: This is safe to merge.\n>\n> If conflicts appear, the likely cause is that translation files were manually changed while Mercury was running.\nIn that case, you can close this PR: a new one will be opened with no conflicts.\n\n');
+            expect(res.body).to.include('> :white_check_mark: This is safe to merge. If merge conflicts appear, you can close this PR and Mercury will open a new, rebased PR for you.\n\n');
         });
 
         it('should include a headline for src/locales/en-us/file.json', () => {
