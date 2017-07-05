@@ -1,37 +1,54 @@
-const config = require('config');
-const logger = require('ot-logger');
+const config            = require('config').logging;
+const globalSchema      = require('ot-loglov3-schemas');
+const Logger            = require('ot-logger');
+const loggerEnvironment = require('./logger-environment');
+const pkg               = require('../../package.json');
 
-const opts   = {
-    servicetype: 'mercury',
-    formatversion: 'v1',
-    environment: config.logging.environment
-}
+const loggerInfo = loggerEnvironment.getEnvironmentInfo();
 
-logger.init(opts);
+const logger = new Logger({
+    logstash: config.logStash,
+    console: config.console,
+    logstashEnvironment: loggerInfo.environment,
+    globalSchema,
+    throwValidationExceptions: config.throwValidationExceptions
+}, {
+    'component-id': 'mercury',
+    'ot-env': `${loggerInfo.envType}-${loggerInfo.envLocation}`,
+    'ot-env-type': loggerInfo.envType,
+    'ot-env-location': loggerInfo.envLocation,
+    'application-version': pkg.version,
+    'host': process.env.TASK_HOST || 'localhost',
+    'service-type': 'mercury'
+});
 
-const log = (type, msg, metadata) => {
-    if(config.logging.logStash){
-        logger.log(type, msg, metadata);
-    }
-}
+const infoLogger = logger.create({
+    '@loglov3-otl': 'mercury-info-v1',
+    'log-name': 'info'   
+});
+
+const errorLogger = logger.create({
+    '@loglov3-otl': 'mercury-error-v1',
+    'log-name': 'error'				
+});
 
 module.exports = () => {
 
-    const buildErrorMetaData = (error, errortype, options) => {
+    const buildErrorMessage = (error, errorType, options) => {
         return {
-            errordetails: error || '',
-            errortype,
-            logname: 'error',
-            path : options.path,
-            failingrepository : options.repo,
-            failingrepositoryowner: options.owner
+            'error-details': JSON.stringify(error) || '',
+            'error-type': errorType,
+            path : options.path || '',
+            'failing-repository' : options.repo,
+            'failing-repository-owner': options.owner,
+            'message': JSON.stringify(error)
         };
     };
 
-    const buildInfoMetaData = (infotype) => {
+    const buildInfoMessage = (msg, infoType) => {
         return {
-            logname: 'info',
-            infotype
+            'info-type': infoType,
+            'message': msg
         };
     };
 
@@ -41,17 +58,17 @@ module.exports = () => {
             owner: repository.owner
         };
 
-        const metadata = buildErrorMetaData(error, errorType, options);
-        log('error', error.toString(), metadata);
+        const message = buildErrorMessage(error, errorType, options);
+        errorLogger.error(message);
     };
 
     const info = (msg, infoType) => {
-        const metadata = buildInfoMetaData(infoType);
-        log('info', msg, metadata);
+        const message = buildInfoMessage(msg, infoType);
+        infoLogger.info(message);
     };
 
     const consoleLog = (msg) => {
-        if(config.logging.console){
+        if(config.console){
             console.log(`[${new Date()}] ${msg}`);
         }
     };
