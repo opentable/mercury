@@ -7,10 +7,4 @@ Please refer to the [Mercury integration runbook](https://github.com/opentable/m
 
 # Mercury Maintainer Guide
 
-#### PP Dashboards
-
-* Kibana: http://kibana-qa.otenv.com/kibana/#/dashboard/elasticsearch/mercury
-
-#### PROD Dashboards
-
-* Kibana: http://kibana.otenv.com/#/dashboard/elasticsearch/mercury
+#### [PROD Dashboard](http://loglov3.otenv.com/app/kibana#/dashboard/9409a8f0-6192-11e7-a44d-6337dbecff74)
