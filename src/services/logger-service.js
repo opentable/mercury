@@ -36,12 +36,11 @@ module.exports = () => {
 
     const buildErrorMessage = (error, errorType, options) => {
         return {
-            'error-details': JSON.stringify(error) || '',
             'error-type': errorType,
             path : options.path || '',
             'failing-repository' : options.repo,
             'failing-repository-owner': options.owner,
-            'message': JSON.stringify(error)
+            'message': error.message || ''
         };
     };
 
