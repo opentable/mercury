@@ -29,7 +29,7 @@ const processRepo = (repository, next) => {
 
     mercury(repository, (err, repository) => {
         if(err) {
-            loggerService.info(`Attempted processing ${repository.owner}/${repository.repo} with errors`, 'repo-not-completed');
+            loggerService.info(`Attempted processing ${repository.owner}/${repository.repo} with errors`, 'repo-skipped');
         }
         else {
             loggerService.info(`Completed processing ${repository.owner}/${repository.repo} without errors`, 'repo-completed');
