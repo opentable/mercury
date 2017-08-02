@@ -2,7 +2,6 @@
 
 const async         = require('async');
 const config        = require('config');
-const errorTypes    = require('./constants/error-types');
 const Logger        = require('./services/logger-service');
 const loggerService = Logger();
 const manifest      = require('./manifest');
@@ -30,10 +29,10 @@ const processRepo = (repository, next) => {
 
     mercury(repository, (err, repository) => {
         if(err) {
-            loggerService.error(err, errorTypes.failedRepositoryProcess, repository);
+            loggerService.info(`Attempted processing ${repository.owner}/${repository.repo} with errors`, 'repo-not-completed');
         }
         else {
-            loggerService.info(`Completed processing ${repository.owner}/${repository.repo}`, 'repo-completed');
+            loggerService.info(`Completed processing ${repository.owner}/${repository.repo} without errors`, 'repo-completed');
         }
 
         next();
