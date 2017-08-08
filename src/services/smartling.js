@@ -5,7 +5,7 @@ const path      = require('path');
 const request   = require('request');
 
 const BASE_URL = 'https://api.smartling.com/';
-const MAX_CONCURRENT_OPERATIONS = 20;
+const MAX_CONCURRENT_OPERATIONS = 5;
 
 const authenticate = (options, next) => {
     const authenticateOptions = {
