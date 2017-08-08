@@ -1,8 +1,10 @@
 'use strict';
 
-const _         = require('lodash');
-const path      = require('path');
-const request   = require('request');
+const _ = require('lodash');
+const fs = require('fs');
+const needle = require('needle');
+const path = require('path');
+const request = require('request');
 
 const BASE_URL = 'https://api.smartling.com/';
 const MAX_CONCURRENT_OPERATIONS = 5;
@@ -17,14 +19,14 @@ const authenticate = (options, next) => {
             userSecret: options.userSecret
         }
     }
-    
+
     request(authenticateOptions, (err, response, body) => {
         const accessToken = _.get(body, 'response.data.accessToken');
-        
-        if(!accessToken) {
+
+        if (!accessToken) {
             return next(new Error(`Error when retrieving Smartling access token`))
         }
-        
+
         next(err, accessToken);
     });
 };
@@ -34,7 +36,7 @@ module.exports = {
     fetchFile: (options, next) => {
         authenticate(options, (err, accessToken) => {
 
-            if(err){ return next(err); }
+            if (err) { return next(err); }
 
             const reqDetails = {
                 url: `${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`,
@@ -42,10 +44,10 @@ module.exports = {
             };
 
             request(reqDetails, (err, response, body) => {
-                if(err || response.statusCode !== 200) {
+                if (err || response.statusCode !== 200) {
                     return next(new Error(`Error when downloading Smartling Resource (${response.statusCode} - ${JSON.stringify(body)})`));
                 }
-                                
+
                 next(null, body);
             });
         });
@@ -54,7 +56,7 @@ module.exports = {
     getProjectInfo: (options, next) => {
         authenticate(options, (err, accessToken) => {
 
-            if(err){ return next(err); }
+            if (err) { return next(err); }
 
             const reqDetails = {
                 url: `${BASE_URL}projects-api/v2/projects/${options.projectId}`,
@@ -63,19 +65,19 @@ module.exports = {
             };
 
             request(reqDetails, (err, response, body) => {
-                if(err || response.statusCode !== 200) {
-                    return next(new Error('Error when downloading Smartling project Info (${response.statusCode} - ${JSON.stringify(body)})'));
+                if (err || response.statusCode !== 200) {
+                    return next(new Error(`Error when downloading Smartling project Info (${response.statusCode} - ${JSON.stringify(body)})`));
                 }
-                                
+
                 next(null, body.response.data);
             });
         });
     },
-    
+
     getStatus: (options, next) => {
         authenticate(options, (err, accessToken) => {
-            
-            if(err){ return next(err); }
+
+            if (err) { return next(err); }
 
             const reqDetails = {
                 url: `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`,
@@ -85,12 +87,12 @@ module.exports = {
                 },
                 json: true
             };
-            
+
             request(reqDetails, (err, response, body) => {
-                if(err || response.statusCode !== 200) {
+                if (err || response.statusCode !== 200) {
                     return next(new Error('Error when downloading Smartling status info (${response.statusCode} - ${JSON.stringify(body)})'));
                 }
-                                
+
                 next(null, body.response.data);
             });
         });
@@ -100,18 +102,18 @@ module.exports = {
 
     uploadFileContent: (content, options, next) => {
         authenticate(options, (err, accessToken) => {
-            
-            if(err) {
+
+            if (err) {
                 return next(err);
             }
-                                                
+
+            const buffer = fs.readFileSync('/Users/fmaffei/Documents/git/opentable/mercury/src/services/test/test.json');
+
             const smartlingFormData = {
                 file: {
-                    value: content,
-                    options: {
-                        filename: path.basename(options.path),
-                        contentType: 'application/json'
-                    }
+                    buffer,
+                    filename: path.basename(options.path),
+                    content_type: 'application/octet-stream'
                 },
                 fileUri: options.path,
                 fileType: path.extname(options.path).replace('.', ''),
@@ -119,22 +121,31 @@ module.exports = {
             };
 
             const smartlingUploadOptions = {
-                url: `${BASE_URL}files-api/v2/projects/${options.projectId}/file`,
-                method: 'POST',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
-                formData: smartlingFormData
+                multipart: true
             }
-            
-            request(smartlingUploadOptions, (err, response, body) => {
-                                
-                if(err || response.statusCode !== 200) {
+
+            needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response) {
+
+                console.log(response.body);
+
+                if (err || response.statusCode !== 200) {
                     return next(new Error('Error when uploading Smartling file'));
                 }
-                                
-                next(null, JSON.parse(body));
+
+                next(null, response.body);
             });
+
+            // request(smartlingUploadOptions, (err, response, body) => {
+
+            //     if (err || response.statusCode !== 200) {
+            //         return next(new Error('Error when uploading Smartling file'));
+            //     }
+
+            //     next(null, JSON.parse(body));
+            // });
         });
     }
 }
