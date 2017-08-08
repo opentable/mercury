@@ -1,13 +1,12 @@
 'use strict';
 
 const _ = require('lodash');
-const fs = require('fs');
 const needle = require('needle');
 const path = require('path');
 const request = require('request');
 
 const BASE_URL = 'https://api.smartling.com/';
-const MAX_CONCURRENT_OPERATIONS = 5;
+const MAX_CONCURRENT_OPERATIONS = 20;
 
 const authenticate = (options, next) => {
     const authenticateOptions = {
@@ -90,7 +89,7 @@ module.exports = {
 
             request(reqDetails, (err, response, body) => {
                 if (err || response.statusCode !== 200) {
-                    return next(new Error('Error when downloading Smartling status info (${response.statusCode} - ${JSON.stringify(body)})'));
+                    return next(new Error(`Error when downloading Smartling status info (${response.statusCode} - ${JSON.stringify(body)})`));
                 }
 
                 next(null, body.response.data);
@@ -107,7 +106,7 @@ module.exports = {
                 return next(err);
             }
 
-            const buffer = fs.readFileSync('/Users/fmaffei/Documents/git/opentable/mercury/src/services/test/test.json');
+            const buffer = Buffer.from(content);
 
             const smartlingFormData = {
                 file: {
@@ -125,27 +124,15 @@ module.exports = {
                     Authorization: `Bearer ${accessToken}`
                 },
                 multipart: true
-            }
+            };
 
             needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response) {
-
-                console.log(response.body);
-
                 if (err || response.statusCode !== 200) {
                     return next(new Error('Error when uploading Smartling file'));
                 }
 
                 next(null, response.body);
             });
-
-            // request(smartlingUploadOptions, (err, response, body) => {
-
-            //     if (err || response.statusCode !== 200) {
-            //         return next(new Error('Error when uploading Smartling file'));
-            //     }
-
-            //     next(null, JSON.parse(body));
-            // });
         });
     }
 }
