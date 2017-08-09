@@ -23,7 +23,7 @@ const authenticate = (options, next) => {
         const accessToken = _.get(body, 'response.data.accessToken');
 
         if (!accessToken) {
-            return next(new Error(`Error when retrieving Smartling access token`))
+            return next(new Error(`Error when retrieving Smartling access token`));
         }
 
         next(err, accessToken);
@@ -102,8 +102,9 @@ module.exports = {
     uploadFileContent: (content, options, next) => {
         authenticate(options, (err, accessToken) => {
 
-            if (err) {
-                return next(err);
+            if (err || !content) {
+                const error = !content ? new Error(`Error when uploading Smartling file with null content`) : err;
+                return next(error);
             }
 
             const buffer = Buffer.from(content);
@@ -128,7 +129,7 @@ module.exports = {
 
             needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response) {
                 if (err || response.statusCode !== 200) {
-                    return next(new Error('Error when uploading Smartling file'));
+                    return next(new Error(`Error on request when uploading Smartling file`));
                 }
 
                 next(null, response.body);
