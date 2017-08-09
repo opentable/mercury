@@ -43,6 +43,7 @@
     "js-yaml": "^3.7.0",
     "lodash": "^4.17.4",
     "micromatch": "^2.3.11",
+    "needle": "^1.6.0",
     "ot-logger": "^3.0.2",
     "ot-loglov3-schemas": "^1.0.186",
     "parse-glob": "^3.0.4",
