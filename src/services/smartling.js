@@ -44,7 +44,7 @@ module.exports = {
 
             request(reqDetails, (err, response, body) => {
                 if (err || response.statusCode !== 200) {
-                    return next(new Error(`Error when downloading Smartling Resource (${response.statusCode} - ${JSON.stringify(body)})`));
+                    return next(new Error(err));
                 }
 
                 next(null, body);
@@ -65,7 +65,7 @@ module.exports = {
 
             request(reqDetails, (err, response, body) => {
                 if (err || response.statusCode !== 200) {
-                    return next(new Error(`Error when downloading Smartling project Info (${response.statusCode} - ${JSON.stringify(body)})`));
+                    return next(new Error(err));
                 }
 
                 next(null, body.response.data);
@@ -89,7 +89,7 @@ module.exports = {
 
             request(reqDetails, (err, response, body) => {
                 if (err || response.statusCode !== 200) {
-                    return next(new Error(`Error when downloading Smartling status info (${response.statusCode} - ${JSON.stringify(body)})`));
+                    return next(new Error(err));
                 }
 
                 next(null, body.response.data);
@@ -129,7 +129,7 @@ module.exports = {
 
             needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response) {
                 if (err || response.statusCode !== 200) {
-                    return next(new Error(`Error on request when uploading Smartling file`));
+                    return next(new Error(err));
                 }
 
                 next(null, response.body);
