@@ -3,23 +3,22 @@
 const _ = require('lodash');
 const needle = require('needle');
 const path = require('path');
-const request = require('request');
 
 const BASE_URL = 'https://api.smartling.com/';
 const MAX_CONCURRENT_OPERATIONS = 20;
 
 const authenticate = (options, next) => {
-    const authenticateOptions = {
-        url: `${BASE_URL}auth-api/v2/authenticate`,
-        method: 'POST',
-        json: true,
-        body: {
-            userIdentifier: options.userIdentifier,
-            userSecret: options.userSecret
-        }
+    const authenticateBody = {
+        userIdentifier: options.userIdentifier,
+        userSecret: options.userSecret
+    };
+
+    const reqDetails = {
+        json: true
     }
 
-    request(authenticateOptions, (err, response, body) => {
+    needle.post(`${BASE_URL}auth-api/v2/authenticate`, authenticateBody, reqDetails, (err, response, body) => {
+
         const accessToken = _.get(body, 'response.data.accessToken');
 
         if (!accessToken) {
@@ -38,16 +37,15 @@ module.exports = {
             if (err) { return next(err); }
 
             const reqDetails = {
-                url: `${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`,
                 headers: { Authorization: `Bearer ${accessToken}` }
             };
 
-            request(reqDetails, (err, response, body) => {
+            needle.get(`${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`, reqDetails, (err, response, body) => {
                 if (err || response.statusCode !== 200) {
-                    return next(new Error(err));
+                    return next(new Error(`Error when retrieving translations content for ${options.fileName}`));
                 }
 
-                next(null, body);
+                next(null, body.toString());
             });
         });
     },
@@ -58,17 +56,18 @@ module.exports = {
             if (err) { return next(err); }
 
             const reqDetails = {
-                url: `${BASE_URL}projects-api/v2/projects/${options.projectId}`,
-                headers: { Authorization: `Bearer ${accessToken}` },
-                json: true
+                headers: { Authorization: `Bearer ${accessToken}` }
             };
 
-            request(reqDetails, (err, response, body) => {
-                if (err || response.statusCode !== 200) {
-                    return next(new Error(err));
+            needle.get(`${BASE_URL}projects-api/v2/projects/${options.projectId}`, reqDetails, (err, response, body) => {
+
+                const info = _.get(body, 'response.data');
+
+                if (err || !info || response.statusCode !== 200) {
+                    return next(new Error(`Error when retrieving Smartling project info for ${options.projectId}`));
                 }
 
-                next(null, body.response.data);
+                next(null, info);
             });
         });
     },
@@ -78,21 +77,23 @@ module.exports = {
 
             if (err) { return next(err); }
 
-            const reqDetails = {
-                url: `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`,
-                headers: { Authorization: `Bearer ${accessToken}` },
-                qs: {
-                    fileUri: options.fileUri
-                },
-                json: true
+            const queryString = { 
+                fileUri: options.fileUri 
             };
 
-            request(reqDetails, (err, response, body) => {
-                if (err || response.statusCode !== 200) {
-                    return next(new Error(err));
+            const reqDetails = {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            };
+
+            needle.request('get', `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`, queryString, reqDetails, (err, response, body) => {
+
+                const status = _.get(body, 'response.data');
+
+                if (err || !status || response.statusCode !== 200) {
+                    return next(new Error(`Error when retrieving translation status for ${options.fileUri}`));
                 }
 
-                next(null, body.response.data);
+                next(null, status);
             });
         });
     },
