@@ -47,7 +47,6 @@
     "ot-logger": "^3.0.2",
     "ot-loglov3-schemas": "^1.0.186",
     "parse-glob": "^3.0.4",
-    "request": "^2.79.0",
     "string-to-template": "^1.0.0",
     "utf8": "^2.1.2"
   }
