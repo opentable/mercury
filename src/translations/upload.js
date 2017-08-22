@@ -1,11 +1,12 @@
 'use strict';
 
-const _         = require('lodash');
-const async     = require('async');
-const config    = require('config');
-const github    = require('../services/github');
-const Logger    = require('../services/logger-service');
-const smartling = require('../services/smartling');
+const _          = require('lodash');
+const async      = require('async');
+const config     = require('config');
+const errorTypes = require('../constants/error-types');
+const github     = require('../services/github');
+const Logger     = require('../services/logger-service');
+const smartling  = require('../services/smartling');
 
 const loggerService = Logger();
 
@@ -42,7 +43,7 @@ module.exports = (repository, callback) => {
                 
                 if(err) {
                     repository.translationFiles[index].report = err.message;
-                    return callback();
+                    return callback(err);
                 }
                                                                 
                 if(smartlingUploadResult.response.data && smartlingUploadResult.response.data.overWritten) {
@@ -55,6 +56,12 @@ module.exports = (repository, callback) => {
             });
         });
     }, (err) => {
+
+        if(err){
+            loggerService.error(err, errorTypes.failedSmartlingUploadFiles, repository);
+            repository.skip = true;
+        }
+
         callback(err, repository);
     });
 }
