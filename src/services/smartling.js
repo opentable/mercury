@@ -109,15 +109,17 @@ module.exports = {
             }
 
             const buffer = Buffer.from(content);
+            const filename = path.basename(options.path);
+            const fileType = path.extname(options.path).replace('.', '');
 
             const smartlingFormData = {
                 file: {
                     buffer,
-                    filename: path.basename(options.path),
+                    filename,
                     content_type: 'application/octet-stream'
                 },
                 fileUri: options.path,
-                fileType: path.extname(options.path).replace('.', ''),
+                fileType: ['yml', 'yaml'].includes(fileType) ? 'yaml' : fileType,
                 authorize: 'true'
             };
 
@@ -131,7 +133,7 @@ module.exports = {
             needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response, body) {
 
                 if (err || response.statusCode !== 200) {
-                    return next(new Error(err));
+                    return next(new Error(`Error when uploading Smartling file`));
                 }
 
                 next(null, body);
