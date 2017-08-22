@@ -128,12 +128,13 @@ module.exports = {
                 multipart: true
             };
 
-            needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response) {
+            needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response, body) {
+
                 if (err || response.statusCode !== 200) {
                     return next(new Error(err));
                 }
 
-                next(null, response.body);
+                next(null, body);
             });
         });
     }

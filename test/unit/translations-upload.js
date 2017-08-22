@@ -77,8 +77,11 @@ describe('translations.upload()', () => {
         });
         
         it('should append the error report to the translationFiles', () => {
-            expect(err).to.be.null;
             expect(res.translationFiles[0].report).to.be.eql('Error when uploading Smartling file');
+        });
+
+        it('should create an error with a descriptive message', () => {
+            expect(err.message).to.be.eql('Error when uploading Smartling file');
         });
     });
 });
