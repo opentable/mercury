@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const mapSmartlingFiletype = require('../utils/map-smartling-filetype');
 const needle = require('needle');
 const path = require('path');
 
@@ -110,7 +111,7 @@ module.exports = {
 
             const buffer = Buffer.from(content);
             const filename = path.basename(options.path);
-            const fileType = path.extname(options.path).replace('.', '');
+            const extension = path.extname(options.path).replace('.', '');
 
             const smartlingFormData = {
                 file: {
@@ -119,7 +120,7 @@ module.exports = {
                     content_type: 'application/octet-stream'
                 },
                 fileUri: options.path,
-                fileType: ['yml', 'yaml'].includes(fileType) ? 'yaml' : fileType,
+                fileType: mapSmartlingFiletype.map(extension),
                 authorize: 'true'
             };
 
