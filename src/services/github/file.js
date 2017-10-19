@@ -32,7 +32,7 @@ module.exports = (github) => ({
                     console.log(`Github file content request returning no values.`);
                     console.log(typeof f);                    
                     console.log(JSON.stringify(f));
-                    return next(error, result);
+                    return next(error);
                 }
             };
             const content = !err && file ? getContent(file) : null;
