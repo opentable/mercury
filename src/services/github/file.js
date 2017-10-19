@@ -25,7 +25,15 @@ module.exports = (github) => ({
         const authenticatedGithub = utils.authenticateGithubOperation('read', github);
         
         authenticatedGithub.repos.getContent(options, (err, file) => {
-            const getContent = f => new Buffer(f.content, f.encoding).toString();
+            const getContent = f => {
+                try {
+                    return new Buffer(f.content, f.encoding).toString();        
+                } catch(error) {
+                    console.log(`Github file content request returning no values.`);
+                    console.log(JSON.stringify(f));
+                    return next(error, result);
+                }
+            };
             const content = !err && file ? getContent(file) : null;
             const sha = !err && file ? file.sha : null;
             const result = {
