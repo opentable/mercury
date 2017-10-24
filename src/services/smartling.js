@@ -119,7 +119,7 @@ module.exports = {
                     content_type: 'application/octet-stream'
                 },
                 fileUri: options.path,
-                fileType: mapSmartlingFiletype.isXml(extension) ? mapSmartlingFiletype.mapXml(content) : mapSmartlingFiletype.map(extension),
+                fileType: mapSmartlingFiletype.map(extension),
                 authorize: 'true'
             };
 
