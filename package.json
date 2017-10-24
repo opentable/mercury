@@ -48,6 +48,7 @@
     "ot-loglov3-schemas": "^1.0.186",
     "parse-glob": "^3.0.4",
     "string-to-template": "^1.0.0",
-    "utf8": "^2.1.2"
+    "utf8": "^2.1.2",
+    "xml-js": "^1.5.1"
   }
 }
