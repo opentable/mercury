@@ -111,8 +111,7 @@ module.exports = {
 
             const buffer = Buffer.from(content);
             const filename = path.basename(options.path);
-            const extension = path.extname(options.path).replace('.', '');
-
+            const extension = path.extname(options.path).replace('.', '').toLowerCase();
             const smartlingFormData = {
                 file: {
                     buffer,
@@ -120,7 +119,7 @@ module.exports = {
                     content_type: 'application/octet-stream'
                 },
                 fileUri: options.path,
-                fileType: mapSmartlingFiletype.map(extension),
+                fileType: mapSmartlingFiletype.map(content, extension),
                 authorize: 'true'
             };
 
@@ -132,7 +131,6 @@ module.exports = {
             };
 
             needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function (err, response, body) {
-
                 if (err || response.statusCode !== 200) {
                     return next(new Error(`Error when uploading Smartling file`));
                 }
