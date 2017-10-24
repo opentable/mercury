@@ -112,7 +112,6 @@ module.exports = {
             const buffer = Buffer.from(content);
             const filename = path.basename(options.path);
             const extension = path.extname(options.path).replace('.', '');
-
             const smartlingFormData = {
                 file: {
                     buffer,
@@ -120,7 +119,7 @@ module.exports = {
                     content_type: 'application/octet-stream'
                 },
                 fileUri: options.path,
-                fileType: mapSmartlingFiletype.map(extension),
+                fileType: mapSmartlingFiletype.isXml(extension) ? mapSmartlingFiletype.mapXml(content) : mapSmartlingFiletype.map(extension),
                 authorize: 'true'
             };
 
