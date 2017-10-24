@@ -111,7 +111,7 @@ module.exports = {
 
             const buffer = Buffer.from(content);
             const filename = path.basename(options.path);
-            const extension = path.extname(options.path).replace('.', '');
+            const extension = path.extname(options.path).replace('.', '').toLowerCase();
             const smartlingFormData = {
                 file: {
                     buffer,
