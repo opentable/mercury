@@ -23,7 +23,7 @@ module.exports = {
         return smartlingFileType ? smartlingFileType : 'unknown';
     },
     mapXml: (content) => {
-        const result = convert.xml2js(content, { compact: true });
+        const result = convert.xml2js(content, { compact: true, ignoreComment: true });
         return (Object.keys(result)[0]) === 'resources' ? 'android' : 'xml';
     }
 };

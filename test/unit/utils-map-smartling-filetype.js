@@ -31,6 +31,7 @@ describe('mapSmartlingFiletype.isXml()', () => {
 describe('mapSmartlingFiletype.mapXml()', () => {
     it('should correctly return android or custom xml filetype depending on the contents of the file', () => {
         expect(mapSmartlingFiletype.mapXml('<resources><string name="test_string">Test XML</string></resources>')).to.equal('android');
+        expect(mapSmartlingFiletype.mapXml('<!-- smartling.instruction_comments_enabled = on --><resources><string name="test_string">Test XML</string><!-- smartling.instruction_comments_enabled = off --></resources>')).to.equal('android');
         expect(mapSmartlingFiletype.mapXml('<data><string name="home-button">Smartling Hotels</string></data>')).to.equal('xml');     
     });
 });
