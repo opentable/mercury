@@ -9,7 +9,7 @@ describe('metadataFormatter.format()', () => {
     describe('PR title', () => {
         let res;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             const repo = testData.postPullRequestFetchInfoRepository;
             res = metadataFormatter.format(_.cloneDeep(repo));
             done();
@@ -23,14 +23,16 @@ describe('metadataFormatter.format()', () => {
     describe('PR status - happy path - not complete', () => {
         let res;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             const repo = testData.postPullRequestFetchInfoRepository;
             res = metadataFormatter.format(_.cloneDeep(repo));
             done();
         });
 
         it('should not include an excluded string warning', () => {
-            expect(res.body).to.not.include('> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.');
+            expect(res.body).to.not.include(
+                '> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.'
+            );
         });
 
         it('should include instructions on how to manage the PR', () => {
@@ -63,14 +65,16 @@ describe('metadataFormatter.format()', () => {
     describe('PR status - happy path - complete', () => {
         let res;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             const repo = testData.postPullRequestFetchInfoRepositoryComplete;
             res = metadataFormatter.format(_.cloneDeep(repo));
             done();
         });
 
         it('should not include an excluded string warning', () => {
-            expect(res.body).to.not.include('> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.');
+            expect(res.body).to.not.include(
+                '> :warning: WARNING\n>\n> Your project contains excluded strings. This typically indicates strings that are being managed outside of Smartling workflow. See [Mercury FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md) for more information.'
+            );
         });
 
         it('should not include instructions on how to manage the PR', () => {
@@ -103,7 +107,7 @@ describe('metadataFormatter.format()', () => {
     describe('PR status - excluded strings', () => {
         let res;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             const repo = testData.postPullRequestFetchInfoRepositoryWithExcludedStrings;
             res = metadataFormatter.format(_.cloneDeep(repo));
             done();
@@ -139,7 +143,7 @@ describe('metadataFormatter.format()', () => {
     describe('missing smartlingStatus', () => {
         let res;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             const repo = testData.postPullRequestFetchInfoRepository;
             repo.translationFiles[0].locales['de-DE'].smartlingStatus = {};
             res = metadataFormatter.format(_.cloneDeep(repo));

@@ -1,17 +1,17 @@
 'use strict';
 
-const expect  = require('chai').expect;
+const expect = require('chai').expect;
 const injectr = require('injectr');
-const sinon   = require('sinon');
+const sinon = require('sinon');
 
 describe('manifest.fetch()', () => {
-
-    const getMockedFetch = (getFileStub, getFileChangedInfoStub) => injectr('../../src/manifest/fetch.js', {
-        '../services/github': {
-            getFile: getFileStub,
-            getFileChangedInfo: getFileChangedInfoStub
-        }
-    });
+    const getMockedFetch = (getFileStub, getFileChangedInfoStub) =>
+        injectr('../../src/manifest/fetch.js', {
+            '../services/github': {
+                getFile: getFileStub,
+                getFileChangedInfo: getFileChangedInfoStub
+            }
+        });
 
     let error, result;
 
@@ -22,18 +22,19 @@ describe('manifest.fetch()', () => {
     };
 
     describe('when fetch succeeds', () => {
-
         describe('when content is valid', () => {
-
             beforeEach(done => {
                 const getFileStub = sinon.stub().yields(null, { content: JSON.stringify({ hello: 'world' }) });
                 const getFileChangedInfoStub = sinon.stub().yields(null, '2011-04-14T16:00:49Z');
                 const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
 
-                fetch({
-                    owner: 'opentable',
-                    repo: 'hobknob'
-                }, next(done));
+                fetch(
+                    {
+                        owner: 'opentable',
+                        repo: 'hobknob'
+                    },
+                    next(done)
+                );
             });
 
             it('should append parsed content and last updated to repository', () => {
@@ -48,16 +49,18 @@ describe('manifest.fetch()', () => {
         });
 
         describe('when content is not valid', () => {
-
             beforeEach(done => {
                 const getFileStub = sinon.stub().yields(null, 'a-string');
                 const getFileChangedInfoStub = sinon.stub().yields(null, '2011-04-14T16:00:49Z');
                 const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
 
-                fetch({
-                    owner: 'opentable',
-                    repo: 'hobknob'
-                }, next(done));
+                fetch(
+                    {
+                        owner: 'opentable',
+                        repo: 'hobknob'
+                    },
+                    next(done)
+                );
             });
 
             it('should show an error', () => {
@@ -70,16 +73,18 @@ describe('manifest.fetch()', () => {
         });
 
         describe('when content is valid but info fetch fails', () => {
-
             beforeEach(done => {
                 const getFileStub = sinon.stub().yields(null, { content: JSON.stringify({ hello: 'world' }) });
                 const getFileChangedInfoStub = sinon.stub().yields('an error!');
                 const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
 
-                fetch({
-                    owner: 'opentable',
-                    repo: 'hobknob'
-                }, next(done));
+                fetch(
+                    {
+                        owner: 'opentable',
+                        repo: 'hobknob'
+                    },
+                    next(done)
+                );
             });
 
             it('should show an error', () => {
@@ -93,16 +98,18 @@ describe('manifest.fetch()', () => {
     });
 
     describe('when fetch fails', () => {
-
         beforeEach(done => {
             const getFileStub = sinon.stub().yields(new Error('404 file not found'));
             const getFileChangedInfoStub = sinon.stub().yields(null, '2011-04-14T16:00:49Z');
             const fetch = getMockedFetch(getFileStub, getFileChangedInfoStub);
 
-            fetch({
-                owner: 'opentable',
-                repo: 'hobknob'
-            }, next(done));
+            fetch(
+                {
+                    owner: 'opentable',
+                    repo: 'hobknob'
+                },
+                next(done)
+            );
         });
 
         it('should show an error', () => {

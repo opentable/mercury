@@ -1,37 +1,34 @@
 'use strict';
 
-const _        = require('lodash');
-const async    = require('async');
-const expect   = require('chai').expect;
-const injectr  = require('injectr');
-const sinon    = require('sinon');
+const _ = require('lodash');
+const async = require('async');
+const expect = require('chai').expect;
+const injectr = require('injectr');
+const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.commitFiles()', () => {
-
-    const mockedCommitFiles = (githubGetFileStub, githubCreateFileStub, githubUpdateFileStub) => injectr('../../src/resources/commit-files.js', {
-        '../services/github': {
-            getFile: githubGetFileStub,
-            createFile: githubCreateFileStub,
-            updateFile: githubUpdateFileStub
-        },
-        async: {
-            eachOfSeries: async.eachOfSeries,
-            eachSeries: async.eachSeries,
-            retry: (policy, fn, cb) => async.retry({ times: 5, interval: 0 }, fn, cb)
-        }
-    });
+    const mockedCommitFiles = (githubGetFileStub, githubCreateFileStub, githubUpdateFileStub) =>
+        injectr('../../src/resources/commit-files.js', {
+            '../services/github': {
+                getFile: githubGetFileStub,
+                createFile: githubCreateFileStub,
+                updateFile: githubUpdateFileStub
+            },
+            async: {
+                eachOfSeries: async.eachOfSeries,
+                eachSeries: async.eachSeries,
+                retry: (policy, fn, cb) => async.retry({ times: 5, interval: 0 }, fn, cb)
+            }
+        });
 
     const repository = testData.postGithubFetchRepository;
-    let githubGetFileStub,
-        githubCreateFileStub,
-        githubUpdateFileStub;
+    let githubGetFileStub, githubCreateFileStub, githubUpdateFileStub;
 
     describe('happy path with file creation', () => {
-
         let err;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
             githubCreateFileStub = sinon.stub().yields();
             githubUpdateFileStub = sinon.stub().yields();
@@ -49,7 +46,7 @@ describe('resources.commitFiles()', () => {
                 }
             ];
 
-            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, error => {
                 err = error;
                 done();
             });
@@ -69,10 +66,9 @@ describe('resources.commitFiles()', () => {
     });
 
     describe('happy path with file update', function() {
-
         let err;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             githubGetFileStub = sinon.stub().yields(null, { content: 'file content', sha: 'test_sha' });
             githubCreateFileStub = sinon.stub().yields();
             githubUpdateFileStub = sinon.stub().yields();
@@ -90,7 +86,7 @@ describe('resources.commitFiles()', () => {
                 }
             ];
 
-            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, error => {
                 err = error;
                 done();
             });
@@ -110,10 +106,9 @@ describe('resources.commitFiles()', () => {
     });
 
     describe('error when getting file sha', () => {
-
         let err;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             githubGetFileStub = sinon.stub().yields({ message: 'Failed to get SHA', code: 422 }, { sha: null });
             githubCreateFileStub = sinon.stub().yields();
             githubUpdateFileStub = sinon.stub().yields();
@@ -131,7 +126,7 @@ describe('resources.commitFiles()', () => {
                 }
             ];
 
-            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, error => {
                 err = error;
                 done();
             });
@@ -147,10 +142,9 @@ describe('resources.commitFiles()', () => {
     });
 
     describe('error when creating file', () => {
-
         let err;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
             githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', code: 500 });
             githubUpdateFileStub = sinon.stub().yields();
@@ -168,7 +162,7 @@ describe('resources.commitFiles()', () => {
                 }
             ];
 
-            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, error => {
                 err = error;
                 done();
             });
@@ -180,10 +174,9 @@ describe('resources.commitFiles()', () => {
     });
 
     describe('error when updating file', () => {
-
         let err;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
             githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', code: 500 });
             githubUpdateFileStub = sinon.stub().yields();
@@ -201,7 +194,7 @@ describe('resources.commitFiles()', () => {
                 }
             ];
 
-            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, (error) => {
+            mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, error => {
                 err = error;
                 done();
             });
