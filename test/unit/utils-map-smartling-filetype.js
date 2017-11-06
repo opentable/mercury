@@ -13,13 +13,18 @@ describe('mapSmartlingFiletype.map()', () => {
         expect(mapSmartlingFiletype.map('test content', 'resw')).to.equal('resx');
         expect(mapSmartlingFiletype.map('test content', 'txt')).to.equal('plainText');
         expect(mapSmartlingFiletype.map('<resources><string name="test_string">Test XML</string></resources>', 'xml')).to.equal('android');
-        expect(mapSmartlingFiletype.map('<!-- smartling.instruction_comments_enabled = on --><resources><string name="test_string">Test XML</string><!-- smartling.instruction_comments_enabled = off --></resources>', 'xml')).to.equal('xml');   
-        expect(mapSmartlingFiletype.map('<data><string name="home-button">Smartling Hotels</string></data>', 'xml')).to.equal('xml');  
-        expect(mapSmartlingFiletype.map('test content', 'yaml')).to.equal('yaml');        
-        expect(mapSmartlingFiletype.map('test content', 'yml')).to.equal('yaml');                
+        expect(
+            mapSmartlingFiletype.map(
+                '<!-- smartling.instruction_comments_enabled = on --><resources><string name="test_string">Test XML</string><!-- smartling.instruction_comments_enabled = off --></resources>',
+                'xml'
+            )
+        ).to.equal('xml');
+        expect(mapSmartlingFiletype.map('<data><string name="home-button">Smartling Hotels</string></data>', 'xml')).to.equal('xml');
+        expect(mapSmartlingFiletype.map('test content', 'yaml')).to.equal('yaml');
+        expect(mapSmartlingFiletype.map('test content', 'yml')).to.equal('yaml');
     });
 
     it('should return unknown Smartling file type for invalid extension', () => {
-        expect(mapSmartlingFiletype.map('invalid')).to.equal('unknown');         
+        expect(mapSmartlingFiletype.map('invalid')).to.equal('unknown');
     });
 });

@@ -16,16 +16,16 @@ const SMARTLING_FILETYPES = {
     yaml: 'yaml'
 };
 
-const inferSmartlingFileTypeFromContent = (content) => {
+const inferSmartlingFileTypeFromContent = content => {
     const result = convert.xml2js(content, { compact: true });
-    const rootNodeName = (Object.keys(result)[0]);
+    const rootNodeName = Object.keys(result)[0];
 
-    return (rootNodeName === ANDROID_XML_ROOT_NODE_NAME) ? 'android' : 'xml';
+    return rootNodeName === ANDROID_XML_ROOT_NODE_NAME ? 'android' : 'xml';
 };
 
 module.exports = {
     map: (content, extension) => {
-        if(extension === 'xml') {
+        if (extension === 'xml') {
             return inferSmartlingFileTypeFromContent(content);
         } else {
             const smartlingFileType = SMARTLING_FILETYPES[extension];

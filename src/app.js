@@ -1,15 +1,14 @@
 'use strict';
 
-const async         = require('async');
-const config        = require('config');
-const Logger        = require('./services/logger-service');
+const async = require('async');
+const config = require('config');
+const Logger = require('./services/logger-service');
 const loggerService = Logger();
-const manifest      = require('./manifest');
-const resources     = require('./resources');
-const translations  = require('./translations');
+const manifest = require('./manifest');
+const resources = require('./resources');
+const translations = require('./translations');
 
 const processRepo = (repository, next) => {
-
     const mercury = async.seq(
         manifest.fetch,
         manifest.validate,
@@ -28,10 +27,9 @@ const processRepo = (repository, next) => {
     );
 
     mercury(repository, (err, repository) => {
-        if(err) {
+        if (err) {
             loggerService.info(`Attempted processing ${repository.owner}/${repository.repo} with errors`, 'repo-skipped');
-        }
-        else {
+        } else {
             loggerService.info(`Completed processing ${repository.owner}/${repository.repo} without errors`, 'repo-completed');
         }
 
@@ -39,15 +37,21 @@ const processRepo = (repository, next) => {
     });
 };
 
-async.eachOfSeries(config.repositories, (repositories, owner, next) => {
-    async.eachSeries(repositories, (repo, next) => {
-
-        processRepo({ owner, repo }, next);
-        
-    }, next);
-}, () => {
-    resources.fetchRequestRateStats(() => {
-        loggerService.info(`Completed running`, 'run-completed');
-        process.exit(0);
-    });
-});
+async.eachOfSeries(
+    config.repositories,
+    (repositories, owner, next) => {
+        async.eachSeries(
+            repositories,
+            (repo, next) => {
+                processRepo({ owner, repo }, next);
+            },
+            next
+        );
+    },
+    () => {
+        resources.fetchRequestRateStats(() => {
+            loggerService.info(`Completed running`, 'run-completed');
+            process.exit(0);
+        });
+    }
+);

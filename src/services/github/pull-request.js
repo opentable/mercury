@@ -1,28 +1,24 @@
 'use strict';
 
-const _      = require('lodash');
+const _ = require('lodash');
 const config = require('config');
-const utils  = require('./utils');
+const utils = require('./utils');
 
-module.exports = (github) => ({
-
-    close: (options, next) => { 
-               
+module.exports = github => ({
+    close: (options, next) => {
         const authenticatedGithub = utils.authenticateGithubOperation('write', github);
         options.state = 'closed';
-        
+
         authenticatedGithub.pullRequests.update(options, next);
     },
 
     create: (options, next) => {
-        
         const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-        
+
         authenticatedGithub.pullRequests.create(options, next);
     },
 
     get: (options, next) => {
-        
         const authenticatedGithub = utils.authenticateGithubOperation('read', github);
         const prOptions = _.extend(_.cloneDeep(options), {
             head: `${config.github.owner}:${config.github.branch}`,
@@ -31,9 +27,9 @@ module.exports = (github) => ({
         });
 
         authenticatedGithub.pullRequests.getAll(prOptions, (err, prs) => {
-            if(err){
+            if (err) {
                 return next(err);
-            } else if(_.isEmpty(prs)){
+            } else if (_.isEmpty(prs)) {
                 return next(null, { found: false });
             }
 
@@ -47,10 +43,9 @@ module.exports = (github) => ({
         });
     },
 
-    update: (options, next) => {    
-        
+    update: (options, next) => {
         const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-        
+
         authenticatedGithub.pullRequests.update(options, next);
     }
 });

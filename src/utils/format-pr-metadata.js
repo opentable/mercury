@@ -8,35 +8,46 @@ const buildExcludedStringWarning = () => {
 
 const buildHeaderForFile = (file, percentCompletedByFile) => {
     const stringBreakDownHeader = `| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
-    return `\n**Translation status of \`${file.src}\`: ${percentCompletedByFile}%**\n\n${percentCompletedByFile !== 100 ? stringBreakDownHeader : ''}`;
+    return `\n**Translation status of \`${file.src}\`: ${percentCompletedByFile}%**\n\n${percentCompletedByFile !== 100
+        ? stringBreakDownHeader
+        : ''}`;
 };
 
-const buildPercentageStat = (percentage) => {
+const buildPercentageStat = percentage => {
     return percentage || percentage === 0 ? `${percentage.toString()}%` : 'N/A';
 };
 
-const buildPullRequestInstructions = (averageCompletion) => {
-    const status = averageCompletion !== 100 ? '> :white_check_mark: This is safe to merge. If merge conflicts appear, you can close this PR and Mercury will open a new, rebased PR for you.\n\n' : '';
+const buildPullRequestInstructions = averageCompletion => {
+    const status =
+        averageCompletion !== 100
+            ? '> :white_check_mark: This is safe to merge. If merge conflicts appear, you can close this PR and Mercury will open a new, rebased PR for you.\n\n'
+            : '';
     return status;
 };
 
-const buildPullRequestStatus = (averageCompletion) => {
+const buildPullRequestStatus = averageCompletion => {
     return `(${buildPercentageStat(averageCompletion)} Overall Completion)`;
 };
 
-const buildTitle = (averageCompletion) => {
+const buildTitle = averageCompletion => {
     return `Mercury Pull Request ${buildPullRequestStatus(averageCompletion)}`;
-}
+};
 
 const buildExcludedStringLink = (smartlingProjectId, localeKey) => {
-    return ' ([view in Smartling](https://dashboard.smartling.com/projects/' + smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + localeKey + '))';
-}
+    return (
+        ' ([view in Smartling](https://dashboard.smartling.com/projects/' +
+        smartlingProjectId +
+        '/content/content.htm#excluded/list/filter/locale:' +
+        localeKey +
+        '))'
+    );
+};
 
-const format = (repository) => {
-
+const format = repository => {
     const averageCompletion = prMetaDataCalculator.calculateAverage(
         prMetaDataCalculator.sumPercentageCompletedOverall(repository),
-        prMetaDataCalculator.countLocales(repository));
+        prMetaDataCalculator.countLocales(repository)
+    );
 
     const title = buildTitle(averageCompletion);
 
@@ -49,13 +60,12 @@ const format = (repository) => {
     }
 
     body += repository.translationFiles.reduce((accumulatorForTranslationFiles, file) => {
-
         const totalStringCount = file.totalStringCount;
 
         const sortedLocales = prMetaDataCalculator.sortLocales(file.locales);
         const percentCompletedByFile = prMetaDataCalculator.sumPercentageCompletedByFile(sortedLocales);
 
-        if(percentCompletedByFile === 100) {
+        if (percentCompletedByFile === 100) {
             return accumulatorForTranslationFiles.concat(buildHeaderForFile(file, percentCompletedByFile));
         }
 
@@ -67,8 +77,13 @@ const format = (repository) => {
                 const completedStringCount = localeStatus.completedStringCount || 0;
                 const percentage = localeStatus.percentCompleted;
 
-                return accumulatorForLocales.concat(`| **${locale.key}** | ${excludedStringCount}${excludedStringCount > 0 ? buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key) : '' } | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`);
-            }, ''));
+                return accumulatorForLocales.concat(
+                    `| **${locale.key}** | ${excludedStringCount}${excludedStringCount > 0
+                        ? buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key)
+                        : ''} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`
+                );
+            }, '')
+        );
     }, '');
 
     return {
@@ -79,4 +94,4 @@ const format = (repository) => {
 
 module.exports = {
     format
-}
+};

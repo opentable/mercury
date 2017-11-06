@@ -1,12 +1,11 @@
 'use strict';
 
-const async         = require('async');
+const async = require('async');
 const encodeContent = require('../../src/services/github/utils').encodeContent;
-const expect        = require('chai').expect;
-const sinon         = require('sinon');
+const expect = require('chai').expect;
+const sinon = require('sinon');
 
 describe('services.github.file.create()', () => {
-
     let createFileStub, updateFileStub;
 
     const firstFailSecondSucceed = () => {
@@ -20,7 +19,7 @@ describe('services.github.file.create()', () => {
         updateFileStub.onCall(0).yields('error');
         updateFileStub.onCall(1).yields(null, 'success');
 
-        return githubFile({ 
+        return githubFile({
             authenticate: () => {},
             repos: {
                 createFile: createFileStub,
@@ -30,10 +29,9 @@ describe('services.github.file.create()', () => {
     };
 
     describe('on file creation with error and retry', () => {
-
         let error;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             const github = firstFailSecondSucceed();
 
             const options = { content: 'some-content' };
@@ -43,7 +41,7 @@ describe('services.github.file.create()', () => {
                 interval: 0
             };
 
-            async.retry(retryPolicy, github.create.bind(null, options), (err) => {
+            async.retry(retryPolicy, github.create.bind(null, options), err => {
                 error = err;
                 done();
             });
@@ -60,10 +58,9 @@ describe('services.github.file.create()', () => {
     });
 
     describe('on file update with error and retry', () => {
-
         let error;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             const github = firstFailSecondSucceed();
 
             const options = { content: 'some-content' };
@@ -73,7 +70,7 @@ describe('services.github.file.create()', () => {
                 interval: 0
             };
 
-            async.retry(retryPolicy, github.update.bind(null, options), (err) => {
+            async.retry(retryPolicy, github.update.bind(null, options), err => {
                 error = err;
                 done();
             });

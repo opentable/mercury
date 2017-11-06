@@ -1,16 +1,15 @@
 'use strict';
 
-const config            = require('config');
-const errorTypes        = require('../constants/error-types');
-const github            = require('../services/github');
-const Logger            = require('../services/logger-service');
+const config = require('config');
+const errorTypes = require('../constants/error-types');
+const github = require('../services/github');
+const Logger = require('../services/logger-service');
 const metadataFormatter = require('../utils/format-pr-metadata');
 
 const loggerService = Logger();
 
 module.exports = (repository, callback) => {
-    
-    if(repository.skipPullRequest) {
+    if (repository.skipPullRequest) {
         return callback(null, repository);
     }
 
@@ -18,7 +17,7 @@ module.exports = (repository, callback) => {
     const action = prAlreadyExists ? 'Updating' : 'Creating';
 
     loggerService.console(`${action} github pull request for ${repository.owner}/${repository.repo}`);
-    
+
     const pullRequestMetadata = metadataFormatter.format(repository);
 
     const prOptions = {
@@ -32,16 +31,15 @@ module.exports = (repository, callback) => {
 
     let handlePr;
 
-    if(prAlreadyExists){
+    if (prAlreadyExists) {
         prOptions.number = repository.prInfo.number;
         handlePr = github.updatePullRequest;
     } else {
         handlePr = github.createPullRequest;
     }
 
-    handlePr(prOptions, (err) => {
-        
-        if(err){ 
+    handlePr(prOptions, err => {
+        if (err) {
             err = new Error(`Failed while ${action.toLowerCase()} pull request`);
             loggerService.error(err, errorTypes[`failed${action}PullRequest`], repository);
         }

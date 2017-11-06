@@ -1,31 +1,30 @@
 'use strict';
 
-const _        = require('lodash');
-const expect   = require('chai').expect;
-const injectr  = require('injectr');
-const sinon    = require('sinon');
+const _ = require('lodash');
+const expect = require('chai').expect;
+const injectr = require('injectr');
+const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('translations.getStatus()', () => {
-    
-    const mockedGetStatus = (smartlingStub) => injectr('../../src/translations/get-status.js', {
-        '../services/smartling': {
-            getStatus: smartlingStub,
-            MAX_CONCURRENT_OPERATIONS: 20
-        }
-    });
-    
+    const mockedGetStatus = smartlingStub =>
+        injectr('../../src/translations/get-status.js', {
+            '../services/smartling': {
+                getStatus: smartlingStub,
+                MAX_CONCURRENT_OPERATIONS: 20
+            }
+        });
+
     const repository = testData.postSmartlingStatusFetchRepository;
-    
+
     describe('happy path', () => {
-    
         let err, res;
-        
-        beforeEach((done) => {
+
+        beforeEach(done => {
             const repo = testData.postSmartlingFetchRepository;
             const smartlingStub = sinon.stub().yields(null, testData.smartlingStatusFirst);
             smartlingStub.onSecondCall().yields(null, testData.smartlingStatusSecond);
-            
+
             mockedGetStatus(smartlingStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
@@ -41,16 +40,15 @@ describe('translations.getStatus()', () => {
             expect(res).to.eql(repository);
         });
     });
-    
+
     describe('when smartling get-status lacks a locale', () => {
-    
         let err, res;
-        
-        beforeEach((done) => {
+
+        beforeEach(done => {
             const noLocaleTestData = _.remove(testData.smartlingStatusFirst.items, item => item.localeId === 'de-DE');
             const repo = testData.postSmartlingFetchRepository;
             const smartlingStub = sinon.stub().yields(null, noLocaleTestData);
-            
+
             mockedGetStatus(smartlingStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
@@ -66,15 +64,14 @@ describe('translations.getStatus()', () => {
             expect(res.translationFiles[0].locales['de-DE'].smartlingStatus).to.eql({});
         });
     });
-    
+
     describe('when smartling get-status call returns an error', () => {
-    
         let err, res;
-        
-        beforeEach((done) => {
+
+        beforeEach(done => {
             const repo = testData.postSmartlingFetchRepository;
             const smartlingStub = sinon.stub().yields(new Error('Error when downloading Smartling status info'));
-            
+
             mockedGetStatus(smartlingStub)(_.cloneDeep(repo), (error, result) => {
                 err = error;
                 res = result;
