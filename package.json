@@ -5,7 +5,7 @@
   "description": "static content translation platform",
   "main": "src/app.js",
   "scripts": {
-    "format": "prettier-eslint \"**/*.js\" --print-width 150 --write",
+    "format": "prettier-eslint \"**/*.js\" --print-width 300 --write",
     "mocha": "mocha test/unit --timeout 10000",
     "precommit": "lint-staged",
     "start": "export NODE_ENV=development && node src/app.js",

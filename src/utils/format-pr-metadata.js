@@ -8,9 +8,7 @@ const buildExcludedStringWarning = () => {
 
 const buildHeaderForFile = (file, percentCompletedByFile) => {
     const stringBreakDownHeader = `| | excluded strings | translated strings | total strings | % |\n|---|---|---|---|---|\n`;
-    return `\n**Translation status of \`${file.src}\`: ${percentCompletedByFile}%**\n\n${percentCompletedByFile !== 100
-        ? stringBreakDownHeader
-        : ''}`;
+    return `\n**Translation status of \`${file.src}\`: ${percentCompletedByFile}%**\n\n${percentCompletedByFile !== 100 ? stringBreakDownHeader : ''}`;
 };
 
 const buildPercentageStat = percentage => {
@@ -18,10 +16,7 @@ const buildPercentageStat = percentage => {
 };
 
 const buildPullRequestInstructions = averageCompletion => {
-    const status =
-        averageCompletion !== 100
-            ? '> :white_check_mark: This is safe to merge. If merge conflicts appear, you can close this PR and Mercury will open a new, rebased PR for you.\n\n'
-            : '';
+    const status = averageCompletion !== 100 ? '> :white_check_mark: This is safe to merge. If merge conflicts appear, you can close this PR and Mercury will open a new, rebased PR for you.\n\n' : '';
     return status;
 };
 
@@ -34,20 +29,11 @@ const buildTitle = averageCompletion => {
 };
 
 const buildExcludedStringLink = (smartlingProjectId, localeKey) => {
-    return (
-        ' ([view in Smartling](https://dashboard.smartling.com/projects/' +
-        smartlingProjectId +
-        '/content/content.htm#excluded/list/filter/locale:' +
-        localeKey +
-        '))'
-    );
+    return ' ([view in Smartling](https://dashboard.smartling.com/projects/' + smartlingProjectId + '/content/content.htm#excluded/list/filter/locale:' + localeKey + '))';
 };
 
 const format = repository => {
-    const averageCompletion = prMetaDataCalculator.calculateAverage(
-        prMetaDataCalculator.sumPercentageCompletedOverall(repository),
-        prMetaDataCalculator.countLocales(repository)
-    );
+    const averageCompletion = prMetaDataCalculator.calculateAverage(prMetaDataCalculator.sumPercentageCompletedOverall(repository), prMetaDataCalculator.countLocales(repository));
 
     const title = buildTitle(averageCompletion);
 
@@ -78,9 +64,7 @@ const format = repository => {
                 const percentage = localeStatus.percentCompleted;
 
                 return accumulatorForLocales.concat(
-                    `| **${locale.key}** | ${excludedStringCount}${excludedStringCount > 0
-                        ? buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key)
-                        : ''} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`
+                    `| **${locale.key}** | ${excludedStringCount}${excludedStringCount > 0 ? buildExcludedStringLink(repository.manifestContent.smartlingProjectId, locale.key) : ''} | ${completedStringCount} | ${totalStringCount} | ${buildPercentageStat(percentage)} |\n`
                 );
             }, '')
         );

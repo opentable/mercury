@@ -50,9 +50,7 @@ module.exports = (repository, callback) => {
             setTimeout(() => {
                 github.updateReference(forkOptions, err => {
                     if (err) {
-                        err = new Error(
-                            `Could not rebase fork from upstream/${branch} - forks are created asynchronously so will retry in the next round.`
-                        );
+                        err = new Error(`Could not rebase fork from upstream/${branch} - forks are created asynchronously so will retry in the next round.`);
                         loggerService.error(err, errorTypes.failedGithubForkRebase, repository);
                         repository.skip = true;
                     }

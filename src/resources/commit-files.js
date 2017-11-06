@@ -46,15 +46,11 @@ module.exports = (repository, callback) => {
                         _.unset(options, 'ref');
 
                         if (!content) {
-                            loggerService.console(
-                                `Creating new ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`
-                            );
+                            loggerService.console(`Creating new ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
                             commitCount++;
                             async.retry(retryPolicy, github.createFile.bind(null, options), callback);
                         } else if (content && content !== locale.smartlingContent) {
-                            loggerService.console(
-                                `Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`
-                            );
+                            loggerService.console(`Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
                             options.sha = sha;
                             commitCount++;
                             async.retry(retryPolicy, github.updateFile.bind(null, options), callback);
