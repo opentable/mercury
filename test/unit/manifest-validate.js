@@ -1,11 +1,10 @@
 'use strict';
 
-const _        = require('lodash');
-const expect   = require('chai').expect;
+const _ = require('lodash');
+const expect = require('chai').expect;
 const validate = require('../../src/manifest/validate');
 
 describe('manifest.validate()', () => {
-
     let error, result;
 
     const next = done => (err, res) => {
@@ -20,21 +19,21 @@ describe('manifest.validate()', () => {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: 'testid001',
-            translations: [{
-                input: {
-                    src: 'src/locales/en-us/*.json'
-                },
-                output: {
-                    dest
+            translations: [
+                {
+                    input: {
+                        src: 'src/locales/en-us/*.json'
+                    },
+                    output: {
+                        dest
+                    }
                 }
-            }]
+            ]
         }
     };
 
     describe('when validating valid manifest', () => {
-
         describe('happy path', () => {
-
             beforeEach(done => validate(repository, next(done)));
 
             it('should be valid', () => {
@@ -71,7 +70,6 @@ describe('manifest.validate()', () => {
         });
 
         describe('when missing smartlingProjectId', () => {
-
             const invalid = {
                 manifestContent: _.omit(repository.manifestContent, 'smartlingProjectId')
             };
@@ -82,12 +80,11 @@ describe('manifest.validate()', () => {
                 expect(error.toString()).to.contain('"smartlingProjectId" is required');
             });
         });
-        
-        describe('when invalid smartlingProjectId', () => {
 
+        describe('when invalid smartlingProjectId', () => {
             const invalid = _.cloneDeep(repository);
             invalid.manifestContent.smartlingProjectId = 'invalid';
-            
+
             beforeEach(done => validate(invalid, next(done)));
 
             it('should not be valid', () => {
@@ -96,7 +93,6 @@ describe('manifest.validate()', () => {
         });
 
         describe('when missing translations', () => {
-
             const invalid = {
                 manifestContent: _.omit(repository.manifestContent, 'translations')
             };
@@ -109,7 +105,6 @@ describe('manifest.validate()', () => {
         });
 
         describe('when translations empty', () => {
-
             const invalid = _.cloneDeep(repository);
             invalid.manifestContent.translations = [];
 
@@ -121,7 +116,6 @@ describe('manifest.validate()', () => {
         });
 
         describe(`when translation source doesn't contain src path`, () => {
-
             const invalid = _.cloneDeep(repository);
             delete invalid.manifestContent.translations[0].input.src;
 
@@ -133,7 +127,6 @@ describe('manifest.validate()', () => {
         });
 
         describe(`when translation source contains src path as array`, () => {
-
             const cloned = _.cloneDeep(repository);
             cloned.manifestContent.translations[0].input.src = [cloned.manifestContent.translations[0].input.src];
 
@@ -146,7 +139,6 @@ describe('manifest.validate()', () => {
         });
 
         describe(`when translation output doesn't contain dest path`, () => {
-
             const invalid = _.cloneDeep(repository);
             delete invalid.manifestContent.translations[0].output.dest;
 
@@ -158,7 +150,6 @@ describe('manifest.validate()', () => {
         });
 
         describe(`when translation output doesn't contain $locale placeholder`, () => {
-
             const invalid = _.cloneDeep(repository);
             invalid.manifestContent.translations[0].output.dest = dest.replace(/locale/gi, 'lol');
 
@@ -170,7 +161,6 @@ describe('manifest.validate()', () => {
         });
 
         describe(`when translation output doesn't contain $filename placeholder`, () => {
-
             const cloned = _.cloneDeep(repository);
             cloned.manifestContent.translations[0].output.dest = dest.replace('${filename}', 'hardcoded-filename');
 

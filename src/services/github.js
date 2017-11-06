@@ -1,12 +1,12 @@
 'use strict';
 
-const _           = require('lodash');
-const File        = require('./github/file');
-const Github      = require('github');
+const _ = require('lodash');
+const File = require('./github/file');
+const Github = require('github');
 const PullRequest = require('./github/pull-request');
-const RateLimit   = require('./github/rate-limit');
-const Reference   = require('./github/reference');
-const utils       = require('./github/utils');
+const RateLimit = require('./github/rate-limit');
+const Reference = require('./github/reference');
+const utils = require('./github/utils');
 
 const MAX_CONCURRENT_OPERATIONS = 20;
 
@@ -26,12 +26,12 @@ const rateLimit = RateLimit(github);
 const reference = Reference(github);
 
 const getFilesList = (options, next) => {
-
     const authenticatedGithub = utils.authenticateGithubOperation('read', github);
 
     reference.get(options, (err, sha) => {
-
-        if(err){ return next(err); }
+        if (err) {
+            return next(err);
+        }
 
         options.recursive = true;
         options.sha = sha;
@@ -43,7 +43,6 @@ const getFilesList = (options, next) => {
 };
 
 const ensureFork = (options, next) => {
-
     const authenticatedGithub = utils.authenticateGithubOperation('write', github);
 
     authenticatedGithub.repos.fork(options, next);

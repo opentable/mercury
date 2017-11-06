@@ -1,30 +1,12 @@
 'use strict';
 
 module.exports = {
-    githubMock: [
-        'src/locales/en-us/file.json',
-        'src/locales/en-us/other-file.json'
-    ],
-    githubMockResx: [
-        'src/locales/folder/Strings.resx',
-        'src/locales/otherfolder/Strings.resx'
-    ],
-    githubMockResxComplex: [
-        'src/locales/folder/Strings.resx',
-        'src/otherlocales/folder/Strings.resx'
-    ],
-    githubMockComplex: [
-        'components/header/header.json',
-        'components/footer/footer.json'
-    ],
-    githubMockDuplicate: [
-        'components/duplicate/name.json',
-        'components/duplicate/name.json'
-    ],
-    githubMockYml: [
-        'src/locales/en-us/file.json',
-        'src/locales/en-us/other-file.yml'
-    ],
+    githubMock: ['src/locales/en-us/file.json', 'src/locales/en-us/other-file.json'],
+    githubMockResx: ['src/locales/folder/Strings.resx', 'src/locales/otherfolder/Strings.resx'],
+    githubMockResxComplex: ['src/locales/folder/Strings.resx', 'src/otherlocales/folder/Strings.resx'],
+    githubMockComplex: ['components/header/header.json', 'components/footer/footer.json'],
+    githubMockDuplicate: ['components/duplicate/name.json', 'components/duplicate/name.json'],
+    githubMockYml: ['src/locales/en-us/file.json', 'src/locales/en-us/other-file.yml'],
     smartlingInfoMock: {
         projectId: '2249fadc3',
         projectName: 'Project 111',
@@ -144,10 +126,12 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: '2249fadc3',
-            translations: [{
-                input: { src: ['src/locales/en-us/*.json'] },
-                output: { dest: 'src/locales/${locale}/${filename}' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/en-us/*.json'] },
+                    output: { dest: 'src/locales/${locale}/${filename}' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -171,10 +155,12 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: '2249fadc3',
-            translations: [{
-                input: { src: ['src/locales/en-us/*.json'] },
-                output: { dest: 'src/locales/${locale}/${filename}' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/en-us/*.json'] },
+                    output: { dest: 'src/locales/${locale}/${filename}' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -206,10 +192,12 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: '2249fadc3',
-            translations: [{
-                input: { src: ['src/locales/en-us/*.json'] },
-                output: { dest: 'src/locales/${locale}/${filename}' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/en-us/*.json'] },
+                    output: { dest: 'src/locales/${locale}/${filename}' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -255,13 +243,16 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: '2249fadc3',
-            translations: [{
-                input: { src: ['src/locales/folder/Strings.resx'] },
-                output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
-            }, {
-                input: { src: ['src/locales/another-folder/Strings.resx'] },
-                output: { dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/folder/Strings.resx'] },
+                    output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
+                },
+                {
+                    input: { src: ['src/locales/another-folder/Strings.resx'] },
+                    output: { dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -307,10 +298,12 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: '2249fadc3',
-            translations: [{
-                input: { src: ['src/locales/en-us/*.json'] },
-                output: { dest: 'src/locales/${locale}/${filename}' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/en-us/*.json'] },
+                    output: { dest: 'src/locales/${locale}/${filename}' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -364,13 +357,16 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: '2249fadc3',
-            translations: [{
-                input: { src: ['src/locales/folder/Strings.resx'] },
-                output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
-            }, {
-                input: { src: ['src/locales/another-folder/Strings.resx'] },
-                output: { dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/folder/Strings.resx'] },
+                    output: { dest: 'src/locales/folder/Strings.${locale.toLowerCase()}.resx' }
+                },
+                {
+                    input: { src: ['src/locales/another-folder/Strings.resx'] },
+                    output: { dest: 'src/locales/another-folder/Strings.${locale.toLowerCase()}.resx' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -424,10 +420,12 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: '2249fadc3',
-            translations: [{
-                input: { src: ['src/locales/en-us/*.json'] },
-                output: { dest: 'src/locales/${locale}/${filename}' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/en-us/*.json'] },
+                    output: { dest: 'src/locales/${locale}/${filename}' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -484,10 +482,12 @@ module.exports = {
         manifestContent: {
             workingBranch: 'master',
             smartlingProjectId: 'ABCDEF',
-            translations: [{
-                input: { src: ['src/locales/en-us/*.json'] },
-                output: { dest: 'src/locales/${locale}/${filename}' }
-            }]
+            translations: [
+                {
+                    input: { src: ['src/locales/en-us/*.json'] },
+                    output: { dest: 'src/locales/${locale}/${filename}' }
+                }
+            ]
         },
         manifestUpdated: '2017-02-15T15:29:05Z',
         translationFiles: [
@@ -688,4 +688,4 @@ module.exports = {
             githubContent: 'file content'
         }
     }
-}
+};
