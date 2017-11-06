@@ -40,17 +40,13 @@ module.exports = {
                 headers: { Authorization: `Bearer ${accessToken}` }
             };
 
-            needle.get(
-                `${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`,
-                reqDetails,
-                (err, response, body) => {
-                    if (err || response.statusCode !== 200) {
-                        return next(new Error(`Error when retrieving translations content for ${options.fileName}`));
-                    }
-
-                    next(null, body.toString());
+            needle.get(`${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`, reqDetails, (err, response, body) => {
+                if (err || response.statusCode !== 200) {
+                    return next(new Error(`Error when retrieving translations content for ${options.fileName}`));
                 }
-            );
+
+                next(null, body.toString());
+            });
         });
     },
 
@@ -90,21 +86,15 @@ module.exports = {
                 headers: { Authorization: `Bearer ${accessToken}` }
             };
 
-            needle.request(
-                'get',
-                `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`,
-                queryString,
-                reqDetails,
-                (err, response, body) => {
-                    const status = _.get(body, 'response.data');
+            needle.request('get', `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`, queryString, reqDetails, (err, response, body) => {
+                const status = _.get(body, 'response.data');
 
-                    if (err || !status || response.statusCode !== 200) {
-                        return next(new Error(`Error when retrieving translation status for ${options.fileUri}`));
-                    }
-
-                    next(null, status);
+                if (err || !status || response.statusCode !== 200) {
+                    return next(new Error(`Error when retrieving translation status for ${options.fileUri}`));
                 }
-            );
+
+                next(null, status);
+            });
         });
     },
 
@@ -141,11 +131,7 @@ module.exports = {
                 multipart: true
             };
 
-            needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function(
-                err,
-                response,
-                body
-            ) {
+            needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function(err, response, body) {
                 if (err || response.statusCode !== 200) {
                     return next(new Error(`Error when uploading Smartling file`));
                 }
