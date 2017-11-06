@@ -1,15 +1,14 @@
 'use strict';
 
-const config     = require('config');
+const config = require('config');
 const errorTypes = require('../constants/error-types');
-const github     = require('../services/github');
-const Logger     = require('../services/logger-service');
+const github = require('../services/github');
+const Logger = require('../services/logger-service');
 
 const loggerService = Logger();
 
 module.exports = (repository, callback) => {
-    
-    if(repository.prInfo.found && !repository.prInfo.closed){
+    if (repository.prInfo.found && !repository.prInfo.closed) {
         return callback(null, repository);
     }
 
@@ -21,17 +20,15 @@ module.exports = (repository, callback) => {
         branch: config.github.branch
     };
 
-    github.deleteReference(options, (err) => {
-        
-        if(err && err.message != 'Reference has already been manually deleted by the repo owners'){
+    github.deleteReference(options, err => {
+        if (err && err.message != 'Reference has already been manually deleted by the repo owners') {
             err = new Error('Failed while deleting outdated reference');
             loggerService.error(err, errorTypes.failedToDeleteOutdatedBranch, repository);
             repository.skip = true;
-        }
-        else {
+        } else {
             err = null;
         }
-        
+
         callback(err, repository);
     });
 };

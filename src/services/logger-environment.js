@@ -48,4 +48,4 @@ const getEnvironmentInfo = () => {
 
 module.exports = {
     getEnvironmentInfo
-}
+};

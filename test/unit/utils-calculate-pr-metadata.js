@@ -10,7 +10,7 @@ describe('metadataCalculator.sortLocales()', () => {
         let res;
         const locales = testData.unsortedLocales;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             res = metadataCalculator.sortLocales(_.cloneDeep(locales));
             done();
         });
@@ -39,7 +39,7 @@ describe('metadataCalculator.sumPercentageCompletedByFile()', () => {
         let res, sortedLocales;
         const locales = testData.unsortedLocales;
 
-        beforeEach((done) => {
+        beforeEach(done => {
             sortedLocales = metadataCalculator.sortLocales(_.cloneDeep(locales));
             res = metadataCalculator.sumPercentageCompletedByFile(sortedLocales);
             done();
@@ -54,7 +54,7 @@ describe('metadataCalculator.sumPercentageCompletedByFile()', () => {
 describe('metadataCalculator.sumPercentageCompletedOverall()', () => {
     let res;
 
-    beforeEach((done) => {
+    beforeEach(done => {
         const repo = testData.postPullRequestFetchInfoRepository;
         res = metadataCalculator.sumPercentageCompletedOverall(_.cloneDeep(repo));
         done();
@@ -68,7 +68,7 @@ describe('metadataCalculator.sumPercentageCompletedOverall()', () => {
 describe('metadataCalculator.countLocales()', () => {
     let res;
 
-    beforeEach((done) => {
+    beforeEach(done => {
         const repo = testData.postPullRequestFetchInfoRepository;
         res = metadataCalculator.countLocales(_.cloneDeep(repo));
         done();
@@ -82,7 +82,7 @@ describe('metadataCalculator.countLocales()', () => {
 describe('metadataCalculator.countExcludedStrings()', () => {
     let res;
 
-    beforeEach((done) => {
+    beforeEach(done => {
         const repo = testData.postPullRequestFetchInfoRepositoryWithExcludedStrings;
         res = metadataCalculator.countExcludedStrings(_.cloneDeep(repo));
         done();

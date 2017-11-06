@@ -8,17 +8,16 @@ const Logger = require('../services/logger-service');
 const loggerService = Logger();
 
 module.exports = (repository, callback) => {
-
     loggerService.console(`Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
-    
+
     const options = {
         branch: repository.manifestContent.workingBranch,
         owner: repository.mercuryForkOwner,
         repo: repository.repo
     };
-    
+
     github.getBranchReference(options, (err, branchReferenceSha) => {
-        if(err){
+        if (err) {
             loggerService.error(err, errorTypes.failedGithubBranch, repository);
             repository.skip = true;
             return callback(err, repository);
@@ -29,13 +28,13 @@ module.exports = (repository, callback) => {
             owner: repository.mercuryForkOwner,
             repo: repository.repo
         };
-        
+
         github.ensureBranchReference(branchOptions, branchReferenceSha, (err, mercuryReferenceSha) => {
-            if(err){
+            if (err) {
                 loggerService.error(err, errorTypes.failedGithubBranch, repository);
                 repository.skip = true;
             }
-                    
+
             repository.mercuryBranchReference = mercuryReferenceSha;
             callback(err, repository);
         });
