@@ -7,16 +7,16 @@ const loggerService = Logger();
 
 const mercury = app({ config });
 
-mercury.on('result', (resultType, message) => {
+mercury.on('result', ({ resultType, message }) => {
   loggerService.info(message, resultType);
 });
 
-mercury.on('action', message => {
+mercury.on('action', ({ message }) => {
   loggerService.console(message);
 });
 
-mercury.on('error', (error, errorType, status) => {
-  loggerService.error(error, errorType, status);
+mercury.on('error', ({ error, errorType, details }) => {
+  loggerService.error(error, errorType, details);
 });
 
 mercury.run(() => {

@@ -8,7 +8,7 @@ module.exports = emitter => callback => {
       err = new Error('Failed while fetching GitHub hourly rate limit status');
     }
 
-    emitter.emit('action', `GitHub rate limit stats for this hour: ${JSON.stringify(stats, null, 2)}`);
+    emitter.emit('action', { message: `GitHub rate limit stats for this hour: ${JSON.stringify(stats, null, 2)}` });
     callback();
   });
 };
