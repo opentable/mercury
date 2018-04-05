@@ -12,7 +12,7 @@ describe('resources.fetchPullRequestInfo()', () => {
       '../services/github': {
         getPullRequestInfo: githubStub
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   describe('happy path', () => {
     const repository = testData.postGithubFetchRepository;

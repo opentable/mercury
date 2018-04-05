@@ -13,7 +13,7 @@ describe('translations.fetchAll()', () => {
         fetchFile: smartlingStub,
         MAX_CONCURRENT_OPERATIONS: 20
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   const repository = testData.postSmartlingFetchRepository;
 

@@ -1,14 +1,16 @@
 'use strict';
 
 const async = require('async');
+const EventEmitter = require('events');
 const Manifest = require('./manifest');
 const Resources = require('./resources');
 const Translations = require('./translations');
 
-module.exports = ({ config, loggerService }) => {
-  const manifest = Manifest(loggerService);
-  const resources = Resources(loggerService);
-  const translations = Translations(loggerService);
+module.exports = ({ config }) => {
+  const emitter = new EventEmitter();
+  const manifest = Manifest(emitter);
+  const resources = Resources(emitter);
+  const translations = Translations(emitter);
 
   const processRepo = (repository, next) => {
     const mercury = async.seq(
@@ -30,31 +32,36 @@ module.exports = ({ config, loggerService }) => {
 
     mercury(repository, (err, repository) => {
       if (err) {
-        loggerService.info(`Attempted processing ${repository.owner}/${repository.repo} with errors`, 'repo-skipped');
+        emitter.emit('result', 'repo-skipped', `Attempted processing ${repository.owner}/${repository.repo} with errors`);
       } else {
-        loggerService.info(`Completed processing ${repository.owner}/${repository.repo} without errors`, 'repo-completed');
+        emitter.emit('result', 'repo-completed', `Completed processing ${repository.owner}/${repository.repo} without errors`);
       }
 
       next();
     });
   };
 
-  async.eachOfSeries(
-    config.repositories,
-    (repositories, owner, next) => {
-      async.eachSeries(
-        repositories,
-        (repo, next) => {
-          processRepo({ owner, repo }, next);
+  return {
+    on: (eventType, cb) => emitter.on(eventType, cb),
+    run: done => {
+      async.eachOfSeries(
+        config.repositories,
+        (repositories, owner, next) => {
+          async.eachSeries(
+            repositories,
+            (repo, next) => {
+              processRepo({ owner, repo }, next);
+            },
+            next
+          );
         },
-        next
+        () => {
+          resources.fetchRequestRateStats(() => {
+            emitter.emit('result', 'run-completed', `Completed running`);
+            done();
+          });
+        }
       );
-    },
-    () => {
-      resources.fetchRequestRateStats(() => {
-        loggerService.info(`Completed running`, 'run-completed');
-        process.exit(0);
-      });
     }
-  );
+  };
 };

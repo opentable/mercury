@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = loggerService => ({
-  fetch: require('./fetch')(loggerService),
-  validate: require('./validate')(loggerService)
+module.exports = emitter => ({
+  fetch: require('./fetch')(emitter),
+  validate: require('./validate')(emitter)
 });

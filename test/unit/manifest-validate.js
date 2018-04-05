@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const expect = require('chai').expect;
 const testData = require('./testData');
-const validate = require('../../src/manifest/validate')(testData.loggerServiceMock);
+const validate = require('../../src/manifest/validate')(testData.emitterMock);
 
 describe('manifest.validate()', () => {
   let error, result;

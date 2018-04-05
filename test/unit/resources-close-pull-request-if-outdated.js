@@ -12,7 +12,7 @@ describe('resources.closePullRequestIfOutdated()', () => {
       '../services/github': {
         closePullRequest: githubStub
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   describe('when pr does not exist yet', () => {
     const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);

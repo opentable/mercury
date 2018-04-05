@@ -20,7 +20,7 @@ describe('resources.commitFiles()', () => {
         eachSeries: async.eachSeries,
         retry: (policy, fn, cb) => async.retry({ times: 5, interval: 0 }, fn, cb)
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   const repository = testData.postGithubFetchRepository;
   let githubGetFileStub, githubCreateFileStub, githubUpdateFileStub;
