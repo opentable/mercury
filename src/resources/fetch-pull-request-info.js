@@ -4,7 +4,7 @@ const errorTypes = require('../constants/error-types');
 const github = require('../services/github');
 
 module.exports = emitter => (repository, callback) => {
-  emitter.emit('action', `Verifying existence of pending pull request for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `Verifying existence of pending pull request for ${repository.owner}/${repository.repo}` });
 
   const prOptions = {
     owner: repository.owner,
@@ -14,7 +14,7 @@ module.exports = emitter => (repository, callback) => {
   github.getPullRequestInfo(prOptions, (err, prInfo) => {
     if (err) {
       err = new Error('Failed while fetching pull request info');
-      emitter.emit('error', err, errorTypes.failedToFetchPrInfo, repository);
+      emitter.emit('error', { error: err, errorType: errorTypes.failedToFetchPrInfo, details: repository });
       repository.skip = true;
     } else {
       repository.prInfo = prInfo;

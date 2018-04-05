@@ -9,7 +9,7 @@ module.exports = emitter => (repository, callback) => {
     return callback(null, repository);
   }
 
-  emitter.emit('action', `Deleting outdated reference for ${repository.mercuryForkOwner}/${repository.repo}`);
+  emitter.emit('action', { message: `Deleting outdated reference for ${repository.mercuryForkOwner}/${repository.repo}` });
 
   const options = {
     owner: repository.mercuryForkOwner,
@@ -20,7 +20,7 @@ module.exports = emitter => (repository, callback) => {
   github.deleteReference(options, err => {
     if (err && err.message != 'Reference has already been manually deleted by the repo owners') {
       err = new Error('Failed while deleting outdated reference');
-      emitter.emit('error', err, errorTypes.failedToDeleteOutdatedBranch, repository);
+      emitter.emit('error', { error: err, errorType: errorTypes.failedToDeleteOutdatedBranch, details: repository });
       repository.skip = true;
     } else {
       err = null;

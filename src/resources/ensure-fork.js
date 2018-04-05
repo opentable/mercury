@@ -4,7 +4,7 @@ const errorTypes = require('../constants/error-types');
 const github = require('../services/github');
 
 module.exports = emitter => (repository, callback) => {
-  emitter.emit('action', `Ensuring existence and validity of a Mercury fork for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `Ensuring existence and validity of a Mercury fork for ${repository.owner}/${repository.repo}` });
 
   const options = {
     owner: repository.owner,
@@ -15,7 +15,7 @@ module.exports = emitter => (repository, callback) => {
 
   github.ensureFork(options, (err, result) => {
     if (err) {
-      emitter.emit('error', err, errorTypes.failedGithubFork, repository);
+      emitter.emit('error', { error: err, errorType: errorTypes.failedGithubFork, details: repository });
       repository.skip = true;
       return callback(err, repository);
     }
@@ -32,7 +32,7 @@ module.exports = emitter => (repository, callback) => {
     github.getBranchReference(branchUpstreamOptions, (err, branchSha) => {
       if (err) {
         err = new Error(`Could not fetch the upstream/${branch} reference`);
-        emitter.emit('error', err, errorTypes.failedToFetchBranchReference, repository);
+        emitter.emit('error', { error: err, errorType: errorTypes.failedToFetchBranchReference, details: repository });
         repository.skip = true;
         return callback(err, repository);
       }
@@ -48,7 +48,7 @@ module.exports = emitter => (repository, callback) => {
         github.updateReference(forkOptions, err => {
           if (err) {
             err = new Error(`Could not rebase fork from upstream/${branch} - forks are created asynchronously so will retry in the next round.`);
-            emitter.emit('error', err, errorTypes.failedGithubForkRebase, repository);
+            emitter.emit('error', { error: err, errorType: errorTypes.failedGithubForkRebase, details: repository });
             repository.skip = true;
           }
 
