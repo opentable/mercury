@@ -9,135 +9,135 @@ const BASE_URL = 'https://api.smartling.com/';
 const MAX_CONCURRENT_OPERATIONS = 20;
 
 const authenticate = (options, next) => {
-    const authenticateBody = {
-        userIdentifier: options.userIdentifier,
-        userSecret: options.userSecret
-    };
+  const authenticateBody = {
+    userIdentifier: options.userIdentifier,
+    userSecret: options.userSecret
+  };
 
-    const reqDetails = {
-        json: true
-    };
+  const reqDetails = {
+    json: true
+  };
 
-    needle.post(`${BASE_URL}auth-api/v2/authenticate`, authenticateBody, reqDetails, (err, response, body) => {
-        const accessToken = _.get(body, 'response.data.accessToken');
+  needle.post(`${BASE_URL}auth-api/v2/authenticate`, authenticateBody, reqDetails, (err, response, body) => {
+    const accessToken = _.get(body, 'response.data.accessToken');
 
-        if (!accessToken) {
-            return next(new Error(`Error when retrieving Smartling access token`));
-        }
+    if (!accessToken) {
+      return next(new Error(`Error when retrieving Smartling access token`));
+    }
 
-        next(err, accessToken);
-    });
+    next(err, accessToken);
+  });
 };
 
 module.exports = {
-    fetchFile: (options, next) => {
-        authenticate(options, (err, accessToken) => {
-            if (err) {
-                return next(err);
-            }
+  fetchFile: (options, next) => {
+    authenticate(options, (err, accessToken) => {
+      if (err) {
+        return next(err);
+      }
 
-            const reqDetails = {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            };
+      const reqDetails = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      };
 
-            needle.get(`${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`, reqDetails, (err, response, body) => {
-                if (err || response.statusCode !== 200) {
-                    return next(new Error(`Error when retrieving translations content for ${options.fileName}`));
-                }
+      needle.get(`${BASE_URL}/files-api/v2/projects/${options.projectId}/locales/${options.localeId}/file?fileUri=${options.fileName}`, reqDetails, (err, response, body) => {
+        if (err || response.statusCode !== 200) {
+          return next(new Error(`Error when retrieving translations content for ${options.fileName}`));
+        }
 
-                next(null, body.toString());
-            });
-        });
-    },
+        next(null, body.toString());
+      });
+    });
+  },
 
-    getProjectInfo: (options, next) => {
-        authenticate(options, (err, accessToken) => {
-            if (err) {
-                return next(err);
-            }
+  getProjectInfo: (options, next) => {
+    authenticate(options, (err, accessToken) => {
+      if (err) {
+        return next(err);
+      }
 
-            const reqDetails = {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            };
+      const reqDetails = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      };
 
-            needle.get(`${BASE_URL}projects-api/v2/projects/${options.projectId}`, reqDetails, (err, response, body) => {
-                const info = _.get(body, 'response.data');
+      needle.get(`${BASE_URL}projects-api/v2/projects/${options.projectId}`, reqDetails, (err, response, body) => {
+        const info = _.get(body, 'response.data');
 
-                if (err || !info || response.statusCode !== 200) {
-                    return next(new Error(`Error when retrieving Smartling project info for ${options.projectId}`));
-                }
+        if (err || !info || response.statusCode !== 200) {
+          return next(new Error(`Error when retrieving Smartling project info for ${options.projectId}`));
+        }
 
-                next(null, info);
-            });
-        });
-    },
+        next(null, info);
+      });
+    });
+  },
 
-    getStatus: (options, next) => {
-        authenticate(options, (err, accessToken) => {
-            if (err) {
-                return next(err);
-            }
+  getStatus: (options, next) => {
+    authenticate(options, (err, accessToken) => {
+      if (err) {
+        return next(err);
+      }
 
-            const queryString = {
-                fileUri: options.fileUri
-            };
+      const queryString = {
+        fileUri: options.fileUri
+      };
 
-            const reqDetails = {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            };
+      const reqDetails = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      };
 
-            needle.request('get', `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`, queryString, reqDetails, (err, response, body) => {
-                const status = _.get(body, 'response.data');
+      needle.request('get', `${BASE_URL}/files-api/v2/projects/${options.projectId}/file/status`, queryString, reqDetails, (err, response, body) => {
+        const status = _.get(body, 'response.data');
 
-                if (err || !status || response.statusCode !== 200) {
-                    return next(new Error(`Error when retrieving translation status for ${options.fileUri}`));
-                }
+        if (err || !status || response.statusCode !== 200) {
+          return next(new Error(`Error when retrieving translation status for ${options.fileUri}`));
+        }
 
-                next(null, status);
-            });
-        });
-    },
+        next(null, status);
+      });
+    });
+  },
 
-    MAX_CONCURRENT_OPERATIONS,
+  MAX_CONCURRENT_OPERATIONS,
 
-    uploadFileContent: (content, options, next) => {
-        authenticate(options, (err, accessToken) => {
-            if (err || !content) {
-                const error = !content ? new Error(`Error when uploading Smartling file with null content`) : err;
-                return next(error);
-            }
+  uploadFileContent: (content, options, next) => {
+    authenticate(options, (err, accessToken) => {
+      if (err || !content) {
+        const error = !content ? new Error(`Error when uploading Smartling file with null content`) : err;
+        return next(error);
+      }
 
-            const buffer = Buffer.from(content);
-            const filename = path.basename(options.path);
-            const extension = path
-                .extname(options.path)
-                .replace('.', '')
-                .toLowerCase();
-            const smartlingFormData = {
-                file: {
-                    buffer,
-                    filename,
-                    content_type: 'application/octet-stream'
-                },
-                fileUri: options.path,
-                fileType: mapSmartlingFiletype.map(content, extension),
-                authorize: 'true'
-            };
+      const buffer = Buffer.from(content);
+      const filename = path.basename(options.path);
+      const extension = path
+        .extname(options.path)
+        .replace('.', '')
+        .toLowerCase();
+      const smartlingFormData = {
+        file: {
+          buffer,
+          filename,
+          content_type: 'application/octet-stream'
+        },
+        fileUri: options.path,
+        fileType: mapSmartlingFiletype.map(content, extension),
+        authorize: 'true'
+      };
 
-            const smartlingUploadOptions = {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                multipart: true
-            };
+      const smartlingUploadOptions = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        multipart: true
+      };
 
-            needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function(err, response, body) {
-                if (err || response.statusCode !== 200) {
-                    return next(new Error(`Error when uploading Smartling file`));
-                }
+      needle.post(`${BASE_URL}files-api/v2/projects/${options.projectId}/file`, smartlingFormData, smartlingUploadOptions, function(err, response, body) {
+        if (err || response.statusCode !== 200) {
+          return next(new Error(`Error when uploading Smartling file`));
+        }
 
-                next(null, body);
-            });
-        });
-    }
+        next(null, body);
+      });
+    });
+  }
 };

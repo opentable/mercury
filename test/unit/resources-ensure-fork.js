@@ -7,159 +7,171 @@ const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.ensureFork()', () => {
-    const mockedEnsureFork = stubs =>
-        injectr(
-            '../../src/resources/ensure-fork.js',
-            {
-                '../services/github': stubs
-            },
-            { setTimeout: cb => cb() }
-        );
+  const mockedEnsureFork = stubs =>
+    injectr(
+      '../../src/resources/ensure-fork.js',
+      {
+        '../services/github': stubs
+      },
+      { setTimeout: cb => cb() }
+    )(testData.loggerServiceMock);
 
-    const repository = testData.postGithubFetchRepository;
+  const repository = testData.postGithubFetchRepository;
 
-    describe('happy path', function() {
-        let err, res, stubs;
+  describe('happy path', function() {
+    let err, res, stubs;
 
-        beforeEach(done => {
-            stubs = {
-                ensureFork: sinon.stub().yields(null, { full_name: 'testOwner/testRepo', owner: { login: 'testOwner' } }),
-                getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
-                updateReference: sinon.stub().yields(null, 'ok')
-            };
+    beforeEach(done => {
+      stubs = {
+        ensureFork: sinon.stub().yields(null, {
+          full_name: 'testOwner/testRepo',
+          owner: { login: 'testOwner' }
+        }),
+        getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
+        updateReference: sinon.stub().yields(null, 'ok')
+      };
 
-            mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
-                err = error;
-                res = result;
-                done();
-            });
-        });
-
-        it('should not error', () => {
-            expect(err).to.be.null;
-        });
-
-        it('should append mercuryForkName and mercuryForkOwner to repository', () => {
-            expect(res.mercuryForkName).to.eql('testOwner/testRepo');
-            expect(res.mercuryForkOwner).to.eql('testOwner');
-        });
-
-        it('should ensure fork/master is up-to-date with upstream/master', () => {
-            expect(stubs.updateReference.args[0][0].reference).to.equal('sha1234567890');
-        });
+      mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
+        err = error;
+        res = result;
+        done();
+      });
     });
 
-    describe('when workingBranch=develop', function() {
-        let err, res, stubs;
-
-        beforeEach(done => {
-            stubs = {
-                ensureFork: sinon.stub().yields(null, { full_name: 'testOwner/testRepo', owner: { login: 'testOwner' } }),
-                getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
-                updateReference: sinon.stub().yields(null, 'ok')
-            };
-
-            const repo = _.cloneDeep(repository);
-            repo.manifestContent.workingBranch = 'develop';
-
-            mockedEnsureFork(stubs)(repo, (error, result) => {
-                err = error;
-                res = result;
-                done();
-            });
-        });
-
-        it('should not error', () => {
-            expect(err).to.be.null;
-        });
-
-        it('should append mercuryForkName and mercuryForkOwner to repository', () => {
-            expect(res.mercuryForkName).to.eql('testOwner/testRepo');
-            expect(res.mercuryForkOwner).to.eql('testOwner');
-        });
-
-        it('should ensure fork/develop is up-to-date with upstream/develop', () => {
-            expect(stubs.getBranchReference.args[0][0].branch).to.equal('develop');
-            expect(stubs.updateReference.args[0][0].branch).to.equal('develop');
-            expect(stubs.updateReference.args[0][0].reference).to.equal('sha1234567890');
-        });
+    it('should not error', () => {
+      expect(err).to.be.null;
     });
 
-    describe('when forking fails with an error', () => {
-        let err, res;
-
-        beforeEach(done => {
-            const stubs = {
-                ensureFork: sinon.stub().yields({ message: 'Could not create the fork', code: 422 }, { content: null }),
-                getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
-                updateReference: sinon.stub().yields(null, 'ok')
-            };
-
-            mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
-                err = error;
-                res = result;
-                done();
-            });
-        });
-
-        it('should show an error', () => {
-            expect(err.message).to.contain('Could not create the fork');
-        });
-
-        it('should mark the repo for being skipped', () => {
-            expect(res.skip).to.be.true;
-        });
+    it('should append mercuryForkName and mercuryForkOwner to repository', () => {
+      expect(res.mercuryForkName).to.eql('testOwner/testRepo');
+      expect(res.mercuryForkOwner).to.eql('testOwner');
     });
 
-    describe('when getting upstream/master reference fails with an error', () => {
-        let err, res, stubs;
+    it('should ensure fork/master is up-to-date with upstream/master', () => {
+      expect(stubs.updateReference.args[0][0].reference).to.equal('sha1234567890');
+    });
+  });
 
-        beforeEach(done => {
-            stubs = {
-                ensureFork: sinon.stub().yields(null, { full_name: 'testOwner/testRepo', owner: { login: 'testOwner' } }),
-                getBranchReference: sinon.stub().yields({ code: 404, message: 'Not found' }),
-                updateReference: sinon.stub().yields(null, 'ok')
-            };
+  describe('when workingBranch=develop', function() {
+    let err, res, stubs;
 
-            mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
-                err = error;
-                res = result;
-                done();
-            });
-        });
+    beforeEach(done => {
+      stubs = {
+        ensureFork: sinon.stub().yields(null, {
+          full_name: 'testOwner/testRepo',
+          owner: { login: 'testOwner' }
+        }),
+        getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
+        updateReference: sinon.stub().yields(null, 'ok')
+      };
 
-        it('should show an error', () => {
-            expect(err.toString()).to.contain('Could not fetch the upstream/master reference');
-        });
+      const repo = _.cloneDeep(repository);
+      repo.manifestContent.workingBranch = 'develop';
 
-        it('should mark the repo for being skipped', () => {
-            expect(res.skip).to.be.true;
-        });
+      mockedEnsureFork(stubs)(repo, (error, result) => {
+        err = error;
+        res = result;
+        done();
+      });
     });
 
-    describe('when rebasing mercuryUser/master from upstream/master fails with an error', function() {
-        let err, res, stubs;
-
-        beforeEach(done => {
-            stubs = {
-                ensureFork: sinon.stub().yields(null, { full_name: 'testOwner/testRepo', owner: { login: 'testOwner' } }),
-                getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
-                updateReference: sinon.stub().yields({ code: 400, message: 'Some error' })
-            };
-
-            mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
-                err = error;
-                res = result;
-                done();
-            });
-        });
-
-        it('should show an error', () => {
-            expect(err.toString()).to.contain('Could not rebase fork from upstream/master');
-        });
-
-        it('should mark the repo for being skipped', () => {
-            expect(res.skip).to.be.true;
-        });
+    it('should not error', () => {
+      expect(err).to.be.null;
     });
+
+    it('should append mercuryForkName and mercuryForkOwner to repository', () => {
+      expect(res.mercuryForkName).to.eql('testOwner/testRepo');
+      expect(res.mercuryForkOwner).to.eql('testOwner');
+    });
+
+    it('should ensure fork/develop is up-to-date with upstream/develop', () => {
+      expect(stubs.getBranchReference.args[0][0].branch).to.equal('develop');
+      expect(stubs.updateReference.args[0][0].branch).to.equal('develop');
+      expect(stubs.updateReference.args[0][0].reference).to.equal('sha1234567890');
+    });
+  });
+
+  describe('when forking fails with an error', () => {
+    let err, res;
+
+    beforeEach(done => {
+      const stubs = {
+        ensureFork: sinon.stub().yields({ message: 'Could not create the fork', code: 422 }, { content: null }),
+        getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
+        updateReference: sinon.stub().yields(null, 'ok')
+      };
+
+      mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
+        err = error;
+        res = result;
+        done();
+      });
+    });
+
+    it('should show an error', () => {
+      expect(err.message).to.contain('Could not create the fork');
+    });
+
+    it('should mark the repo for being skipped', () => {
+      expect(res.skip).to.be.true;
+    });
+  });
+
+  describe('when getting upstream/master reference fails with an error', () => {
+    let err, res, stubs;
+
+    beforeEach(done => {
+      stubs = {
+        ensureFork: sinon.stub().yields(null, {
+          full_name: 'testOwner/testRepo',
+          owner: { login: 'testOwner' }
+        }),
+        getBranchReference: sinon.stub().yields({ code: 404, message: 'Not found' }),
+        updateReference: sinon.stub().yields(null, 'ok')
+      };
+
+      mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
+        err = error;
+        res = result;
+        done();
+      });
+    });
+
+    it('should show an error', () => {
+      expect(err.toString()).to.contain('Could not fetch the upstream/master reference');
+    });
+
+    it('should mark the repo for being skipped', () => {
+      expect(res.skip).to.be.true;
+    });
+  });
+
+  describe('when rebasing mercuryUser/master from upstream/master fails with an error', function() {
+    let err, res, stubs;
+
+    beforeEach(done => {
+      stubs = {
+        ensureFork: sinon.stub().yields(null, {
+          full_name: 'testOwner/testRepo',
+          owner: { login: 'testOwner' }
+        }),
+        getBranchReference: sinon.stub().yields(null, 'sha1234567890'),
+        updateReference: sinon.stub().yields({ code: 400, message: 'Some error' })
+      };
+
+      mockedEnsureFork(stubs)(_.cloneDeep(repository), (error, result) => {
+        err = error;
+        res = result;
+        done();
+      });
+    });
+
+    it('should show an error', () => {
+      expect(err.toString()).to.contain('Could not rebase fork from upstream/master');
+    });
+
+    it('should mark the repo for being skipped', () => {
+      expect(res.skip).to.be.true;
+    });
+  });
 });

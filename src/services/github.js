@@ -11,13 +11,13 @@ const utils = require('./github/utils');
 const MAX_CONCURRENT_OPERATIONS = 20;
 
 const github = new Github({
-    protocol: 'https',
-    host: 'api.github.com',
-    headers: {
-        'user-agent': 'mercury'
-    },
-    followRedirects: false,
-    timeout: 20000
+  protocol: 'https',
+  host: 'api.github.com',
+  headers: {
+    'user-agent': 'mercury'
+  },
+  followRedirects: false,
+  timeout: 20000
 });
 
 const file = File(github);
@@ -26,43 +26,43 @@ const rateLimit = RateLimit(github);
 const reference = Reference(github);
 
 const getFilesList = (options, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+  const authenticatedGithub = utils.authenticateGithubOperation('read', github);
 
-    reference.get(options, (err, sha) => {
-        if (err) {
-            return next(err);
-        }
+  reference.get(options, (err, sha) => {
+    if (err) {
+      return next(err);
+    }
 
-        options.recursive = true;
-        options.sha = sha;
+    options.recursive = true;
+    options.sha = sha;
 
-        authenticatedGithub.gitdata.getTree(options, (err, list) => {
-            next(err, list ? _.map(list.tree, x => x.path) : undefined);
-        });
+    authenticatedGithub.gitdata.getTree(options, (err, list) => {
+      next(err, list ? _.map(list.tree, x => x.path) : undefined);
     });
+  });
 };
 
 const ensureFork = (options, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
+  const authenticatedGithub = utils.authenticateGithubOperation('write', github);
 
-    authenticatedGithub.repos.fork(options, next);
+  authenticatedGithub.repos.fork(options, next);
 };
 
 module.exports = {
-    closePullRequest: pullRequest.close,
-    createPullRequest: pullRequest.create,
-    createFile: file.create,
-    deleteReference: reference.delete,
-    ensureBranchReference: reference.getOrCreate,
-    ensureFork,
-    getBranchReference: reference.get,
-    getFile: file.get,
-    getFileChangedInfo: file.lastUpdated,
-    getFilesList,
-    getPullRequestInfo: pullRequest.get,
-    getRequestRateStats: rateLimit.get,
-    MAX_CONCURRENT_OPERATIONS,
-    updateFile: file.update,
-    updatePullRequest: pullRequest.update,
-    updateReference: reference.update
+  closePullRequest: pullRequest.close,
+  createPullRequest: pullRequest.create,
+  createFile: file.create,
+  deleteReference: reference.delete,
+  ensureBranchReference: reference.getOrCreate,
+  ensureFork,
+  getBranchReference: reference.get,
+  getFile: file.get,
+  getFileChangedInfo: file.lastUpdated,
+  getFilesList,
+  getPullRequestInfo: pullRequest.get,
+  getRequestRateStats: rateLimit.get,
+  MAX_CONCURRENT_OPERATIONS,
+  updateFile: file.update,
+  updatePullRequest: pullRequest.update,
+  updateReference: reference.update
 };
