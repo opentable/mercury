@@ -36,7 +36,7 @@ const mapFileObjects = files => {
 };
 
 module.exports = emitter => (repository, callback) => {
-  emitter.emit('action', `Getting translations' list from github for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `Getting translations' list from github for ${repository.owner}/${repository.repo}` });
 
   const srcGlobs = _.map(repository.manifestContent.translations, item => ({
     src: item.input.src,
@@ -58,7 +58,7 @@ module.exports = emitter => (repository, callback) => {
   github.getFilesList(githubOptions, (err, list) => {
     if (err) {
       err = new Error('No github files found. Skipping.');
-      emitter.emit('error', err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
+      emitter.emit('error', { error: err, errorType: errorTypes.failedToLocateTranslationFilesInGithub, details: repository });
       repository.skip = true;
       return callback(err, repository);
     }
@@ -74,7 +74,7 @@ module.exports = emitter => (repository, callback) => {
 
       if (matchingError) {
         err = new Error(matchingError);
-        emitter.emit('error', err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
+        emitter.emit('error', { error: err, errorType: errorTypes.failedToLocateTranslationFilesInGithub, details: repository });
         repository.skip = true;
         return callback(err, repository);
       }
@@ -82,10 +82,10 @@ module.exports = emitter => (repository, callback) => {
       repository.translationFiles = translationFiles;
 
       smartling.getProjectInfo(smartlingOptions, (err, info) => {
-        emitter.emit('action', `Getting project info from smartling for ${repository.owner}/${repository.repo}`);
+        emitter.emit('action', { message: `Getting project info from smartling for ${repository.owner}/${repository.repo}` });
 
         if (err) {
-          emitter.emit('error', err, errorTypes.failedSmartlingFetchInfo, repository);
+          emitter.emit('error', { error: err, errorType: errorTypes.failedSmartlingFetchInfo, details: repository });
           repository.skip = true;
         } else {
           repository.sourceLocaleId = info.sourceLocaleId;
