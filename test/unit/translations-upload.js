@@ -7,80 +7,80 @@ const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('translations.upload()', () => {
-    const mockedUpload = (githubStub, smartlingStub) =>
-        injectr('../../src/translations/upload.js', {
-            '../services/github': {
-                getFile: githubStub
-            },
-            '../services/smartling': {
-                uploadFileContent: smartlingStub,
-                MAX_CONCURRENT_OPERATIONS: 20
-            }
+  const mockedUpload = (githubStub, smartlingStub) =>
+    injectr('../../src/translations/upload.js', {
+      '../services/github': {
+        getFile: githubStub
+      },
+      '../services/smartling': {
+        uploadFileContent: smartlingStub,
+        MAX_CONCURRENT_OPERATIONS: 20
+      }
+    })(testData.loggerServiceMock);
+
+  const githubStub = sinon.stub().yields(null, testData.githubMock);
+
+  const repository = testData.postSourceFetchRepository;
+
+  describe('happy path', () => {
+    describe('when the file is new', () => {
+      let err, res;
+
+      beforeEach(done => {
+        const smartlingStub = sinon.stub().yields(null, testData.smartlingMockNew);
+
+        mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
+          err = error;
+          res = result;
+          done();
         });
+      });
 
-    const githubStub = sinon.stub().yields(null, testData.githubMock);
-
-    const repository = testData.postSourceFetchRepository;
-
-    describe('happy path', () => {
-        describe('when the file is new', () => {
-            let err, res;
-
-            beforeEach(done => {
-                const smartlingStub = sinon.stub().yields(null, testData.smartlingMockNew);
-
-                mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
-                    err = error;
-                    res = result;
-                    done();
-                });
-            });
-
-            it('should append the correct report to the translationFiles', () => {
-                expect(err).to.be.null;
-                expect(res.translationFiles[0].report).to.be.eql('New Smartling file uploaded');
-            });
-        });
-
-        describe('when the file is existing', () => {
-            let err, res;
-
-            beforeEach(done => {
-                const smartlingStub = sinon.stub().yields(null, testData.smartlingMockExisting);
-
-                mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
-                    err = error;
-                    res = result;
-                    done();
-                });
-            });
-
-            it('should append the correct report to the translationFiles', () => {
-                expect(err).to.be.null;
-                expect(res.translationFiles[0].report).to.be.eql('Existing Smartling file overwritten');
-            });
-        });
+      it('should append the correct report to the translationFiles', () => {
+        expect(err).to.be.null;
+        expect(res.translationFiles[0].report).to.be.eql('New Smartling file uploaded');
+      });
     });
 
-    describe('when smartling returns an error', () => {
-        let err, res;
+    describe('when the file is existing', () => {
+      let err, res;
 
-        beforeEach(done => {
-            const smartlingStub = sinon.stub().yields(new Error('Error when uploading Smartling file'));
+      beforeEach(done => {
+        const smartlingStub = sinon.stub().yields(null, testData.smartlingMockExisting);
 
-            mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
-                err = error;
-                res = result;
-                done();
-            });
+        mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
+          err = error;
+          res = result;
+          done();
         });
+      });
 
-        it('should append the error report to the translationFiles', () => {
-            expect(res.translationFiles[0].report).to.be.eql('Error when uploading Smartling file');
-        });
-
-        it('should create an error with a descriptive message', () => {
-            expect(err.message).to.be.eql('Error when uploading Smartling file');
-        });
+      it('should append the correct report to the translationFiles', () => {
+        expect(err).to.be.null;
+        expect(res.translationFiles[0].report).to.be.eql('Existing Smartling file overwritten');
+      });
     });
+  });
+
+  describe('when smartling returns an error', () => {
+    let err, res;
+
+    beforeEach(done => {
+      const smartlingStub = sinon.stub().yields(new Error('Error when uploading Smartling file'));
+
+      mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), (error, result) => {
+        err = error;
+        res = result;
+        done();
+      });
+    });
+
+    it('should append the error report to the translationFiles', () => {
+      expect(res.translationFiles[0].report).to.be.eql('Error when uploading Smartling file');
+    });
+
+    it('should create an error with a descriptive message', () => {
+      expect(err.message).to.be.eql('Error when uploading Smartling file');
+    });
+  });
 });
