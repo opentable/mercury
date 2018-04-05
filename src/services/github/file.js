@@ -4,68 +4,68 @@ const _ = require('lodash');
 const utils = require('./utils');
 
 module.exports = github => ({
-    create: (options, next) => {
-        const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-        const createOptions = _.cloneDeep(options);
-        const encodedContent = utils.encodeContent(createOptions.content);
-        _.set(createOptions, 'content', encodedContent);
+  create: (options, next) => {
+    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
+    const createOptions = _.cloneDeep(options);
+    const encodedContent = utils.encodeContent(createOptions.content);
+    _.set(createOptions, 'content', encodedContent);
 
-        authenticatedGithub.repos.createFile(createOptions, (err, result) => {
-            if (err) {
-                return next(err);
-            }
-            next(null, result);
-        });
-    },
+    authenticatedGithub.repos.createFile(createOptions, (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      next(null, result);
+    });
+  },
 
-    get: (options, next) => {
-        const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+  get: (options, next) => {
+    const authenticatedGithub = utils.authenticateGithubOperation('read', github);
 
-        authenticatedGithub.repos.getContent(options, (err, file) => {
-            const getContent = f => {
-                try {
-                    return new Buffer(f.content, f.encoding).toString();
-                } catch (error) {
-                    console.log(`Github file content request returning no values.`);
-                    console.log(typeof f);
-                    console.log(JSON.stringify(f));
-                    return next(error);
-                }
-            };
-            const content = !err && file ? getContent(file) : null;
-            const sha = !err && file ? file.sha : null;
-            const result = {
-                content,
-                sha
-            };
-            return next(err, result);
-        });
-    },
+    authenticatedGithub.repos.getContent(options, (err, file) => {
+      const getContent = f => {
+        try {
+          return new Buffer(f.content, f.encoding).toString();
+        } catch (error) {
+          console.log(`Github file content request returning no values.`);
+          console.log(typeof f);
+          console.log(JSON.stringify(f));
+          return next(error);
+        }
+      };
+      const content = !err && file ? getContent(file) : null;
+      const sha = !err && file ? file.sha : null;
+      const result = {
+        content,
+        sha
+      };
+      return next(err, result);
+    });
+  },
 
-    lastUpdated: (options, next) => {
-        options['per_page'] = 1;
-        const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+  lastUpdated: (options, next) => {
+    options['per_page'] = 1;
+    const authenticatedGithub = utils.authenticateGithubOperation('read', github);
 
-        authenticatedGithub.repos.getCommits(options, (err, commits) => {
-            if (err || _.isEmpty(commits)) {
-                return next(err);
-            }
+    authenticatedGithub.repos.getCommits(options, (err, commits) => {
+      if (err || _.isEmpty(commits)) {
+        return next(err);
+      }
 
-            next(null, commits[0].commit.author.date);
-        });
-    },
+      next(null, commits[0].commit.author.date);
+    });
+  },
 
-    update: (options, next) => {
-        const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-        const updateOptions = _.cloneDeep(options);
-        const encodedContent = utils.encodeContent(updateOptions.content);
-        _.set(updateOptions, 'content', encodedContent);
+  update: (options, next) => {
+    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
+    const updateOptions = _.cloneDeep(options);
+    const encodedContent = utils.encodeContent(updateOptions.content);
+    _.set(updateOptions, 'content', encodedContent);
 
-        authenticatedGithub.repos.updateFile(updateOptions, (err, result) => {
-            if (err) {
-                return next(err);
-            }
-            next(null, result);
-        });
-    }
+    authenticatedGithub.repos.updateFile(updateOptions, (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      next(null, result);
+    });
+  }
 });
