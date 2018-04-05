@@ -13,7 +13,7 @@ describe('resources.fetchAll()', () => {
         getFile: githubStub,
         MAX_CONCURRENT_OPERATIONS: 20
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   describe('happy path', () => {
     const repository = testData.postGithubFetchRepository;

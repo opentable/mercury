@@ -3,12 +3,12 @@
 const errorTypes = require('../constants/error-types');
 const github = require('../services/github');
 
-module.exports = loggerService => (repository, callback) => {
+module.exports = emitter => (repository, callback) => {
   if (!repository.prInfo.found || !repository.prInfo.outdated) {
     return callback(null, repository);
   }
 
-  loggerService.console(`Closing outdated pull request for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', `Closing outdated pull request for ${repository.owner}/${repository.repo}`);
 
   const prOptions = {
     number: repository.prInfo.number,
@@ -19,7 +19,7 @@ module.exports = loggerService => (repository, callback) => {
   github.closePullRequest(prOptions, err => {
     if (err) {
       err = new Error('Failed while closing pull request');
-      loggerService.error(err, errorTypes.failedToClosePullRequest, repository);
+      emitter.emit('error', err, errorTypes.failedToClosePullRequest, repository);
       repository.skip = true;
     }
 

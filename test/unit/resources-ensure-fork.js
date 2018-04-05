@@ -14,7 +14,7 @@ describe('resources.ensureFork()', () => {
         '../services/github': stubs
       },
       { setTimeout: cb => cb() }
-    )(testData.loggerServiceMock);
+    )(testData.emitterMock);
 
   const repository = testData.postGithubFetchRepository;
 

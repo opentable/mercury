@@ -15,7 +15,7 @@ describe('translations.getList()', () => {
       '../services/smartling': {
         getProjectInfo: smartlingStub
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   const repository = testData.preTranslationRepository;
 

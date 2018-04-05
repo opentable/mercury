@@ -3,8 +3,8 @@
 const errorTypes = require('../constants/error-types');
 const github = require('../services/github');
 
-module.exports = loggerService => (repository, callback) => {
-  loggerService.console(`Fetching manifest from github for ${repository.owner}/${repository.repo}`);
+module.exports = emitter => (repository, callback) => {
+  emitter.emit('action', `Fetching manifest from github for ${repository.owner}/${repository.repo}`);
 
   const options = {
     path: 'mercury.json',
@@ -15,14 +15,14 @@ module.exports = loggerService => (repository, callback) => {
   github.getFile(options, (err, file) => {
     if (err) {
       err = new Error('mercury.json not found. Skipping.');
-      loggerService.error(err, errorTypes.failedToLocateManifest, repository);
+      emitter.emit('error', err, errorTypes.failedToLocateManifest, repository);
       repository.skip = true;
     } else {
       try {
         repository.manifestContent = JSON.parse(file.content);
       } catch (e) {
         err = new Error('An error happened when parsing mercury.json');
-        loggerService.error(err, errorTypes.failedToParseManifest, repository);
+        emitter.emit('error', err, errorTypes.failedToParseManifest, repository);
         repository.skip = true;
       }
     }
@@ -34,7 +34,7 @@ module.exports = loggerService => (repository, callback) => {
     github.getFileChangedInfo(options, (err, changedDate) => {
       if (err) {
         err = new Error('An error happened when fetching mercury.json info');
-        loggerService.error(err, errorTypes.failedToFetchManifestInfo, repository);
+        emitter.emit('error', err, errorTypes.failedToFetchManifestInfo, repository);
         repository.skip = true;
       }
 

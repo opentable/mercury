@@ -26,8 +26,8 @@ const getAllGithubFilenames = repository => {
   return list;
 };
 
-module.exports = loggerService => (repository, callback) => {
-  loggerService.console(`Fetching secondary language files from github for ${repository.owner}/${repository.repo}`);
+module.exports = emitter => (repository, callback) => {
+  emitter.emit('action', `Fetching secondary language files from github for ${repository.owner}/${repository.repo}`);
 
   const githubOptions = {
     repo: repository.repo,
@@ -64,7 +64,7 @@ module.exports = loggerService => (repository, callback) => {
     },
     err => {
       if (err) {
-        loggerService.error(err, errorTypes.failedGithubFetchFiles, repository);
+        emitter.emit('error', err, errorTypes.failedGithubFetchFiles, repository);
         repository.skip = true;
       }
 

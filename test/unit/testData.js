@@ -1,10 +1,8 @@
 'use strict';
 
 module.exports = {
-  loggerServiceMock: {
-    console: () => {},
-    error: () => {},
-    info: () => {}
+  emitterMock: {
+    emit: () => {}
   },
   githubMock: ['src/locales/en-us/file.json', 'src/locales/en-us/other-file.json'],
   githubMockResx: ['src/locales/folder/Strings.resx', 'src/locales/otherfolder/Strings.resx'],
