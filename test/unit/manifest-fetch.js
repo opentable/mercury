@@ -12,7 +12,7 @@ describe('manifest.fetch()', () => {
         getFile: getFileStub,
         getFileChangedInfo: getFileChangedInfoStub
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   let error, result;
 

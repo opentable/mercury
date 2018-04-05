@@ -16,7 +16,7 @@ describe('translations.upload()', () => {
         uploadFileContent: smartlingStub,
         MAX_CONCURRENT_OPERATIONS: 20
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   const githubStub = sinon.stub().yields(null, testData.githubMock);
 

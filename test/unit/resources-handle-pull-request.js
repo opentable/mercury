@@ -13,7 +13,7 @@ describe('resources.handlePullRequest()', () => {
         createPullRequest: createStub,
         updatePullRequest: updateStub
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   const repository = testData.postPullRequestFetchInfoRepository;
 

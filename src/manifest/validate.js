@@ -19,12 +19,12 @@ const schema = joi.object().keys({
   }).required()).required()
 });
 
-module.exports = loggerService => (repository, callback) => {
-  loggerService.console(`Validating manifest for ${repository.owner}/${repository.repo}`);
+module.exports = emitter => (repository, callback) => {
+  emitter.emit('action', `Validating manifest for ${repository.owner}/${repository.repo}`);
 
   joi.validate(repository.manifestContent, schema, (err, normalisedManifest) => {
     if (err) {
-      loggerService.error(new Error('Manifest is not valid'), errorTypes.manifestFailedValidation, repository);
+      emitter.emit('error', new Error('Manifest is not valid'), errorTypes.manifestFailedValidation, repository);
     }
 
     if (!err && normalisedManifest) {

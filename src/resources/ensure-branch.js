@@ -4,8 +4,8 @@ const config = require('config');
 const errorTypes = require('../constants/error-types');
 const github = require('../services/github');
 
-module.exports = loggerService => (repository, callback) => {
-  loggerService.console(`Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
+module.exports = emitter => (repository, callback) => {
+  emitter.emit('action', `Ensuring existence of a mercury branch for ${repository.mercuryForkOwner}/${repository.repo}`);
 
   const options = {
     branch: repository.manifestContent.workingBranch,
@@ -15,7 +15,7 @@ module.exports = loggerService => (repository, callback) => {
 
   github.getBranchReference(options, (err, branchReferenceSha) => {
     if (err) {
-      loggerService.error(err, errorTypes.failedGithubBranch, repository);
+      emitter.emit('error', err, errorTypes.failedGithubBranch, repository);
       repository.skip = true;
       return callback(err, repository);
     }
@@ -28,7 +28,7 @@ module.exports = loggerService => (repository, callback) => {
 
     github.ensureBranchReference(branchOptions, branchReferenceSha, (err, mercuryReferenceSha) => {
       if (err) {
-        loggerService.error(err, errorTypes.failedGithubBranch, repository);
+        emitter.emit('error', err, errorTypes.failedGithubBranch, repository);
         repository.skip = true;
       }
 

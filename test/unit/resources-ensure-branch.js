@@ -13,7 +13,7 @@ describe('resources.ensureBranch()', () => {
         getBranchReference: githubgetBranchReferenceStub,
         ensureBranchReference: githubEnsureBranchStub
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   const repository = testData.postGithubFetchRepository;
 
