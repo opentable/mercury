@@ -11,8 +11,8 @@ const retryPolicy = {
   interval: retryCount => 200 * retryCount
 };
 
-module.exports = loggerService => (repository, callback) => {
-  loggerService.console(`Committing new or updated files to ${repository.mercuryForkOwner}/${repository.repo}`);
+module.exports = emitter => (repository, callback) => {
+  emitter.emit('action', `Committing new or updated files to ${repository.mercuryForkOwner}/${repository.repo}`);
 
   let commitCount = 0;
 
@@ -43,11 +43,11 @@ module.exports = loggerService => (repository, callback) => {
             _.unset(options, 'ref');
 
             if (!content) {
-              loggerService.console(`Creating new ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
+              emitter.emit('action', `Creating new ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
               commitCount++;
               async.retry(retryPolicy, github.createFile.bind(null, options), callback);
             } else if (content && content !== locale.smartlingContent) {
-              loggerService.console(`Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
+              emitter.emit('action', `Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`);
               options.sha = sha;
               commitCount++;
               async.retry(retryPolicy, github.updateFile.bind(null, options), callback);
@@ -66,7 +66,7 @@ module.exports = loggerService => (repository, callback) => {
 
       if (err) {
         err = new Error(err.message);
-        loggerService.error(err, errorTypes.failedGithubCommit, repository);
+        emitter.emit('error', err, errorTypes.failedGithubCommit, repository);
         repository.skip = true;
       }
 

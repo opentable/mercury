@@ -5,7 +5,7 @@ const errorTypes = require('../constants/error-types');
 const github = require('../services/github');
 const metadataFormatter = require('../utils/format-pr-metadata');
 
-module.exports = loggerService => (repository, callback) => {
+module.exports = emitter => (repository, callback) => {
   if (repository.skipPullRequest) {
     return callback(null, repository);
   }
@@ -13,7 +13,7 @@ module.exports = loggerService => (repository, callback) => {
   const prAlreadyExists = repository.prInfo.found && !repository.prInfo.outdated;
   const action = prAlreadyExists ? 'Updating' : 'Creating';
 
-  loggerService.console(`${action} github pull request for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', `${action} github pull request for ${repository.owner}/${repository.repo}`);
 
   const pullRequestMetadata = metadataFormatter.format(repository);
 
@@ -38,7 +38,7 @@ module.exports = loggerService => (repository, callback) => {
   handlePr(prOptions, err => {
     if (err) {
       err = new Error(`Failed while ${action.toLowerCase()} pull request`);
-      loggerService.error(err, errorTypes[`failed${action}PullRequest`], repository);
+      emitter.emit('error', err, errorTypes[`failed${action}PullRequest`], repository);
     }
 
     callback(err, repository);

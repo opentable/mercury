@@ -18,8 +18,8 @@ const getAllSmartlingFilenames = repository => {
   return list;
 };
 
-module.exports = loggerService => (repository, callback) => {
-  loggerService.console(`Fetching secondary language files from smartling for ${repository.owner}/${repository.repo}`);
+module.exports = emitter => (repository, callback) => {
+  emitter.emit('action', `Fetching secondary language files from smartling for ${repository.owner}/${repository.repo}`);
 
   const smartlingOptions = {
     userIdentifier: config.smartling.userIdentifier,
@@ -50,7 +50,7 @@ module.exports = loggerService => (repository, callback) => {
     },
     err => {
       if (err) {
-        loggerService.error(err, errorTypes.failedSmartlingFetchFiles, repository);
+        emitter.emit('error', err, errorTypes.failedSmartlingFetchFiles, repository);
         repository.skip = true;
       }
 

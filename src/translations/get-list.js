@@ -35,8 +35,8 @@ const mapFileObjects = files => {
   return _.map(files, file => ({ dest: file.dest, src: file.src }));
 };
 
-module.exports = loggerService => (repository, callback) => {
-  loggerService.console(`Getting translations' list from github for ${repository.owner}/${repository.repo}`);
+module.exports = emitter => (repository, callback) => {
+  emitter.emit('action', `Getting translations' list from github for ${repository.owner}/${repository.repo}`);
 
   const srcGlobs = _.map(repository.manifestContent.translations, item => ({
     src: item.input.src,
@@ -58,7 +58,7 @@ module.exports = loggerService => (repository, callback) => {
   github.getFilesList(githubOptions, (err, list) => {
     if (err) {
       err = new Error('No github files found. Skipping.');
-      loggerService.error(err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
+      emitter.emit('error', err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
       repository.skip = true;
       return callback(err, repository);
     }
@@ -74,7 +74,7 @@ module.exports = loggerService => (repository, callback) => {
 
       if (matchingError) {
         err = new Error(matchingError);
-        loggerService.error(err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
+        emitter.emit('error', err, errorTypes.failedToLocateTranslationFilesInGithub, repository);
         repository.skip = true;
         return callback(err, repository);
       }
@@ -82,10 +82,10 @@ module.exports = loggerService => (repository, callback) => {
       repository.translationFiles = translationFiles;
 
       smartling.getProjectInfo(smartlingOptions, (err, info) => {
-        loggerService.console(`Getting project info from smartling for ${repository.owner}/${repository.repo}`);
+        emitter.emit('action', `Getting project info from smartling for ${repository.owner}/${repository.repo}`);
 
         if (err) {
-          loggerService.error(err, errorTypes.failedSmartlingFetchInfo, repository);
+          emitter.emit('error', err, errorTypes.failedSmartlingFetchInfo, repository);
           repository.skip = true;
         } else {
           repository.sourceLocaleId = info.sourceLocaleId;

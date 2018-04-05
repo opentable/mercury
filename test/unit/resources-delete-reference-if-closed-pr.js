@@ -12,7 +12,7 @@ describe('resources.deleteReferenceIfClosedPr()', () => {
       '../services/github': {
         deleteReference: githubStub
       }
-    })(testData.loggerServiceMock);
+    })(testData.emitterMock);
 
   describe('when there is no open Mercury pr', () => {
     const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
