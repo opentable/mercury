@@ -13,7 +13,7 @@ module.exports = emitter => (repository, callback) => {
   const prAlreadyExists = repository.prInfo.found && !repository.prInfo.outdated;
   const action = prAlreadyExists ? 'Updating' : 'Creating';
 
-  emitter.emit('action', `${action} github pull request for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `${action} github pull request for ${repository.owner}/${repository.repo}` });
 
   const pullRequestMetadata = metadataFormatter.format(repository);
 
@@ -38,7 +38,7 @@ module.exports = emitter => (repository, callback) => {
   handlePr(prOptions, err => {
     if (err) {
       err = new Error(`Failed while ${action.toLowerCase()} pull request`);
-      emitter.emit('error', err, errorTypes[`failed${action}PullRequest`], repository);
+      emitter.emit('error', { error: err, errorType: errorTypes[`failed${action}PullRequest`], details: repository });
     }
 
     callback(err, repository);

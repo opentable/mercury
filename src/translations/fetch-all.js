@@ -19,7 +19,7 @@ const getAllSmartlingFilenames = repository => {
 };
 
 module.exports = emitter => (repository, callback) => {
-  emitter.emit('action', `Fetching secondary language files from smartling for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `Fetching secondary language files from smartling for ${repository.owner}/${repository.repo}` });
 
   const smartlingOptions = {
     userIdentifier: config.smartling.userIdentifier,
@@ -50,7 +50,7 @@ module.exports = emitter => (repository, callback) => {
     },
     err => {
       if (err) {
-        emitter.emit('error', err, errorTypes.failedSmartlingFetchFiles, repository);
+        emitter.emit('error', { error: err, errorType: errorTypes.failedSmartlingFetchFiles, details: repository });
         repository.skip = true;
       }
 

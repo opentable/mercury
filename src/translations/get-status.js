@@ -27,7 +27,7 @@ const mapLocaleStatus = (current, status, next) => {
 };
 
 module.exports = emitter => (repository, callback) => {
-  emitter.emit('action', `Getting translations' status from smartling for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `Getting translations' status from smartling for ${repository.owner}/${repository.repo}` });
 
   const smartlingOptions = {
     userIdentifier: config.smartling.userIdentifier,
@@ -56,7 +56,7 @@ module.exports = emitter => (repository, callback) => {
     },
     err => {
       if (err) {
-        emitter.emit('error', err, errorTypes.failedSmartlingGetStatus, repository);
+        emitter.emit('error', { error: err, errorType: errorTypes.failedSmartlingGetStatus, details: repository });
         repository.skip = true;
       }
 

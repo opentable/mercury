@@ -8,7 +8,7 @@ module.exports = emitter => (repository, callback) => {
     return callback(null, repository);
   }
 
-  emitter.emit('action', `Closing outdated pull request for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `Closing outdated pull request for ${repository.owner}/${repository.repo}` });
 
   const prOptions = {
     number: repository.prInfo.number,
@@ -19,7 +19,7 @@ module.exports = emitter => (repository, callback) => {
   github.closePullRequest(prOptions, err => {
     if (err) {
       err = new Error('Failed while closing pull request');
-      emitter.emit('error', err, errorTypes.failedToClosePullRequest, repository);
+      emitter.emit('error', { error: err, errorType: errorTypes.failedToClosePullRequest, details: repository });
       repository.skip = true;
     }
 

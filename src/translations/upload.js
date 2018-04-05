@@ -8,7 +8,7 @@ const github = require('../services/github');
 const smartling = require('../services/smartling');
 
 module.exports = emitter => (repository, callback) => {
-  emitter.emit('action', `Uploading source files to smartling for ${repository.owner}/${repository.repo}`);
+  emitter.emit('action', { message: `Uploading source files to smartling for ${repository.owner}/${repository.repo}` });
 
   const githubOptions = {
     repo: repository.repo,
@@ -54,7 +54,7 @@ module.exports = emitter => (repository, callback) => {
     },
     err => {
       if (err) {
-        emitter.emit('error', err, errorTypes.failedSmartlingUploadFiles, repository);
+        emitter.emit('error', { error: err, errorType: errorTypes.failedSmartlingUploadFiles, details: repository });
         repository.skip = true;
       }
 
