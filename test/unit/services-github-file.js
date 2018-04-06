@@ -1,12 +1,14 @@
 'use strict';
 
 const async = require('async');
-const config = require('config');
-const encodeContent = require('../../src/services/github/utils')(config).encodeContent;
+const GithubUtils = require('../../src/services/github/utils');
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const testData = require('./testData');
 
 describe('services.github.file.create()', () => {
+  const config = testData.configMock;
+  const encodeContent = GithubUtils(config).encodeContent;
   let createFileStub, updateFileStub;
 
   const firstFailSecondSucceed = () => {
