@@ -24,7 +24,7 @@ The `mercury.json` file is the one addition you'll need to make to your project.
 
 ``` json
 {
-    "smartlingProjectId": "cf3dd4fb5",
+    "smartlingProjectId": "<smartling-test-projectid>",
     "translations": [{
         "input": {
             "src": ["src/locales/en-us/*.json", "!src/locales/en-us/config.json"]

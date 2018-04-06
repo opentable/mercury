@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
@@ -9,6 +8,7 @@ const testData = require('./testData');
 
 describe('translations.upload()', () => {
   const emitter = testData.emitterMock;
+  const config = testData.configMock;
   const mockedUpload = (githubStub, smartlingStub) =>
     injectr('../../src/translations/upload.js', {
       '../services/github': () => ({ getFile: githubStub }),
