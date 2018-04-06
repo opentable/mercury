@@ -1,19 +1,21 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.fetchAll()', () => {
+  const emitter = testData.emitterMock;
   const mockedFetchAll = githubStub =>
     injectr('../../src/resources/fetch-all.js', {
-      '../services/github': {
+      '../services/github': () => ({
         getFile: githubStub,
         MAX_CONCURRENT_OPERATIONS: 20
-      }
-    })(testData.emitterMock);
+      })
+    })({ emitter, config });
 
   describe('happy path', () => {
     const repository = testData.postGithubFetchRepository;

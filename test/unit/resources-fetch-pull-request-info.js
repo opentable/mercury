@@ -1,18 +1,18 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.fetchPullRequestInfo()', () => {
+  const emitter = testData.emitterMock;
   const mockedFetchAll = githubStub =>
     injectr('../../src/resources/fetch-pull-request-info.js', {
-      '../services/github': {
-        getPullRequestInfo: githubStub
-      }
-    })(testData.emitterMock);
+      '../services/github': () => ({ getPullRequestInfo: githubStub })
+    })({ emitter, config });
 
   describe('happy path', () => {
     const repository = testData.postGithubFetchRepository;

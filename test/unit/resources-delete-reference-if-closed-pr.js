@@ -1,18 +1,18 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.deleteReferenceIfClosedPr()', () => {
+  const emitter = testData.emitterMock;
   const mockedDeleteReference = githubStub =>
     injectr('../../src/resources/delete-reference-if-closed-pr.js', {
-      '../services/github': {
-        deleteReference: githubStub
-      }
-    })(testData.emitterMock);
+      '../services/github': () => ({ deleteReference: githubStub })
+    })({ emitter, config });
 
   describe('when there is no open Mercury pr', () => {
     const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);

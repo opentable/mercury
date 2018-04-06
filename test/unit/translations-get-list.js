@@ -1,21 +1,19 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('translations.getList()', () => {
+  const emitter = testData.emitterMock;
   const mockedGetList = (githubStub, smartlingStub) =>
     injectr('../../src/translations/get-list.js', {
-      '../services/github': {
-        getFilesList: githubStub
-      },
-      '../services/smartling': {
-        getProjectInfo: smartlingStub
-      }
-    })(testData.emitterMock);
+      '../services/github': () => ({ getFilesList: githubStub }),
+      '../services/smartling': { getProjectInfo: smartlingStub }
+    })({ emitter, config });
 
   const repository = testData.preTranslationRepository;
 

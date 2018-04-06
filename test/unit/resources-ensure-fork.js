@@ -1,20 +1,22 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.ensureFork()', () => {
+  const emitter = testData.emitterMock;
   const mockedEnsureFork = stubs =>
     injectr(
       '../../src/resources/ensure-fork.js',
       {
-        '../services/github': stubs
+        '../services/github': () => stubs
       },
       { setTimeout: cb => cb() }
-    )(testData.emitterMock);
+    )({ emitter, config });
 
   const repository = testData.postGithubFetchRepository;
 
