@@ -1,8 +1,7 @@
 {
-  "name": "mercury",
-  "version": "0.0.0",
-  "sha": "SHA",
-  "description": "static content translation platform",
+  "name": "mercury-bot",
+  "version": "1.0.0",
+  "description": "Mercury is a bot for managing in-code static translations",
   "main": "index.js",
   "scripts": {
     "format": "prettier-eslint \"**/*.js\" --print-width 300 --write",
