@@ -19,7 +19,7 @@ const schema = joi.object().keys({
   }).required()).required()
 });
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter }) => (repository, callback) => {
   emitter.emit('action', { message: `Validating manifest for ${repository.owner}/${repository.repo}` });
 
   joi.validate(repository.manifestContent, schema, (err, normalisedManifest) => {

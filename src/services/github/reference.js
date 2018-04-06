@@ -1,9 +1,10 @@
 'use strict';
 
 const _ = require('lodash');
-const utils = require('./utils');
 
-module.exports = github => {
+module.exports = (config, github) => {
+  const utils = require('./utils')(config);
+
   const deleteReference = (options, next) => {
     const authenticatedGithub = utils.authenticateGithubOperation('write', github);
     options.ref = `heads/${options.branch}`;

@@ -1,16 +1,15 @@
 'use strict';
 
-const config = require('config');
 const errorTypes = require('../constants/error-types');
-const github = require('../services/github');
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   if (repository.prInfo.found && !repository.prInfo.closed) {
     return callback(null, repository);
   }
 
   emitter.emit('action', { message: `Deleting outdated reference for ${repository.mercuryForkOwner}/${repository.repo}` });
 
+  const github = require('../services/github')(config);
   const options = {
     owner: repository.mercuryForkOwner,
     repo: repository.repo,

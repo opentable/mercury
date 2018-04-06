@@ -1,9 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const config = require('config');
 const errorTypes = require('../constants/error-types');
-const github = require('../services/github');
 const mm = require('micromatch');
 const smartling = require('../services/smartling');
 
@@ -35,7 +33,7 @@ const mapFileObjects = files => {
   return _.map(files, file => ({ dest: file.dest, src: file.src }));
 };
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   emitter.emit('action', { message: `Getting translations' list from github for ${repository.owner}/${repository.repo}` });
 
   const srcGlobs = _.map(repository.manifestContent.translations, item => ({
@@ -54,6 +52,8 @@ module.exports = emitter => (repository, callback) => {
     userSecret: config.smartling.userSecret,
     projectId: repository.manifestContent.smartlingProjectId
   };
+
+  const github = require('../services/github')(config);
 
   github.getFilesList(githubOptions, (err, list) => {
     if (err) {
