@@ -2,25 +2,27 @@
 
 const _ = require('lodash');
 const async = require('async');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.commitFiles()', () => {
+  const emitter = testData.emitterMock;
   const mockedCommitFiles = (githubGetFileStub, githubCreateFileStub, githubUpdateFileStub) =>
     injectr('../../src/resources/commit-files.js', {
-      '../services/github': {
+      '../services/github': () => ({
         getFile: githubGetFileStub,
         createFile: githubCreateFileStub,
         updateFile: githubUpdateFileStub
-      },
+      }),
       async: {
         eachOfSeries: async.eachOfSeries,
         eachSeries: async.eachSeries,
         retry: (policy, fn, cb) => async.retry({ times: 5, interval: 0 }, fn, cb)
       }
-    })(testData.emitterMock);
+    })({ emitter, config });
 
   const repository = testData.postGithubFetchRepository;
   let githubGetFileStub, githubCreateFileStub, githubUpdateFileStub;

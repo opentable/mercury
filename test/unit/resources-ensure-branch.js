@@ -1,19 +1,21 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.ensureBranch()', () => {
+  const emitter = testData.emitterMock;
   const mockedEnsureBranch = (githubgetBranchReferenceStub, githubEnsureBranchStub) =>
     injectr('../../src/resources/ensure-branch.js', {
-      '../services/github': {
+      '../services/github': () => ({
         getBranchReference: githubgetBranchReferenceStub,
         ensureBranchReference: githubEnsureBranchStub
-      }
-    })(testData.emitterMock);
+      })
+    })({ emitter, config });
 
   const repository = testData.postGithubFetchRepository;
 

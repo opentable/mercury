@@ -1,19 +1,21 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('translations.getStatus()', () => {
+  const emitter = testData.emitterMock;
   const mockedGetStatus = smartlingStub =>
     injectr('../../src/translations/get-status.js', {
       '../services/smartling': {
         getStatus: smartlingStub,
         MAX_CONCURRENT_OPERATIONS: 20
       }
-    })(testData.emitterMock);
+    })({ emitter, config });
 
   const repository = testData.postSmartlingStatusFetchRepository;
 

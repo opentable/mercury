@@ -1,8 +1,7 @@
 'use strict';
 
-const github = require('../services/github');
-
-module.exports = emitter => callback => {
+module.exports = ({ emitter, config }) => callback => {
+  const github = require('../services/github')(config);
   github.getRequestRateStats((err, stats) => {
     if (err) {
       err = new Error('Failed while fetching GitHub hourly rate limit status');

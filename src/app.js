@@ -8,9 +8,9 @@ const Translations = require('./translations');
 
 module.exports = ({ config }) => {
   const emitter = new EventEmitter();
-  const manifest = Manifest(emitter);
-  const resources = Resources(emitter);
-  const translations = Translations(emitter);
+  const manifest = Manifest({ emitter, config });
+  const resources = Resources({ emitter, config });
+  const translations = Translations({ emitter, config });
 
   const processRepo = (repository, next) => {
     const mercury = async.seq(

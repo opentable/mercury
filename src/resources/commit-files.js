@@ -2,19 +2,18 @@
 
 const _ = require('lodash');
 const async = require('async');
-const config = require('config');
 const errorTypes = require('../constants/error-types');
-const github = require('../services/github');
 
 const retryPolicy = {
   times: 5,
   interval: retryCount => 200 * retryCount
 };
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   emitter.emit('action', { message: `Committing new or updated files to ${repository.mercuryForkOwner}/${repository.repo}` });
 
   let commitCount = 0;
+  const github = require('../services/github')(config);
 
   async.eachSeries(
     repository.translationFiles,

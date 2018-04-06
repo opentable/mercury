@@ -1,18 +1,20 @@
 'use strict';
 
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('manifest.fetch()', () => {
+  const emitter = testData.emitterMock;
   const getMockedFetch = (getFileStub, getFileChangedInfoStub) =>
     injectr('../../src/manifest/fetch.js', {
-      '../services/github': {
+      '../services/github': () => ({
         getFile: getFileStub,
         getFileChangedInfo: getFileChangedInfoStub
-      }
-    })(testData.emitterMock);
+      })
+    })({ emitter, config });
 
   let error, result;
 

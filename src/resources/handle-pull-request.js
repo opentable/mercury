@@ -1,15 +1,14 @@
 'use strict';
 
-const config = require('config');
 const errorTypes = require('../constants/error-types');
-const github = require('../services/github');
 const metadataFormatter = require('../utils/format-pr-metadata');
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   if (repository.skipPullRequest) {
     return callback(null, repository);
   }
 
+  const github = require('../services/github')(config);
   const prAlreadyExists = repository.prInfo.found && !repository.prInfo.outdated;
   const action = prAlreadyExists ? 'Updating' : 'Creating';
 

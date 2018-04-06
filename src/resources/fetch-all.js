@@ -3,7 +3,6 @@
 const _ = require('lodash');
 const async = require('async');
 const errorTypes = require('../constants/error-types');
-const github = require('../services/github');
 const path = require('path');
 const stringToTemplate = require('string-to-template');
 
@@ -26,9 +25,10 @@ const getAllGithubFilenames = repository => {
   return list;
 };
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   emitter.emit('action', { message: `Fetching secondary language files from github for ${repository.owner}/${repository.repo}` });
 
+  const github = require('../services/github')(config);
   const githubOptions = {
     repo: repository.repo,
     owner: repository.owner

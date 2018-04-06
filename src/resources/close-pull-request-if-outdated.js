@@ -1,15 +1,15 @@
 'use strict';
 
 const errorTypes = require('../constants/error-types');
-const github = require('../services/github');
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   if (!repository.prInfo.found || !repository.prInfo.outdated) {
     return callback(null, repository);
   }
 
   emitter.emit('action', { message: `Closing outdated pull request for ${repository.owner}/${repository.repo}` });
 
+  const github = require('../services/github')(config);
   const prOptions = {
     number: repository.prInfo.number,
     owner: repository.owner,

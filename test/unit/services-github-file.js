@@ -1,7 +1,8 @@
 'use strict';
 
 const async = require('async');
-const encodeContent = require('../../src/services/github/utils').encodeContent;
+const config = require('config');
+const encodeContent = require('../../src/services/github/utils')(config).encodeContent;
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
@@ -19,7 +20,7 @@ describe('services.github.file.create()', () => {
     updateFileStub.onCall(0).yields('error');
     updateFileStub.onCall(1).yields(null, 'success');
 
-    return githubFile({
+    return githubFile(config, {
       authenticate: () => {},
       repos: {
         createFile: createFileStub,

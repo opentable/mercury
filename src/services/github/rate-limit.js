@@ -1,9 +1,8 @@
 'use strict';
 
 const async = require('async');
-const config = require('config');
 
-module.exports = github => ({
+module.exports = (config, github) => ({
   get: next => {
     const options = {};
     const stats = {};
