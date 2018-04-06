@@ -1,13 +1,13 @@
 'use strict';
 
 const _ = require('lodash');
-const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.deleteReferenceIfClosedPr()', () => {
+  const config = testData.configMock;
   const emitter = testData.emitterMock;
   const mockedDeleteReference = githubStub =>
     injectr('../../src/resources/delete-reference-if-closed-pr.js', {
