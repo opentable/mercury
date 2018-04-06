@@ -1,13 +1,13 @@
 'use strict';
 
 const _ = require('lodash');
-const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.fetchPullRequestInfo()', () => {
+  const config = testData.configMock;
   const emitter = testData.emitterMock;
   const mockedFetchAll = githubStub =>
     injectr('../../src/resources/fetch-pull-request-info.js', {

@@ -1,6 +1,26 @@
 'use strict';
 
 module.exports = {
+  configMock: {
+    github: {
+      apiTokens: [
+        {
+          operation: 'read',
+          value: 'guid-1234567890'
+        },
+        {
+          operation: 'write',
+          value: 'guid-0987654321'
+        }
+      ],
+      owner: 'mercurybot',
+      branch: 'mercury'
+    },
+    smartling: {
+      userIdentifier: '12345678901234567890',
+      userSecret: 'secret-1234567890'
+    }
+  },
   emitterMock: {
     emit: () => {}
   },

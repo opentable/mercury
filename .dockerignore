@@ -1,8 +1,0 @@
-.editorconfig
-.eslintrc
-.git
-.gitignore
-README.md
-Dockerfile
-node_modules
-tests

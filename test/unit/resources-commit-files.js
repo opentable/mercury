@@ -2,13 +2,13 @@
 
 const _ = require('lodash');
 const async = require('async');
-const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.commitFiles()', () => {
+  const config = testData.configMock;
   const emitter = testData.emitterMock;
   const mockedCommitFiles = (githubGetFileStub, githubCreateFileStub, githubUpdateFileStub) =>
     injectr('../../src/resources/commit-files.js', {
