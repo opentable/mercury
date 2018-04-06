@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const async = require('async');
-const config = require('config');
 const errorTypes = require('../constants/error-types');
 const smartling = require('../services/smartling');
 const metadataCalculator = require('../utils/calculate-pr-metadata');
@@ -26,7 +25,7 @@ const mapLocaleStatus = (current, status, next) => {
   next();
 };
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   emitter.emit('action', { message: `Getting translations' status from smartling for ${repository.owner}/${repository.repo}` });
 
   const smartlingOptions = {

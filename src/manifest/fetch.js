@@ -1,11 +1,11 @@
 'use strict';
 
 const errorTypes = require('../constants/error-types');
-const github = require('../services/github');
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   emitter.emit('action', { message: `Fetching manifest from github for ${repository.owner}/${repository.repo}` });
 
+  const github = require('../services/github')(config);
   const options = {
     path: 'mercury.json',
     repo: repository.repo,
