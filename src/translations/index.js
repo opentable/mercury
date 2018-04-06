@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = emitter => ({
-  fetchAll: require('./fetch-all')(emitter),
-  getList: require('./get-list')(emitter),
-  getStatus: require('./get-status')(emitter),
-  upload: require('./upload')(emitter)
+module.exports = options => ({
+  fetchAll: require('./fetch-all')(options),
+  getList: require('./get-list')(options),
+  getStatus: require('./get-status')(options),
+  upload: require('./upload')(options)
 });

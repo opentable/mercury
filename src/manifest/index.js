@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = emitter => ({
-  fetch: require('./fetch')(emitter),
-  validate: require('./validate')(emitter)
+module.exports = options => ({
+  fetch: require('./fetch')(options),
+  validate: require('./validate')(options)
 });

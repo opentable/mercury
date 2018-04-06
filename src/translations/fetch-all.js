@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const async = require('async');
-const config = require('config');
 const errorTypes = require('../constants/error-types');
 const smartling = require('../services/smartling');
 
@@ -18,7 +17,7 @@ const getAllSmartlingFilenames = repository => {
   return list;
 };
 
-module.exports = emitter => (repository, callback) => {
+module.exports = ({ emitter, config }) => (repository, callback) => {
   emitter.emit('action', { message: `Fetching secondary language files from smartling for ${repository.owner}/${repository.repo}` });
 
   const smartlingOptions = {

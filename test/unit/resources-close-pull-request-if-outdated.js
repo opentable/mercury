@@ -1,18 +1,18 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('resources.closePullRequestIfOutdated()', () => {
+  const emitter = testData.emitterMock;
   const mockedClose = githubStub =>
     injectr('../../src/resources/close-pull-request-if-outdated.js', {
-      '../services/github': {
-        closePullRequest: githubStub
-      }
-    })(testData.emitterMock);
+      '../services/github': () => ({ closePullRequest: githubStub })
+    })({ emitter, config });
 
   describe('when pr does not exist yet', () => {
     const repository = _.cloneDeep(testData.postPullRequestFetchInfoRepository);
