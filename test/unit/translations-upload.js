@@ -1,22 +1,22 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const injectr = require('injectr');
 const sinon = require('sinon');
 const testData = require('./testData');
 
 describe('translations.upload()', () => {
+  const emitter = testData.emitterMock;
   const mockedUpload = (githubStub, smartlingStub) =>
     injectr('../../src/translations/upload.js', {
-      '../services/github': {
-        getFile: githubStub
-      },
+      '../services/github': () => ({ getFile: githubStub }),
       '../services/smartling': {
         uploadFileContent: smartlingStub,
         MAX_CONCURRENT_OPERATIONS: 20
       }
-    })(testData.emitterMock);
+    })({ emitter, config });
 
   const githubStub = sinon.stub().yields(null, testData.githubMock);
 

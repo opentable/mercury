@@ -1,11 +1,14 @@
 'use strict';
 
 const _ = require('lodash');
+const config = require('config');
 const expect = require('chai').expect;
 const testData = require('./testData');
-const validate = require('../../src/manifest/validate')(testData.emitterMock);
 
 describe('manifest.validate()', () => {
+  const emitter = testData.emitterMock;
+  const validate = require('../../src/manifest/validate')({ emitter, config });
+
   let error, result;
 
   const next = done => (err, res) => {
