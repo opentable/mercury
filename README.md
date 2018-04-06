@@ -1,25 +1,15 @@
-# Mercury User Guide
-Mercury is a static content translation platform - [Interested? Watch a presentation.](https://www.youtube.com/watch?v=ByLO5SJXZ6Y)
+# Mercury
 
-#### Ready to integrate your repository with Mercury?
-Please refer to the [Mercury integration runbook](https://github.com/opentable/mercury/blob/master/docs/integration-runbook.md) and [FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md).
+Mercury is a bot for handling in-code static translations. Developed at [OpenTable](https://www.opentable.com), [it](https://github.com/mercurybot) takes care of dozens of codebases by making automated Pull Requests to keep the code up to date with our translations.
 
-# Mercury Maintainer Guide
-After cloning the project, just run:
-```
-npm i
-```
-to install dependencies, then:
-```
-npm start
-```
-to run Mercury against a sandbox repo (You can change the [config file](https://github.com/opentable/mercury/blob/master/config/development.yml) that to run it against any repo with a `mercury.json` file).
+#### How Mercury works
 
-To run tests:
-```
-npm test
-```
+The bot looks for a `mercury.json` manifest file in a repository's root. It then locates the source files and keeps them updated with Smartling by using its API. Please refer to the [Mercury integration runbook](https://github.com/opentable/mercury/blob/master/docs/integration-runbook.md) and [FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md).
 
+#### How to use Mercury in your organization
 
-### Logs Dashboard:
-* [prod-sc](http://loglov3.otenv.com/app/kibana#/dashboard/9409a8f0-6192-11e7-a44d-6337dbecff74)
+Mercury is available as [npm module](https://www.npmjs.com/package/mercury-bot) and needs to be configured to run with github and smartling API tokens.
+If you wish to know more about it, [get in touch with us](mailto:fmaffei@opentable.com).
+
+#### License
+MIT
