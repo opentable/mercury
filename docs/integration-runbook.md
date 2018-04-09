@@ -8,15 +8,13 @@ If you want to integrate your repository with Mercury, please follow these steps
 
 *N.B. If you already have and do not need to update source files, you can jump to [Step 2](#step-2-create-a-smartling-project).*
 
-If you don't, you can create a source file with the strings you need to translate. One best practice is to put these files into a `locales/en-US` folder. As an example, you can take a look at [this project's source files](https://github.com/opentable/restaurant-messages-generator-api/tree/master/src/locales/en-us).  
+If you don't, you can create a source file with the strings you need to translate. One best practice is to put these files into a `locales/en-US` folder.
 
 JSON is the standard we'd recommend, even if Mercury supports many file types and it's likely you won't have to convert your existing resources.
 
 ### Step 2: create a Smartling project
 
 *N.B. If you already have one, take note of the project ID, and then jump to [Step 3](#step-3-create-a-mercuryjson-file-in-).*
-
-If you want to setup a new one, please get in touch with the MLP Team (multi-language@opentable.com), we'll be happy to provide guidance.
 
 ### Step 3: create a mercury.json file in /
 
@@ -50,7 +48,7 @@ The `mercury.json` file is the one addition you'll need to make to your project.
 
 ### Step 4: Mercury, a kind of magic!
 
-At this point, you'll need to get in touch with the MLP Team (multi-language@opentable.com) and ask for your project to be included into the Mercury whitelist. This will be automated at some point, to achieve automatic detection of mercury.json files in any organization repo.
+At this point, you'll need to get in touch with Mercury owners in your org and ask for your project to be included into the Mercury whitelist.
 
 ### Step 5: The Pull Request
 
