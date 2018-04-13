@@ -6,7 +6,7 @@ Mercury is a bot for handling in-code static translations. Developed at [OpenTab
 
 The bot looks for a `mercury.json` manifest file in a repository's root. It then locates the source files and keeps them updated with [Smartling](https://smartling.com/) by using its API. Please refer to the [Mercury consumer integration runbook](https://github.com/opentable/mercury/blob/master/docs/integration-runbook.md) and [FAQ](https://github.com/opentable/mercury/blob/master/docs/faq.md).
 
-### How to use Mercury in your organization
+### How to setup the bot in your organization
 
 Mercury is available as [npm module](https://www.npmjs.com/package/mercury-bot) and needs to be configured to run with github and smartling API tokens.
 
