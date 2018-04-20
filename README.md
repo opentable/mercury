@@ -1,6 +1,13 @@
-# Mercury
+<div align="center">
+    <img width="200" height="200" src="docs/mercury-logo.png">
 
-Mercury is a bot for handling in-code static translations. Developed at [OpenTable](https://www.opentable.com), [it](https://github.com/mercurybot) takes care of dozens of codebases by making automated Pull Requests to keep the code up to date with our translations.
+<br>
+<br>
+<h1>Mercury</h1>
+<p>Mercury is a bot for handling in-code static translations. Developed at <a href="https://www.opentable.com">OpenTable</a>, it takes care of dozens of codebases by making automated Pull Requests to keep the code up to date with our translations.</p>
+</div>
+
+***
 
 ### How Mercury works
 
