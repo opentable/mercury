@@ -8,6 +8,10 @@ const smartling = require('../services/smartling');
 module.exports = ({ emitter, config }) => (repository, callback) => {
   emitter.emit('action', { message: `Uploading source files to smartling for ${repository.owner}/${repository.repo}` });
 
+  if (repository.manifestContent.readOnly) {
+    return callback(null, repository);
+  }
+
   const githubOptions = {
     repo: repository.repo,
     owner: repository.owner

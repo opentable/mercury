@@ -40,6 +40,12 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     dest: item.output.dest
   }));
 
+  if (repository.manifestContent.readOnly) {
+    _.map(srcGlobs, g => (g.src = _.head(g.src)));
+    repository.translationFiles = srcGlobs;
+    return callback(null, repository);
+  }
+
   const githubOptions = {
     repo: repository.repo,
     owner: repository.owner,

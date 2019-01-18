@@ -22,6 +22,11 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
       repository.targetLocales = _.filter(info.targetLocales, {
         enabled: true
       }).map(x => x.localeId);
+
+      if (repository.manifestContent.readOnly) {
+        repository.targetLocales.push(info.sourceLocaleId);
+      }
+
       if (_.isEmpty(repository.targetLocales)) {
         repository.skip = true;
       }
