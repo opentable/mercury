@@ -11,7 +11,7 @@ const calculateAverage = (percentageCount, localesCount) => {
 };
 
 const calculatePercent = (completedStringCount, totalStringCount) => {
-  return roundToOne(completedStringCount / totalStringCount * 100);
+  return roundToOne((completedStringCount / totalStringCount) * 100);
 };
 
 const countLocales = repository => {

@@ -3,7 +3,6 @@
 const _ = require('lodash');
 const errorTypes = require('../constants/error-types');
 const mm = require('micromatch');
-const smartling = require('../services/smartling');
 
 const getMatchingFiles = (list, srcGlobsCollection, callback) => {
   let collection = [];
@@ -47,12 +46,6 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     branch: repository.manifestContent.workingBranch
   };
 
-  const smartlingOptions = {
-    userIdentifier: config.smartling.userIdentifier,
-    userSecret: config.smartling.userSecret,
-    projectId: repository.manifestContent.smartlingProjectId
-  };
-
   const github = require('../services/github')(config);
 
   github.getFilesList(githubOptions, (err, list) => {
@@ -81,24 +74,7 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
 
       repository.translationFiles = translationFiles;
 
-      smartling.getProjectInfo(smartlingOptions, (err, info) => {
-        emitter.emit('action', { message: `Getting project info from smartling for ${repository.owner}/${repository.repo}` });
-
-        if (err) {
-          emitter.emit('error', { error: err, errorType: errorTypes.failedSmartlingFetchInfo, details: repository });
-          repository.skip = true;
-        } else {
-          repository.sourceLocaleId = info.sourceLocaleId;
-          repository.targetLocales = _.filter(info.targetLocales, {
-            enabled: true
-          }).map(x => x.localeId);
-          if (_.isEmpty(repository.targetLocales)) {
-            repository.skip = true;
-          }
-        }
-
-        callback(err, repository);
-      });
+      callback(err, repository);
     });
   });
 };
