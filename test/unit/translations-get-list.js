@@ -62,6 +62,50 @@ describe('translations.getList()', () => {
     });
   });
 
+  describe('when readOnly=false', () => {
+    let err, githubStub, res;
+
+    beforeEach(done => {
+      const repo = _.cloneDeep(repository);
+      repo.manifestContent.readOnly = true;
+      repo.manifestContent.translations = [
+        {
+          input: { src: ['src/locales/messages.pot'] },
+          output: { dest: 'src/locales/${locale}/messages.po' }
+        }
+      ];
+
+      githubStub = sinon.stub().yields(null, testData.githubMock);
+
+      mockedGetList(githubStub)(repo, (error, result) => {
+        err = error;
+        res = result;
+        done();
+      });
+    });
+
+    it('should not error', () => {
+      expect(err).to.be.null;
+    });
+
+    it('should not get files list from github', () => {
+      expect(githubStub.called).to.be.false;
+    });
+
+    it('should not get files list from github', () => {
+      expect(githubStub.called).to.be.false;
+    });
+
+    it('should populate repo.translations correctly', () => {
+      expect(res.translationFiles).to.be.eql([
+        {
+          dest: 'src/locales/${locale}/messages.po',
+          src: 'src/locales/messages.pot'
+        }
+      ]);
+    });
+  });
+
   describe('when using glob in filename', () => {
     describe('happy path', () => {
       let err, res;
