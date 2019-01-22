@@ -62,7 +62,7 @@ describe('translations.getList()', () => {
     });
   });
 
-  describe('when readOnly=false', () => {
+  describe('when readOnly=true', () => {
     let err, githubStub, res;
 
     beforeEach(done => {
