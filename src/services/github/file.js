@@ -25,7 +25,7 @@ module.exports = (config, github) => {
       authenticatedGithub.repos.getContent(options, (err, file) => {
         const getContent = f => {
           try {
-            return new Buffer(f.content, f.encoding).toString();
+            return new Buffer.from(f.content, f.encoding).toString();
           } catch (error) {
             return next(error);
           }
