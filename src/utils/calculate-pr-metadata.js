@@ -11,7 +11,7 @@ const calculateAverage = (percentageCount, localesCount) => {
 };
 
 const calculatePercent = (completedStringCount, totalStringCount) => {
-  return roundToOne(completedStringCount / totalStringCount * 100);
+  return roundToOne((completedStringCount / totalStringCount) * 100);
 };
 
 const countLocales = repository => {
@@ -31,21 +31,20 @@ const countExcludedStrings = repository => {
 
 const sumPercentageCompletedByFile = locales => {
   let totalLocales = 0;
-  const totalCompleted = _.reduce(
-    locales,
-    (sum, locale) => {
+  const totalCompleted = _.chain(locales)
+    .filter(locale => locale.key !== 'en-US')
+    .reduce((sum, locale) => {
       totalLocales++;
       return sum + locale.value.smartlingStatus.percentCompleted;
-    },
-    0
-  );
+    }, 0)
+    .value();
 
   return calculateAverage(totalCompleted, totalLocales);
 };
 
 const sumPercentageCompletedOverall = repo => {
   return _.chain(repo.translationFiles)
-    .map(translationFile => _.values(translationFile.locales))
+    .map(translationFile => _.values(_.pickBy(translationFile.locales, (v, k) => k !== 'en-US')))
     .flatten()
     .map(locale => locale.smartlingStatus.percentCompleted)
     .reduce((sum, n) => sum + n, 0)

@@ -83,4 +83,26 @@ describe('translations.upload()', () => {
       expect(err.message).to.be.eql('Error when uploading Smartling file');
     });
   });
+
+  describe('when readOnly=true', () => {
+    let err, smartlingStub;
+
+    beforeEach(done => {
+      smartlingStub = sinon.stub().yields(null, testData.smartlingMockNew);
+      repository.manifestContent.readOnly = true;
+
+      mockedUpload(githubStub, smartlingStub)(_.cloneDeep(repository), error => {
+        err = error;
+        done();
+      });
+    });
+
+    it('should not error', () => {
+      expect(err).to.be.null;
+    });
+
+    it('should not upload to Smartling', () => {
+      expect(smartlingStub.called).to.be.false;
+    });
+  });
 });

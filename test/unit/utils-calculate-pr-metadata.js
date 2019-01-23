@@ -46,7 +46,7 @@ describe('metadataCalculator.sumPercentageCompletedByFile()', () => {
     });
 
     it('should return the percentage completed by file', () => {
-      expect(res).to.equal(87.1);
+      expect(res).to.equal(85);
     });
   });
 });

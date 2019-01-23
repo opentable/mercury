@@ -25,11 +25,8 @@ module.exports = (config, github) => {
       authenticatedGithub.repos.getContent(options, (err, file) => {
         const getContent = f => {
           try {
-            return new Buffer(f.content, f.encoding).toString();
+            return new Buffer.from(f.content, f.encoding).toString();
           } catch (error) {
-            console.log(`Github file content request returning no values.`);
-            console.log(typeof f);
-            console.log(JSON.stringify(f));
             return next(error);
           }
         };

@@ -6,6 +6,11 @@ const errorTypes = require('../constants/error-types');
 const smartling = require('../services/smartling');
 
 module.exports = ({ emitter, config }) => (repository, callback) => {
+  if (repository.manifestContent.readOnly) {
+    emitter.emit('action', { message: `Skipping the smartling upload for readOnly repo ${repository.owner}/${repository.repo}` });
+    return callback(null, repository);
+  }
+
   emitter.emit('action', { message: `Uploading source files to smartling for ${repository.owner}/${repository.repo}` });
 
   const githubOptions = {

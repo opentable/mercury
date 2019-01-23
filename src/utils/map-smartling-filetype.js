@@ -8,6 +8,7 @@ const SMARTLING_FILETYPES = {
   csv: 'csv',
   html: 'html',
   json: 'json',
+  pot: 'gettext',
   properties: 'javaProperties',
   resx: 'resx',
   resw: 'resx',

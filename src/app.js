@@ -17,6 +17,7 @@ module.exports = ({ config }) => {
       manifest.fetch,
       manifest.validate,
       translations.getList,
+      translations.getProjectInfo,
       translations.upload,
       translations.fetchAll,
       translations.getStatus,

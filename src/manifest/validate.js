@@ -9,6 +9,7 @@ const notEmptyArray = joi.array().min(1);
 const schema = joi.object().keys({
   workingBranch: joi.string().min(1).default('master'),
   smartlingProjectId: joi.string().length(9).required(),
+  readOnly: joi.boolean(),
   translations: notEmptyArray.items(joi.object().keys({
     input: joi.object().keys({
       src: joi.any().allow(joi.string(), notEmptyArray.items(joi.string())).required()
