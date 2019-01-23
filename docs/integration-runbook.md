@@ -39,6 +39,7 @@ The `mercury.json` file is the one addition you'll need to make to your project.
 |name|description|
 |----|-----------|
 |`workingBranch` (string, optional)|Default `master`, is the working github branch.|
+|`readOnly` (boolean, optional)|Default `false`, it is the way to tell Mercury that you want to bypass the uploading of source files from Github and only perform the download of translated strings via PR. If you want to use this feature, make sure that you are using a single input filename in `translations[index].input.src`, for example `["/smartling-folder/messages.pot"]` and that the filename corresponds to the one uploaded to smartling. The output configuration works exactly the same way.|
 |`smartlingProjectId` (string, required)|It is the ID of your smartling project that Mercury will look at. If unsure of what that is, just browse your Smartling project. The ID will be found in the URL: *https://dashboard.smartling.com/projects/{{ID}}/translations/dashboard.htm*|
 |`translations` (array of objects, required)|It is a list of configurations that have two common properties: an input and an output. Mercury will read every file in each input path, and place its translations in the output path. In most cases this will be populated by just one object, but there might be cases in which you need more than one input-output mapping|
 |`translations[index].input` (object, required)|The input details|
