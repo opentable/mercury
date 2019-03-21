@@ -12,6 +12,7 @@ const SMARTLING_FILETYPES = {
   properties: 'javaProperties',
   resx: 'resx',
   resw: 'resx',
+  strings: 'ios',
   txt: 'plainText',
   yml: 'yaml',
   yaml: 'yaml'
