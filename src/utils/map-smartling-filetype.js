@@ -20,9 +20,9 @@ const SMARTLING_FILETYPES = {
 
 const inferSmartlingFileTypeFromContent = content => {
   const result = convert.xml2js(content, { compact: true });
-  const rootNodeName = Object.keys(result)[0];
+  const rootNodeName = Object.keys(result);
 
-  return rootNodeName === ANDROID_XML_ROOT_NODE_NAME ? 'android' : 'xml';
+  return rootNodeName.includes(ANDROID_XML_ROOT_NODE_NAME) ? 'android' : 'xml';
 };
 
 module.exports = {
