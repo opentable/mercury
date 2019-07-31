@@ -7,7 +7,7 @@
     "format": "prettier-eslint \"**/*.js\" --print-width 300 --write",
     "mocha": "mocha test/unit --timeout 10000",
     "precommit": "lint-staged",
-    "test": "npm run format && eslint ./ && npm run mocha"
+    "test": "npm run format && $(npm bin)/eslint ./ && npm run mocha"
   },
   "lint-staged": {
     "linters": {
@@ -40,7 +40,7 @@
     "injectr": "^0.5.1",
     "lint-staged": "^4.3.0",
     "mocha": "^3.2.0",
-    "prettier-eslint-cli": "^4.4.0",
+    "prettier-eslint-cli": "^5.0.0",
     "sinon": "^1.17.7"
   },
   "dependencies": {
