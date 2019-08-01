@@ -10,13 +10,11 @@
     "test": "npm run format && $(npm bin)/eslint ./ && npm run mocha"
   },
   "lint-staged": {
-    "linters": {
-      "*.js": [
-        "npm run format",
-        "eslint ./",
-        "git add"
-      ]
-    }
+    "*.js": [
+      "npm run format",
+      "eslint ./",
+      "git add"
+    ]
   },
   "engines": {
     "node": ">=8.0.0"
