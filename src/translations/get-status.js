@@ -38,7 +38,7 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     repository.translationFiles,
     smartling.MAX_CONCURRENT_OPERATIONS,
     (file, next) => {
-      const options = _.extend(_.cloneDeep(smartlingOptions), {
+      const options = _.assignIn(_.cloneDeep(smartlingOptions), {
         fileUri: file.src
       });
 

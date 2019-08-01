@@ -40,7 +40,7 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     filesToDownload,
     github.MAX_CONCURRENT_OPERATIONS,
     (file, next) => {
-      const options = _.extend(_.cloneDeep(githubOptions), {
+      const options = _.assignIn(_.cloneDeep(githubOptions), {
         path: file.fileName
       });
 

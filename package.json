@@ -10,13 +10,11 @@
     "test": "npm run format && $(npm bin)/eslint ./ && npm run mocha"
   },
   "lint-staged": {
-    "linters": {
-      "*.js": [
-        "npm run format",
-        "eslint ./",
-        "git add"
-      ]
-    }
+    "*.js": [
+      "npm run format",
+      "eslint ./",
+      "git add"
+    ]
   },
   "engines": {
     "node": ">=8.0.0"
@@ -41,8 +39,8 @@
     "eslint": "6.1.0",
     "husky": "^0.14.3",
     "injectr": "^0.5.1",
-    "lint-staged": "^4.3.0",
-    "mocha": "^3.2.0",
+    "lint-staged": "^9.2.1",
+    "mocha": "^6.2.0",
     "prettier-eslint-cli": "^5.0.0",
     "sinon": "^1.17.7"
   },
@@ -54,7 +52,7 @@
     "github": "^8.2.1",
     "joi": "^10.2.0",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.15",
     "micromatch": "^2.3.11",
     "needle": "^1.6.0",
     "parse-glob": "^3.0.4",
