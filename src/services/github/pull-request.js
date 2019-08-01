@@ -21,7 +21,7 @@ module.exports = (config, github) => {
 
     get: (options, next) => {
       const authenticatedGithub = utils.authenticateGithubOperation('read', github);
-      const prOptions = _.extend(_.cloneDeep(options), {
+      const prOptions = _.assignIn(_.cloneDeep(options), {
         head: `${config.github.owner}:${config.github.branch}`,
         per_page: 1,
         state: 'open'

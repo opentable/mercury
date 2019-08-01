@@ -32,12 +32,12 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     (translation, index, callback) => {
       const path = translation.src;
 
-      const options = _.extend(_.cloneDeep(githubOptions), {
+      const options = _.assignIn(_.cloneDeep(githubOptions), {
         path
       });
 
       github.getFile(options, (err, file) => {
-        const options = _.extend(_.cloneDeep(smartlingOptions), {
+        const options = _.assignIn(_.cloneDeep(smartlingOptions), {
           path
         });
 

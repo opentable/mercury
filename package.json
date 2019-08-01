@@ -54,7 +54,7 @@
     "github": "^8.2.1",
     "joi": "^10.2.0",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.15",
     "micromatch": "^2.3.11",
     "needle": "^1.6.0",
     "parse-glob": "^3.0.4",

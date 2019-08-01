@@ -32,7 +32,7 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     filesToDownload,
     smartling.MAX_CONCURRENT_OPERATIONS,
     (file, next) => {
-      const options = _.extend(_.cloneDeep(smartlingOptions), file);
+      const options = _.assignIn(_.cloneDeep(smartlingOptions), file);
 
       smartling.fetchFile(options, (err, content) => {
         if (!err && content) {
