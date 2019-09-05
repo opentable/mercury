@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const File = require('./github/file');
 const Github = require('github');
+const Octokit = require('@octokit/rest');
 const PullRequest = require('./github/pull-request');
 const RateLimit = require('./github/rate-limit');
 const Reference = require('./github/reference');
@@ -20,33 +21,42 @@ module.exports = config => {
     timeout: 20000
   });
 
-  const file = File(config, github);
-  const pullRequest = PullRequest(config, github);
+  const octokit = new Octokit({
+    auth: () => {
+      return config.github.apiTokens[0].value;
+    },
+    baseUrl: 'https://api.github.com',
+    userAgent: 'mercury'
+  });
+
+  const file = File(config, octokit);
+  const pullRequest = PullRequest(config, octokit);
   const rateLimit = RateLimit(config, github);
-  const reference = Reference(config, github);
-  const utils = require('./github/utils')(config);
+  const reference = Reference(octokit);
 
   const getFilesList = (options, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('read', github);
-
     reference.get(options, (err, sha) => {
       if (err) {
         return next(err);
       }
 
-      options.recursive = true;
-      options.sha = sha;
+      options.recursive = 1;
+      options.tree_sha = sha;
 
-      authenticatedGithub.gitdata.getTree(options, (err, list) => {
-        next(err, list ? _.map(list.tree, x => x.path) : undefined);
-      });
+      octokit.git
+        .getTree(options)
+        .then(({ data }) => {
+          next(null, _.map(data.tree, x => x.path));
+        })
+        .catch(err => next(err));
     });
   };
 
   const ensureFork = (options, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-
-    authenticatedGithub.repos.fork(options, next);
+    octokit.repos
+      .createFork(options)
+      .then(({ data }) => next(null, data))
+      .catch(err => next(err));
   };
 
   return {

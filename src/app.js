@@ -33,9 +33,15 @@ module.exports = ({ config }) => {
 
     mercury(repository, (err, repository) => {
       if (err) {
-        emitter.emit('result', { resultType: 'repo-skipped', message: `Attempted processing ${repository.owner}/${repository.repo} with errors` });
+        emitter.emit('result', {
+          resultType: 'repo-skipped',
+          message: `Attempted processing ${repository.owner}/${repository.repo} with errors`
+        });
       } else {
-        emitter.emit('result', { resultType: 'repo-completed', message: `Completed processing ${repository.owner}/${repository.repo} without errors` });
+        emitter.emit('result', {
+          resultType: 'repo-completed',
+          message: `Completed processing ${repository.owner}/${repository.repo} without errors`
+        });
       }
 
       next();
@@ -58,7 +64,10 @@ module.exports = ({ config }) => {
         },
         () => {
           resources.fetchRequestRateStats(() => {
-            emitter.emit('result', { resultType: 'run-completed', message: `Completed running` });
+            emitter.emit('result', {
+              resultType: 'run-completed',
+              message: `Completed running`
+            });
             done();
           });
         }

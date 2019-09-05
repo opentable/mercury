@@ -33,7 +33,9 @@ const mapFileObjects = files => {
 };
 
 module.exports = ({ emitter, config }) => (repository, callback) => {
-  emitter.emit('action', { message: `Getting translations' list from github for ${repository.owner}/${repository.repo}` });
+  emitter.emit('action', {
+    message: `Getting translations' list from github for ${repository.owner}/${repository.repo}`
+  });
 
   const srcGlobs = _.map(repository.manifestContent.translations, item => ({
     src: item.input.src,
@@ -57,7 +59,11 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
   github.getFilesList(githubOptions, (err, list) => {
     if (err) {
       err = new Error('No github files found. Skipping.');
-      emitter.emit('error', { error: err, errorType: errorTypes.failedToLocateTranslationFilesInGithub, details: repository });
+      emitter.emit('error', {
+        error: err,
+        errorType: errorTypes.failedToLocateTranslationFilesInGithub,
+        details: repository
+      });
       repository.skip = true;
       return callback(err, repository);
     }
@@ -73,7 +79,11 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
 
       if (matchingError) {
         err = new Error(matchingError);
-        emitter.emit('error', { error: err, errorType: errorTypes.failedToLocateTranslationFilesInGithub, details: repository });
+        emitter.emit('error', {
+          error: err,
+          errorType: errorTypes.failedToLocateTranslationFilesInGithub,
+          details: repository
+        });
         repository.skip = true;
         return callback(err, repository);
       }

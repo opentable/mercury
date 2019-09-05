@@ -2,69 +2,66 @@
 
 const _ = require('lodash');
 
-module.exports = (config, github) => {
+module.exports = (config, octokit) => {
   const utils = require('./utils')(config);
   return {
     create: (options, next) => {
-      const authenticatedGithub = utils.authenticateGithubOperation('write', github);
       const createOptions = _.cloneDeep(options);
       const encodedContent = utils.encodeContent(createOptions.content);
       _.set(createOptions, 'content', encodedContent);
 
-      authenticatedGithub.repos.createFile(createOptions, (err, result) => {
-        if (err) {
-          return next(err);
-        }
-        next(null, result);
-      });
+      octokit.repos
+        .createFile(createOptions)
+        .then(({ data }) => next(null, data))
+        .catch(err => err);
     },
 
     get: (options, next) => {
-      const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+      octokit.repos
+        .getContents(options)
+        .then(({ data }) => {
+          const getContent = f => {
+            try {
+              return new Buffer.from(f.content, f.encoding).toString();
+            } catch (error) {
+              return next(error);
+            }
+          };
+          const content = data ? getContent(data) : null;
+          const sha = data ? data.sha : null;
+          const result = {
+            content,
+            sha
+          };
 
-      authenticatedGithub.repos.getContent(options, (err, file) => {
-        const getContent = f => {
-          try {
-            return new Buffer.from(f.content, f.encoding).toString();
-          } catch (error) {
-            return next(error);
-          }
-        };
-        const content = !err && file ? getContent(file) : null;
-        const sha = !err && file ? file.sha : null;
-        const result = {
-          content,
-          sha
-        };
-        return next(err, result);
-      });
+          return next(null, result);
+        })
+        .catch(err => next(err));
     },
 
     lastUpdated: (options, next) => {
       options['per_page'] = 1;
-      const authenticatedGithub = utils.authenticateGithubOperation('read', github);
+      octokit.repos
+        .listCommits(options)
+        .then(({ data }) => {
+          if (_.isEmpty(data)) {
+            return next('Empty commit data for manifest.json');
+          }
 
-      authenticatedGithub.repos.getCommits(options, (err, commits) => {
-        if (err || _.isEmpty(commits)) {
-          return next(err);
-        }
-
-        next(null, commits[0].commit.author.date);
-      });
+          next(null, data[0].commit.author.date);
+        })
+        .catch(err => next(err));
     },
 
     update: (options, next) => {
-      const authenticatedGithub = utils.authenticateGithubOperation('write', github);
       const updateOptions = _.cloneDeep(options);
       const encodedContent = utils.encodeContent(updateOptions.content);
       _.set(updateOptions, 'content', encodedContent);
 
-      authenticatedGithub.repos.updateFile(updateOptions, (err, result) => {
-        if (err) {
-          return next(err);
-        }
-        next(null, result);
-      });
+      octokit.repos
+        .updateFile(updateOptions)
+        .then(({ data }) => next(null, data))
+        .catch(err => err);
     }
   };
 };
