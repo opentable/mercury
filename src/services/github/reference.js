@@ -2,13 +2,13 @@
 
 const _ = require('lodash');
 
-module.exports = octokit => {
+module.exports = (readOctokit, writeOctokit) => {
   const deleteReference = (options, next) => {
     options.ref = `heads/${options.branch}`;
 
     getReference(options, (err, branchReferenceSha) => {
       if (branchReferenceSha) {
-        return octokit.git
+        return readOctokit.git
           .deleteRef(options)
           .then(() => next())
           .catch(err => next(err));
@@ -21,7 +21,7 @@ module.exports = octokit => {
   const getReference = (options, next) => {
     options.ref = `heads/${options.branch}`;
 
-    octokit.gitdata
+    readOctokit.gitdata
       .getRef(options)
       .then(({ data }) => {
         next(null, _.get(data, ['object', 'sha']));
@@ -38,12 +38,14 @@ module.exports = octokit => {
       options.ref = `refs/heads/${options.branch}`;
       options.sha = sourceSha;
 
-      octokit.git
+      writeOctokit.git
         .createRef(options)
         .then(({ data }) => {
-          next(err, _.get(data, [`object`, `sha`]));
+          next(null, _.get(data, [`object`, `sha`]));
         })
-        .catch(err => next(err));
+        .catch(err => {
+          next(err);
+        });
     });
   };
 
@@ -51,7 +53,7 @@ module.exports = octokit => {
     options.ref = `heads/${options.branch}`;
     options.sha = options.reference;
 
-    octokit.git
+    writeOctokit.git
       .updateRef(options)
       .then(() => next())
       .catch(err => next(err));

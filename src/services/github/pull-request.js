@@ -2,19 +2,19 @@
 
 const _ = require('lodash');
 
-module.exports = (config, octokit) => {
+module.exports = (config, readOctokit, writeOctokit) => {
   return {
     close: (options, next) => {
       options.state = 'closed';
 
-      octokit.pulls
+      writeOctokit.pulls
         .update(options)
         .then(() => next(null))
         .catch(err => next(err));
     },
 
     create: (options, next) => {
-      octokit.pulls
+      writeOctokit.pulls
         .create(options)
         .then(() => next())
         .catch(err => next(err));
@@ -27,7 +27,7 @@ module.exports = (config, octokit) => {
         state: 'open'
       });
 
-      octokit.pulls
+      readOctokit.pulls
         .list(prOptions)
         .then(({ data }) => {
           if (_.isEmpty(data)) {
@@ -46,7 +46,7 @@ module.exports = (config, octokit) => {
     },
 
     update: (options, next) => {
-      octokit.pulls
+      writeOctokit.pulls
         .update(options)
         .then(() => next())
         .catch(err => next(err));

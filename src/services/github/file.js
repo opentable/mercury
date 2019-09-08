@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 
-module.exports = (config, octokit) => {
+module.exports = (config, readOctokit, writeOctokit) => {
   const utils = require('./utils')(config);
   return {
     create: (options, next) => {
@@ -10,14 +10,14 @@ module.exports = (config, octokit) => {
       const encodedContent = utils.encodeContent(createOptions.content);
       _.set(createOptions, 'content', encodedContent);
 
-      octokit.repos
+      writeOctokit.repos
         .createFile(createOptions)
         .then(({ data }) => next(null, data))
         .catch(err => err);
     },
 
     get: (options, next) => {
-      octokit.repos
+      readOctokit.repos
         .getContents(options)
         .then(({ data }) => {
           const getContent = f => {
@@ -41,7 +41,7 @@ module.exports = (config, octokit) => {
 
     lastUpdated: (options, next) => {
       options['per_page'] = 1;
-      octokit.repos
+      readOctokit.repos
         .listCommits(options)
         .then(({ data }) => {
           if (_.isEmpty(data)) {
@@ -58,8 +58,8 @@ module.exports = (config, octokit) => {
       const encodedContent = utils.encodeContent(updateOptions.content);
       _.set(updateOptions, 'content', encodedContent);
 
-      octokit.repos
-        .updateFile(updateOptions)
+      writeOctokit.repos
+        .createOrUpdateFile(updateOptions)
         .then(({ data }) => next(null, data))
         .catch(err => err);
     }

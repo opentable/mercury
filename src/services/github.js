@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const File = require('./github/file');
-const Github = require('github');
 const Octokit = require('@octokit/rest');
 const PullRequest = require('./github/pull-request');
 const RateLimit = require('./github/rate-limit');
@@ -11,28 +10,30 @@ const Reference = require('./github/reference');
 module.exports = config => {
   const MAX_CONCURRENT_OPERATIONS = 20;
 
-  const github = new Github({
-    protocol: 'https',
-    host: 'api.github.com',
-    headers: {
-      'user-agent': 'mercury'
-    },
-    followRedirects: false,
-    timeout: 20000
-  });
-
-  const octokit = new Octokit({
+  const readOctokit = new Octokit({
     auth: () => {
-      return config.github.apiTokens[0].value;
+      const tokens = _.filter(config.github.apiTokens, ['operation', 'read']);
+      const token = _.sample(tokens).value;
+      return token;
     },
     baseUrl: 'https://api.github.com',
     userAgent: 'mercury'
   });
 
-  const file = File(config, octokit);
-  const pullRequest = PullRequest(config, octokit);
-  const rateLimit = RateLimit(config, github);
-  const reference = Reference(octokit);
+  const writeOctokit = new Octokit({
+    auth: () => {
+      const tokens = _.filter(config.github.apiTokens, ['operation', 'write']);
+      const token = _.sample(tokens).value;
+      return token;
+    },
+    baseUrl: 'https://api.github.com',
+    userAgent: 'mercury'
+  });
+
+  const file = File(config, readOctokit, writeOctokit);
+  const pullRequest = PullRequest(config, readOctokit, writeOctokit);
+  const rateLimit = RateLimit(config);
+  const reference = Reference(readOctokit, writeOctokit);
 
   const getFilesList = (options, next) => {
     reference.get(options, (err, sha) => {
@@ -43,7 +44,7 @@ module.exports = config => {
       options.recursive = 1;
       options.tree_sha = sha;
 
-      octokit.git
+      readOctokit.git
         .getTree(options)
         .then(({ data }) => {
           next(null, _.map(data.tree, x => x.path));
@@ -53,7 +54,7 @@ module.exports = config => {
   };
 
   const ensureFork = (options, next) => {
-    octokit.repos
+    readOctokit.repos
       .createFork(options)
       .then(({ data }) => next(null, data))
       .catch(err => next(err));
