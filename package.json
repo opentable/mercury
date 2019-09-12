@@ -42,7 +42,7 @@
     "lint-staged": "^9.2.1",
     "mocha": "^6.2.0",
     "prettier-eslint-cli": "^5.0.0",
-    "sinon": "^1.17.7"
+    "sinon": "^7.4.2"
   },
   "dependencies": {
     "@octokit/rest": "^16.28.9",
