@@ -13,7 +13,7 @@ module.exports = (config, readOctokit, writeOctokit) => {
       writeOctokit.repos
         .createFile(createOptions)
         .then(({ data }) => next(null, data))
-        .catch(err => err);
+        .catch(err => next(err));
     },
 
     get: (options, next) => {
@@ -61,7 +61,7 @@ module.exports = (config, readOctokit, writeOctokit) => {
       writeOctokit.repos
         .createOrUpdateFile(updateOptions)
         .then(({ data }) => next(null, data))
-        .catch(err => err);
+        .catch(err => next(err));
     }
   };
 };

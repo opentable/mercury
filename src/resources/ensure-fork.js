@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const errorTypes = require('../constants/error-types');
 
 module.exports = ({ emitter, config }) => (repository, callback) => {
@@ -26,8 +27,8 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
       return callback(err, repository);
     }
 
-    repository.mercuryForkName = result && result.full_name ? result.full_name : null;
-    repository.mercuryForkOwner = result && result.owner ? 'mercurybot' : null;
+    repository.mercuryForkName = _.get(result, 'full_name', null);
+    repository.mercuryForkOwner = _.get(result, 'owner.login', null);
 
     const branchUpstreamOptions = {
       branch,

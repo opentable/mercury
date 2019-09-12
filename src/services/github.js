@@ -54,7 +54,7 @@ module.exports = config => {
   };
 
   const ensureFork = (options, next) => {
-    readOctokit.repos
+    writeOctokit.repos
       .createFork(options)
       .then(({ data }) => next(null, data))
       .catch(err => next(err));
