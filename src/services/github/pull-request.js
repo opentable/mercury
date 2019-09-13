@@ -2,52 +2,54 @@
 
 const _ = require('lodash');
 
-module.exports = (config, github) => {
-  const utils = require('./utils')(config);
-
+module.exports = (config, readOctokit, writeOctokit) => {
   return {
     close: (options, next) => {
-      const authenticatedGithub = utils.authenticateGithubOperation('write', github);
       options.state = 'closed';
 
-      authenticatedGithub.pullRequests.update(options, next);
+      writeOctokit.pulls
+        .update(options)
+        .then(() => next(null))
+        .catch(err => next(err));
     },
 
     create: (options, next) => {
-      const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-
-      authenticatedGithub.pullRequests.create(options, next);
+      writeOctokit.pulls
+        .create(options)
+        .then(() => next())
+        .catch(err => next(err));
     },
 
     get: (options, next) => {
-      const authenticatedGithub = utils.authenticateGithubOperation('read', github);
       const prOptions = _.assignIn(_.cloneDeep(options), {
         head: `${config.github.owner}:${config.github.branch}`,
         per_page: 1,
         state: 'open'
       });
 
-      authenticatedGithub.pullRequests.getAll(prOptions, (err, prs) => {
-        if (err) {
-          return next(err);
-        } else if (_.isEmpty(prs)) {
-          return next(null, { found: false });
-        }
+      readOctokit.pulls
+        .list(prOptions)
+        .then(({ data }) => {
+          if (_.isEmpty(data)) {
+            return next(null, { found: false });
+          }
 
-        const pr = _.head(prs);
+          const pr = _.head(data);
 
-        next(null, {
-          createdAt: pr.created_at,
-          found: true,
-          number: pr.number
-        });
-      });
+          return next(null, {
+            createdAt: pr.created_at,
+            found: true,
+            number: pr.number
+          });
+        })
+        .catch(err => next(err));
     },
 
     update: (options, next) => {
-      const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-
-      authenticatedGithub.pullRequests.update(options, next);
+      writeOctokit.pulls
+        .update(options)
+        .then(() => next())
+        .catch(err => next(err));
     }
   };
 };

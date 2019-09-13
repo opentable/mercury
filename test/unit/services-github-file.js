@@ -15,20 +15,24 @@ describe('services.github.file.create()', () => {
     const githubFile = require('../../src/services/github/file');
 
     createFileStub = sinon.stub();
-    createFileStub.onCall(0).yields('error');
-    createFileStub.onCall(1).yields(null, 'success');
+    createFileStub.onCall(0).rejects('error');
+    createFileStub.onCall(1).resolves({ data: 'success' });
 
     updateFileStub = sinon.stub();
-    updateFileStub.onCall(0).yields('error');
-    updateFileStub.onCall(1).yields(null, 'success');
+    updateFileStub.onCall(0).rejects('error');
+    updateFileStub.onCall(1).resolves({ data: 'success' });
 
-    return githubFile(config, {
-      authenticate: () => {},
-      repos: {
-        createFile: createFileStub,
-        updateFile: updateFileStub
+    return githubFile(
+      config,
+      {},
+      {
+        authenticate: () => {},
+        repos: {
+          createFile: createFileStub,
+          createOrUpdateFile: updateFileStub
+        }
       }
-    });
+    );
   };
 
   describe('on file creation with error and retry', () => {

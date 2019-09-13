@@ -2,16 +2,16 @@
 
 const _ = require('lodash');
 
-module.exports = (config, github) => {
-  const utils = require('./utils')(config);
-
+module.exports = (readOctokit, writeOctokit) => {
   const deleteReference = (options, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
     options.ref = `heads/${options.branch}`;
 
     getReference(options, (err, branchReferenceSha) => {
       if (branchReferenceSha) {
-        return authenticatedGithub.gitdata.deleteReference(options, next);
+        return readOctokit.git
+          .deleteRef(options)
+          .then(() => next())
+          .catch(err => next(err));
       }
 
       next(new Error('Reference has already been manually deleted by the repo owners'));
@@ -19,15 +19,17 @@ module.exports = (config, github) => {
   };
 
   const getReference = (options, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
     options.ref = `heads/${options.branch}`;
 
-    authenticatedGithub.gitdata.getReference(options, (err, reference) => next(err, _.get(reference, ['object', 'sha'])));
+    readOctokit.gitdata
+      .getRef(options)
+      .then(({ data }) => {
+        next(null, _.get(data, ['object', 'sha']));
+      })
+      .catch(err => next(err));
   };
 
   const getOrCreate = (options, sourceSha, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-
     getReference(options, (err, branchReferenceSha) => {
       if (branchReferenceSha) {
         return next(err, branchReferenceSha);
@@ -36,17 +38,25 @@ module.exports = (config, github) => {
       options.ref = `refs/heads/${options.branch}`;
       options.sha = sourceSha;
 
-      authenticatedGithub.gitdata.createReference(options, (err, reference) => next(err, _.get(reference, ['object', 'sha'])));
+      writeOctokit.git
+        .createRef(options)
+        .then(({ data }) => {
+          next(null, _.get(data, [`object`, `sha`]));
+        })
+        .catch(err => {
+          next(err);
+        });
     });
   };
 
   const update = (options, next) => {
-    const authenticatedGithub = utils.authenticateGithubOperation('write', github);
-
     options.ref = `heads/${options.branch}`;
     options.sha = options.reference;
 
-    authenticatedGithub.gitdata.updateReference(options, next);
+    writeOctokit.git
+      .updateRef(options)
+      .then(() => next())
+      .catch(err => next(err));
   };
 
   return {

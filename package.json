@@ -42,14 +42,14 @@
     "lint-staged": "^9.2.1",
     "mocha": "^6.2.0",
     "prettier-eslint-cli": "^5.0.0",
-    "sinon": "^1.17.7"
+    "sinon": "^7.4.2"
   },
   "dependencies": {
+    "@octokit/rest": "^16.28.9",
     "async": "^2.1.4",
     "base-64": "^0.1.0",
     "config": "^1.24.0",
     "deep-diff": "^0.3.4",
-    "github": "^8.2.1",
     "joi": "^10.2.0",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
