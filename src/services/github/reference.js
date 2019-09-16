@@ -2,13 +2,13 @@
 
 const _ = require('lodash');
 
-module.exports = (readOctokit, writeOctokit) => {
+module.exports = writeOctokit => {
   const deleteReference = (options, next) => {
     options.ref = `heads/${options.branch}`;
 
     getReference(options, (err, branchReferenceSha) => {
       if (branchReferenceSha) {
-        return readOctokit.git
+        return writeOctokit.git
           .deleteRef(options)
           .then(() => next())
           .catch(err => next(err));
@@ -21,7 +21,7 @@ module.exports = (readOctokit, writeOctokit) => {
   const getReference = (options, next) => {
     options.ref = `heads/${options.branch}`;
 
-    readOctokit.gitdata
+    writeOctokit.gitdata
       .getRef(options)
       .then(({ data }) => {
         next(null, _.get(data, ['object', 'sha']));
