@@ -70,7 +70,7 @@ describe('resources.fetchAll()', () => {
 
     beforeEach(done => {
       const repo = testData.postSmartlingFetchRepository;
-      const githubStub = sinon.stub().yields({ message: 'Not Found', code: 404 }, { content: null });
+      const githubStub = sinon.stub().yields({ message: 'Not Found', status: 404 }, { content: null });
 
       mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
         err = error;
@@ -93,7 +93,7 @@ describe('resources.fetchAll()', () => {
 
     beforeEach(done => {
       const repo = testData.postSmartlingFetchRepository;
-      const githubStub = sinon.stub().yields({ message: 'BOOM!', code: 500 }, { content: null });
+      const githubStub = sinon.stub().yields({ message: 'BOOM!', status: 500 }, { content: null });
 
       mockedFetchAll(githubStub)(_.cloneDeep(repo), (error, result) => {
         err = error;
