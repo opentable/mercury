@@ -31,7 +31,7 @@ describe('resources.commitFiles()', () => {
     let err;
 
     beforeEach(done => {
-      githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
+      githubGetFileStub = sinon.stub().yields({ message: 'Not found', status: 404 }, { content: null, sha: null });
       githubCreateFileStub = sinon.stub().yields();
       githubUpdateFileStub = sinon.stub().yields();
 
@@ -111,7 +111,7 @@ describe('resources.commitFiles()', () => {
     let err;
 
     beforeEach(done => {
-      githubGetFileStub = sinon.stub().yields({ message: 'Failed to get SHA', code: 422 }, { sha: null });
+      githubGetFileStub = sinon.stub().yields({ message: 'Failed to get SHA', status: 422 }, { sha: null });
       githubCreateFileStub = sinon.stub().yields();
       githubUpdateFileStub = sinon.stub().yields();
 
@@ -147,8 +147,8 @@ describe('resources.commitFiles()', () => {
     let err;
 
     beforeEach(done => {
-      githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
-      githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', code: 500 });
+      githubGetFileStub = sinon.stub().yields({ message: 'Not found', status: 404 }, { content: null, sha: null });
+      githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', status: 500 });
       githubUpdateFileStub = sinon.stub().yields();
 
       const testRepo = _.cloneDeep(repository);
@@ -179,8 +179,8 @@ describe('resources.commitFiles()', () => {
     let err;
 
     beforeEach(done => {
-      githubGetFileStub = sinon.stub().yields({ message: 'Not found', code: 404 }, { content: null, sha: null });
-      githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', code: 500 });
+      githubGetFileStub = sinon.stub().yields({ message: 'Not found', status: 404 }, { content: null, sha: null });
+      githubCreateFileStub = sinon.stub().yields({ message: 'Error when creating file', status: 500 });
       githubUpdateFileStub = sinon.stub().yields();
 
       const testRepo = _.cloneDeep(repository);

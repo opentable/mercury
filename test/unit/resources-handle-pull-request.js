@@ -129,7 +129,7 @@ describe('resources.handlePullRequest()', () => {
     it('should update pr', () => {
       expect(createStub.called).to.be.false;
       expect(updateStub.called).to.be.true;
-      expect(updateStub.args[0][0].number).to.equal(13);
+      expect(updateStub.args[0][0].pull_number).to.equal(13);
     });
   });
 
@@ -164,7 +164,7 @@ describe('resources.handlePullRequest()', () => {
       expect(createStub.called).to.be.false;
       expect(updateStub.called).to.be.true;
       expect(updateStub.args[0][0].base).to.equal('develop');
-      expect(updateStub.args[0][0].number).to.equal(13);
+      expect(updateStub.args[0][0].pull_number).to.equal(13);
     });
   });
 

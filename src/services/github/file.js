@@ -13,20 +13,17 @@ module.exports = (config, readOctokit, writeOctokit) => {
       writeOctokit.repos
         .createFile(createOptions)
         .then(({ data }) => next(null, data))
-        .catch(err => next(err));
+        .catch(err => {
+          next(err);
+        });
     },
 
     get: (options, next) => {
       readOctokit.repos
         .getContents(options)
         .then(({ data }) => {
-          const getContent = f => {
-            try {
-              return new Buffer.from(f.content, f.encoding).toString();
-            } catch (error) {
-              return next(error);
-            }
-          };
+          const getContent = f => new Buffer.from(f.content, f.encoding).toString();
+
           const content = data ? getContent(data) : null;
           const sha = data ? data.sha : null;
           const result = {
@@ -36,7 +33,9 @@ module.exports = (config, readOctokit, writeOctokit) => {
 
           return next(null, result);
         })
-        .catch(err => next(err));
+        .catch(err => {
+          return next(err, { content: null, sha: null });
+        });
     },
 
     lastUpdated: (options, next) => {
@@ -61,7 +60,9 @@ module.exports = (config, readOctokit, writeOctokit) => {
       writeOctokit.repos
         .createOrUpdateFile(updateOptions)
         .then(({ data }) => next(null, data))
-        .catch(err => next(err));
+        .catch(err => {
+          next(err);
+        });
     }
   };
 };

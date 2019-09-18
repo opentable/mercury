@@ -33,7 +33,7 @@ module.exports = config => {
   const file = File(config, readOctokit, writeOctokit);
   const pullRequest = PullRequest(config, readOctokit, writeOctokit);
   const rateLimit = RateLimit(config);
-  const reference = Reference(readOctokit, writeOctokit);
+  const reference = Reference(writeOctokit);
 
   const getFilesList = (options, next) => {
     reference.get(options, (err, sha) => {

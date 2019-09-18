@@ -26,7 +26,9 @@ const getAllGithubFilenames = repository => {
 };
 
 module.exports = ({ emitter, config }) => (repository, callback) => {
-  emitter.emit('action', { message: `Fetching secondary language files from github for ${repository.owner}/${repository.repo}` });
+  emitter.emit('action', {
+    message: `Fetching secondary language files from github for ${repository.owner}/${repository.repo}`
+  });
 
   const github = require('../services/github')(config);
   const githubOptions = {
@@ -45,7 +47,7 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
       });
 
       github.getFile(options, (err, githubFile) => {
-        if (err && err.code !== 404) {
+        if (err && err.status !== 404) {
           return next(new Error(err.message));
         }
 
@@ -64,7 +66,11 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     },
     err => {
       if (err) {
-        emitter.emit('error', { error: err, errorType: errorTypes.failedGithubFetchFiles, details: repository });
+        emitter.emit('error', {
+          error: err,
+          errorType: errorTypes.failedGithubFetchFiles,
+          details: repository
+        });
         repository.skip = true;
       }
 

@@ -28,18 +28,18 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
             repo: repository.repo,
             path: locale.githubPath,
             ref: config.github.branch,
-            content: locale.smartlingContent,
             message: `Mercury commit for ${localeId} to file ${locale.githubPath}`
           };
 
           github.getFile(options, (err, file) => {
-            if (err && err.code !== 404) {
+            if (err && err.status !== 404) {
               return callback(new Error(err.message));
             }
 
             const content = file.content;
             const sha = file.sha;
 
+            _.set(options, 'content', locale.smartlingContent);
             _.set(options, 'branch', options.ref);
             _.unset(options, 'ref');
 
