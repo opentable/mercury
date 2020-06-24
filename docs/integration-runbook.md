@@ -6,7 +6,7 @@ If you want to integrate your repository with Mercury, please follow these steps
 
 ### Step 1: create and push one or more en-US source file(s)
 
-*N.B. If you already have and do not need to update source files, you can jump to [Step 2](#step-2-create-a-smartling-project).*
+_N.B. If you already have and do not need to update source files, you can jump to [Step 2](#step-2-create-a-smartling-project)._
 
 If you don't, you can create a source file with the strings you need to translate. One best practice is to put these files into a `locales/en-US` folder.
 
@@ -14,42 +14,44 @@ JSON is the standard we'd recommend, even if Mercury supports many file types an
 
 ### Step 2: create a Smartling project
 
-*N.B. If you already have one, take note of the project ID, and then jump to [Step 3](#step-3-create-a-mercuryjson-file-in-).*
+_N.B. If you already have one, take note of the project ID, and then jump to [Step 3](#step-3-create-a-mercuryjson-file-in-)._
 
 ### Step 3: create a mercury.json file in /
 
 The `mercury.json` file is the one addition you'll need to make to your project. Let's take a look at this example:
 
-``` json
+```json
 {
-    "smartlingProjectId": "<smartling-test-projectid>",
-    "translations": [{
-        "input": {
-            "src": ["src/locales/en-us/*.json", "!src/locales/en-us/config.json"]
-        },
-        "output": {
-            "dest": "src/locales/${locale}/${filename}"
-        }
-    }]
+  "smartlingProjectId": "<smartling-test-projectid>",
+  "translations": [
+    {
+      "input": {
+        "src": ["src/locales/en-us/*.json", "!src/locales/en-us/config.json"]
+      },
+      "output": {
+        "dest": "src/locales/${locale}/${filename}"
+      }
+    }
+  ]
 }
 ```
 
 #### The configuration properties:
 
-|name|description|
-|----|-----------|
-|`workingBranch` (string, optional)|Default `master`, is the working github branch.|
-|`readOnly` (boolean, optional)|Default `false`, it is the way to tell Mercury that you want to bypass the uploading of source files from Github and only perform the download of translated strings via PR. If you want to use this feature, make sure that you are using a single input filename in `translations[index].input.src`, for example `["/smartling-folder/messages.pot"]` and that the filename corresponds to the one uploaded to smartling. The output configuration works exactly the same way.|
-|`smartlingProjectId` (string, required)|It is the ID of your smartling project that Mercury will look at. If unsure of what that is, just browse your Smartling project. The ID will be found in the URL: *https://dashboard.smartling.com/projects/{{ID}}/translations/dashboard.htm*|
-|`translations` (array of objects, required)|It is a list of configurations that have two common properties: an input and an output. Mercury will read every file in each input path, and place its translations in the output path. In most cases this will be populated by just one object, but there might be cases in which you need more than one input-output mapping|
-|`translations[index].input` (object, required)|The input details|
-|`translations[index].input.src` (array of strings, required)|List of file paths globs. The `*` character can be used to match specific patterns and exclusions can be achieved by inserting `!` at the beginning of the path|
-|`translations[index].output` (object, required)|The output details|
-|`translations[index].output.dest` (string, required)|The path where Mercury will save the translations. Two string interpolations are used to build this path: `${locale}` will represent each of the supported languages that are returned by Smartling in form of translations, and `${filename}` will replicate the original filename that has been uploaded from the en-us folder. The string can be javascript interpolated, for instance `${locale.toLowerCase()` allows to obtain a lower-cased dest. It is required to at least use the `${locale}`, since it will differentiate the translated languages of the resource. For example, if we have a file called `src/locales/en-US/example.json` in the input path, and Smartling is setup to translate content in `es-MX` and `de-DE`, Mercury will create: `src/locales/es-MX/example.json`, `src/locales/de-DE/example.json`|
+| name                                                         | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `workingBranch` (string, optional)                           | Default `master`, is the working github branch.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `readOnly` (boolean, optional)                               | Default `false`, it is the way to tell Mercury that you want to bypass the uploading of source files from Github and only perform the download of translated strings via PR. If you want to use this feature, make sure that you are using a single input filename in `translations[index].input.src`, for example `["/smartling-folder/messages.pot"]` and that the filename corresponds to the one uploaded to smartling. The output configuration works exactly the same way.                                                                                                                                                                                                                                                                                                                                                    |
+| `smartlingProjectId` (string, required)                      | It is the ID of your smartling project that Mercury will look at. If unsure of what that is, just browse your Smartling project. The ID will be found in the URL: _https://dashboard.smartling.com/projects/{{ID}}/translations/dashboard.htm_                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `translations` (array of objects, required)                  | It is a list of configurations that have two common properties: an input and an output. Mercury will read every file in each input path, and place its translations in the output path. In most cases this will be populated by just one object, but there might be cases in which you need more than one input-output mapping                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `translations[index].input` (object, required)               | The input details                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `translations[index].input.src` (array of strings, required) | List of file paths globs. The `*` character can be used to match specific patterns and exclusions can be achieved by inserting `!` at the beginning of the path                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `translations[index].output` (object, required)              | The output details                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `translations[index].output.dest` (string, required)         | The path where Mercury will save the translations. Two string interpolations are used to build this path: `${locale}` will represent each of the supported languages that are returned by Smartling in form of translations, and `${filename}` will replicate the original filename that has been uploaded from the en-us folder. The string can be javascript interpolated, for instance `${locale.toLowerCase()` allows to obtain a lower-cased dest. It is required to at least use the `${locale}`, since it will differentiate the translated languages of the resource. For example, if we have a file called `src/locales/en-US/example.json` in the input path, and Smartling is setup to translate content in `es-MX` and `de-DE`, Mercury will create: `src/locales/es-MX/example.json`, `src/locales/de-DE/example.json` |
 
 ### Step 4: Mercury, a kind of magic!
 
-At this point, you'll need to get in touch with Mercury owners in your org and ask for your project to be included into the Mercury whitelist.
+At this point, you'll need to get in touch with Mercury owners in your org and ask for your project to be included into the Mercury list of allowed repositories.
 
 ### Step 5: The Pull Request
 
