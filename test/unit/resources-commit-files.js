@@ -107,6 +107,46 @@ describe('resources.commitFiles()', () => {
     });
   });
 
+  describe('happy path with empty file update', function() {
+    let err;
+
+    beforeEach(done => {
+      githubGetFileStub = sinon.stub().yields(null, { content: '', sha: 'test_sha' });
+      githubCreateFileStub = sinon.stub().yields();
+      githubUpdateFileStub = sinon.stub().yields();
+
+      const testRepo = _.cloneDeep(repository);
+      testRepo.translationFiles = [
+        {
+          locales: {
+            'de-DE': {
+              smartlingContent: 'translated file content',
+              githubPath: 'src/locales/de-DE/file.json',
+              githubContent: ''
+            }
+          }
+        }
+      ];
+
+      mockedCommitFiles(githubGetFileStub, githubCreateFileStub, githubUpdateFileStub)(testRepo, error => {
+        err = error;
+        done();
+      });
+    });
+
+    it('should not error', () => {
+      expect(err).to.be.null;
+    });
+
+    it('should never call createFile', () => {
+      expect(githubCreateFileStub.called).to.be.false;
+    });
+
+    it('should call updateFile once', () => {
+      expect(githubUpdateFileStub.called).to.be.true;
+    });
+  });
+
   describe('error when getting file sha', () => {
     let err;
 
