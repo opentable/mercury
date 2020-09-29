@@ -21,7 +21,7 @@ module.exports = writeOctokit => {
   const getReference = (options, next) => {
     options.ref = `heads/${options.branch}`;
 
-    writeOctokit.gitdata
+    writeOctokit.git
       .getRef(options)
       .then(({ data }) => {
         next(null, _.get(data, ['object', 'sha']));
