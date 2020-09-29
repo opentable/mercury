@@ -43,13 +43,13 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
             _.set(options, 'branch', options.ref);
             _.unset(options, 'ref');
 
-            if (!content) {
+            if (typeof content !== 'string') {
               emitter.emit('action', {
                 message: `Creating new ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`
               });
               commitCount++;
               async.retry(retryPolicy, github.createFile.bind(null, options), callback);
-            } else if (content && content !== locale.smartlingContent) {
+            } else if (content !== locale.smartlingContent) {
               emitter.emit('action', {
                 message: `Updating existing ${localeId} file ${locale.githubPath} on ${repository.mercuryForkOwner}/${repository.repo}`
               });
