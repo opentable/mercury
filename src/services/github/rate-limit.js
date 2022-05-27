@@ -1,7 +1,7 @@
 'use strict';
 
 const async = require('async');
-const Octokit = require('@octokit/rest');
+const { Octokit } = require('@octokit/rest');
 
 module.exports = config => ({
   get: next => {
