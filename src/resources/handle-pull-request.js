@@ -26,7 +26,7 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
     head: `${config.github.owner}:${config.github.branch}`,
     title: pullRequestMetadata.title,
     base: repository.manifestContent.workingBranch,
-    body: pullRequestMetadata.body.length > MAX_ALLOWED_BODY_CHARS ? "This repository has too many translation files, Mercury can't return a status description with the PR." : pullRequestMetadata.body.length
+    body: pullRequestMetadata.body.length > MAX_ALLOWED_BODY_CHARS ? "This repository has too many translation files, Mercury can't return a status description with the PR." : pullRequestMetadata.body
   };
 
   let handlePr;
