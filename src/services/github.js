@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const File = require('./github/file');
-const Octokit = require('@octokit/rest');
+const { Octokit } = require('@octokit/rest');
 const PullRequest = require('./github/pull-request');
 const RateLimit = require('./github/rate-limit');
 const Reference = require('./github/reference');
@@ -47,7 +47,10 @@ module.exports = config => {
       readOctokit.git
         .getTree(options)
         .then(({ data }) => {
-          next(null, _.map(data.tree, x => x.path));
+          next(
+            null,
+            _.map(data.tree, x => x.path)
+          );
         })
         .catch(err => next(err));
     });

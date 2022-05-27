@@ -1,6 +1,6 @@
 {
   "name": "mercury-bot",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Mercury is a bot for managing in-code static translations",
   "main": "src/app.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "sinon": "^7.4.2"
   },
   "dependencies": {
-    "@octokit/rest": "16.28.9",
+    "@octokit/rest": "^16.43.2",
     "async": "2.6.3",
     "base-64": "0.1.0",
     "config": "1.31.0",
