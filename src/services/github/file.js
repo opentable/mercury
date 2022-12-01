@@ -19,7 +19,7 @@ module.exports = (config, readOctokit, writeOctokit) => {
     },
 
     get: (options, next) => {
-      readOctokit.repos
+      writeOctokit.repos
         .getContents(options)
         .then(({ data }) => {
           const getContent = f => new Buffer.from(f.content, f.encoding).toString();
