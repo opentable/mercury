@@ -47,10 +47,7 @@ module.exports = config => {
       readOctokit.git
         .getTree(options)
         .then(({ data }) => {
-          next(
-            null,
-            _.map(data.tree, x => x.path)
-          );
+          next(null, _.map(data.tree, x => x.path));
         })
         .catch(err => next(err));
     });

@@ -28,7 +28,8 @@ module.exports = ({ emitter, config }) => (repository, callback) => {
             repo: repository.repo,
             path: locale.githubPath,
             ref: config.github.branch,
-            message: `Mercury commit for ${localeId} to file ${locale.githubPath}`
+            message: `Mercury commit for ${localeId} to file ${locale.githubPath}`,
+            useWriteOctokit: true
           };
 
           github.getFile(options, (err, file) => {
