@@ -73,6 +73,7 @@ app.run(() => process.exit(0));
 |`smartling`|`object`|`yes`|The smartling config|
 |`smartling.userIdentifier`|`string`|`yes`|The smartling UserId|
 |`smartling.userSecret`|`string`|`yes`|The smartling UserSecret|
+|`bucketsCount`|`number`|`no`|Buckets count. The current bucket is selected based on the current UTC hour. The value must be between 1 and 24. The default value is 1|
 
 ##### mercury.on(eventName, payload)
 

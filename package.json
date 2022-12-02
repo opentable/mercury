@@ -1,6 +1,6 @@
 {
   "name": "mercury-bot",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Mercury is a bot for managing in-code static translations",
   "main": "src/app.js",
   "scripts": {
